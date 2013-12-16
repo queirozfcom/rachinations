@@ -13,11 +13,17 @@ class Edge
 
     #setting default values
     hsh = {
-        :label => 1
+        :label => 1,
+        :types => []
     }.merge hsh
 
     @label = hsh[:label]
+    @types = hsh[:types]
 
+  end
+
+  def has_type?(type)
+    @types.empty? || @types.include?(type)
   end
 
 end

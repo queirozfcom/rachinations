@@ -33,24 +33,36 @@ class Pool < Node
     # an empty array means resources are just numbers
     @types = hsh[:types]
 
-    if !@types.empty?
+    #need to set each type to zero
+    if !@types.empty? && hsh[:initial_value] == 0
       @resources = Hash.new
 
       @types.each do |value|
         @resources[value] = 0
       end
 
-      # one or the other, not both
-    elsif hsh[:initial_value].is_a? Hash
-
+      # implicit declaration of types
+    elsif @types.empty? && hsh[:initial_value].is_a?(Hash)
       @resources = Hash.new
 
       hsh[:initial_value].each do |key, value|
-        #this is what i mean by implicit declaration of types
         @types.push key
         @resources[key] = value
       end
-    elsif hsh[:initial_value].is_a? Fixnum
+      #both types and initial values were set!
+    elsif !types.empty? && hsh[:initial_value].is_a?(Hash)
+      @resources = Hash.new
+      hsh[:types].each do |key|
+        #set zero
+        @resources[key] = 0
+        #and set custom initial value if provided
+        if hsh[:initial_value].has_key?(key)
+          @resources[key] = hsh[:initial_value][key]
+        end
+      end
+
+      #no types, just initial value for integer (or float in case of infinity for sources)
+    elsif hsh[:initial_value].is_a? Numeric
       @resources = hsh[:initial_value]
     else
       raise ArgumentError.new
@@ -68,7 +80,7 @@ class Pool < Node
 
       #this means the user is thinking this is a simple node
       if @resources.is_a? Hash
-        raise ArgumentError.new
+        raise ArgumentError.new 'This node has non-trivial types but you\'ve tried to access it like it only had numbers.'
       else
         @resources
       end
@@ -113,6 +125,14 @@ class Pool < Node
         raise ArgumentError.new
       end
     end
+  end
+
+  def has_type?(type)
+    @resources.is_a?(Numeric) || @resources.keys.include?(type)
+  end
+
+  def typed?
+    @resources.is_a? Hash
   end
 
   def to_s

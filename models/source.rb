@@ -4,11 +4,24 @@ class Source < Pool
 
   def initialize(name,hsh={})
 
+
+    if hsh.has_key?(:types)
+      values = Hash.new
+      hsh[:types].each do |key|
+        values[key] = Float::INFINITY
+      end
+      hsh[:initial_value] = values
+    end
+
+
     #sources are always automatic push
+    hsh[:mode] = :push
+    hsh[:activation] = :automatic
+
+    #default values
     hsh = {
-      :mode => :push,
-      :initial_value => Float::INFINITY,
-      :activation => :automatic
+      :types => [],
+      :initial_value => Float::INFINITY
     }.merge hsh
 
     super(name,hsh)
@@ -23,7 +36,7 @@ class Source < Pool
       if @resources.has_key? type
         #do nothing
       else
-        raise ArgumentError.new
+        raise ArgumentError.new "You tried to remove a resource of type #{type} but I don't deal with those types."
       end
     end
   end

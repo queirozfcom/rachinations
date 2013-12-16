@@ -58,32 +58,67 @@ class Diagram
     post_execution_nodes = @nodes.map { |el| el.clone }
     post_execution_edges = @edges.map { |el| el.clone }
 
+    #only automatic nodes cause changes in other nodes
     @nodes
-    .select { |node| node.activation == 'automatic' }
+    .select { |node| node.activation === :automatic }
     .each do |node|
 
       # if this node is in push mode and has arrows pointing
       # away from it, we need to send resources, if available.
 
-      if node.mode == 'push'
+      if node.mode === :push
 
-        available_resources = node.resources
 
         @edges
         .select { |edge| edge.from_node_name == node.name }
         .each do |edge|
 
-          if available_resources > 0
-            post_execution_nodes.detect { |n| n.name == edge.to_node_name }.add_resource!
-            post_execution_nodes.detect { |n| n.name == node.name }.remove_resource!
-            # in case this inner loop runs more than once
-            available_resources -= 1
+          if  node.typed?
+
+            #each resource type gets individual treatment
+
+            node.types.each do |key|
+
+
+              available_resources = node.resource_count(key)
+
+              p node
+
+              if available_resources > 0
+
+                if edge.has_type?(key) && post_execution_nodes.detect { |n| n.name == edge.to_node_name }.has_type?(key)
+                  #resources leave and arrive on the other side
+                  node.remove_resource!(key)
+                  post_execution_nodes.detect { |n| n.name == edge.to_node_name }.add_resource!(key)
+                elsif edge.has_type?(key) && !post_execution_nodes.detect { |n| n.name == edge.to_node_name }.has_type?(key)
+                  #resources leave but don't arrive on the other side
+                  node.remove_resource!(key)
+                else
+                  #if edge doesn't allow this type, nothing gets done - resources don't even leave base
+                end
+
+              else
+                #no resources of this type to send, do nothing.
+              end
+            end
+          else
+            # just numbers, business as usual
+
+            available_resources = node.resource_count
+
+            if available_resources > 0
+              post_execution_nodes.detect { |n| n.name == edge.to_node_name }.add_resource!
+              post_execution_nodes.detect { |n| n.name == node.name }.remove_resource!
+              # in case this inner loop runs more than once (if there is more than one edge pointing away from this node)
+              available_resources -= 1
+            end
+
           end
 
         end
 
         #finding out if there's anything to pull to this node
-      elsif node.mode == 'pull'
+      elsif node.mode == :pull
 
         @edges
         .select { |edge| edge.to_node_name == node.name }
@@ -91,7 +126,7 @@ class Diagram
 
           from_node = @nodes.detect { |n| n.name == edge.from_node_name }
 
-          available_resources = from_node.resources
+          available_resources = from_node.resource_count
 
           if available_resources > 0
             post_execution_nodes.detect { |n| n.name == edge.to_node_name }.add_resource!
@@ -104,12 +139,12 @@ class Diagram
 
     end
 
-    @nodes = post_execution_nodes
-    @edges = post_execution_edges
-    print "\n"
-    p "Round Number #{round_number}:"
-    @nodes.each { |n| p n }
-    print "\n"
+#@nodes = post_execution_nodes
+#@edges = post_execution_edges
+#print "\n"
+#p "Round Number #{round_number}:"
+#@nodes.each { |n| p n }
+#print "\n"
 
   end
 
