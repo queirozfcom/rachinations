@@ -65,7 +65,6 @@ class Diagram
 
       # if this node is in push mode and has arrows pointing
       # away from it, we need to send resources, if available.
-
       if node.mode === :push
 
 
@@ -81,8 +80,6 @@ class Diagram
 
 
               available_resources = node.resource_count(key)
-
-              p node
 
               if available_resources > 0
 
@@ -139,8 +136,13 @@ class Diagram
 
     end
 
-#@nodes = post_execution_nodes
-#@edges = post_execution_edges
+@nodes = post_execution_nodes
+@edges = post_execution_edges
+
+
+
+
+
 #print "\n"
 #p "Round Number #{round_number}:"
 #@nodes.each { |n| p n }

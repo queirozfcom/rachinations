@@ -47,6 +47,24 @@ class DiagramTesting < Test::Unit::TestCase
     assert_equal(2, p.get_node("pool2").resource_count)
   end
 
+  def test_two_pools_pull_automatic
+    p = Diagram.new('two pools pull automatic')
+
+    pool1 = Pool.new('pool1',:initial_value => 5)
+    p.add_node!(pool1)
+
+    pool2 = Pool.new('pool2', :activation => :automatic)
+    p.add_node!(pool2)
+
+    edge2 = Edge.new('connector2', 'pool1', 'pool2')
+    p.add_edge!(edge2)
+
+    #i know this is too much
+    p.run!(10)
+
+    assert_equal(0, p.get_node("pool1").resource_count)
+    assert_equal(5, p.get_node("pool2").resource_count)
+  end
 
   def test_one_source_three_pools
     p = Diagram.new('one source three pools')
@@ -100,6 +118,23 @@ class DiagramTesting < Test::Unit::TestCase
   def test_one_source_one_pool_types
 
     p = Diagram.new('one source one pool typed')
+
+    p.add_node!(Source.new('source', :types => [:green]))
+
+    p.add_node!(Pool.new('pool1', :types => [:green, :red]))
+
+    p.add_edge!(Edge.new('connector1', 'source', 'pool1'))
+
+    p.run!(5)
+
+    assert_equal(5, p.get_node('pool1').resource_count(:green))
+    assert_equal(0, p.get_node('pool1').resource_count(:red))
+
+  end
+
+  def test_two_pools_different_types_edge_allows_types
+
+    p = Diagram.new('two pools different types')
 
     p.add_node!(Source.new('source', :types => [:green]))
 
