@@ -1,0 +1,22 @@
+#!/usr/bin/env ruby
+#encoding: UTF-8
+
+require_relative '../models/diagram'
+
+d = Diagram.('test1')
+
+d.add_node!(Source.new(:name=>"source"))
+
+d.add_node!(Pool.new(:name=>"pool1",:mode=>"push",:activation=>"automatic"))
+
+d.add_node!(Pool.new(:name=>"pool2"))
+
+d.add_node!(Pool.new(:name=>"pool3",:activation=>"automatic"))
+
+d.add_edge!(Edge.new("source","pool1",:name=>"connector1"))
+
+d.add_edge!(Edge.new("pool1","pool2",:name=>"connector2"))
+
+d.add_edge!(Edge.new("pool2","pool3",:name=>"connector3"))
+
+d.run!(4)
