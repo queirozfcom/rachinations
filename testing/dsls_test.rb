@@ -1,10 +1,10 @@
+require_relative '../models/diagram'
 require_relative '../dsl/dsl.rb'
-require "rubygems"
-gem "test-unit"
-require "test/unit"
+gem 'minitest'
+require "minitest/autorun"
 
 
-class DSLSTest < Test::Unit::TestCase
+class DSLSTest < MiniTest::Test
   include DSL
 
   # Called before every test method runs. Can be used
@@ -21,12 +21,12 @@ class DSLSTest < Test::Unit::TestCase
   end
 
 
-  def test_no_error
+  def test_no_types
 
     diagram 'test_diagram' do
-      node 'source', Source, :types => ['blue']
-      node 'pool1',  Pool, :activation => :automatic, :types => ['blue','yellow']
-      edge 'edge1', 'source','pool1', :types => ['blue,red']
+      node 'source', Source
+      node 'pool1', Pool
+      edge 'edge1', Edge, 'source', 'pool1'
     end
 
   end

@@ -1,9 +1,11 @@
 require_relative '../models/diagram'
-require "rubygems"
-gem "test-unit"
-require "test/unit"
+gem 'minitest'
+require "minitest/autorun"
+require 'minitest/reporters'
 
-class DiagramTesting < Test::Unit::TestCase
+Minitest::Reporters.use!
+
+class DiagramTest < MiniTest::Test
 
   def test_one_source_one_pool
     p = Diagram.new('one source one pool')
@@ -50,7 +52,7 @@ class DiagramTesting < Test::Unit::TestCase
   def test_two_pools_pull_automatic
     p = Diagram.new('two pools pull automatic')
 
-    pool1 = Pool.new('pool1',:initial_value => 5)
+    pool1 = Pool.new('pool1', :initial_value => 5)
     p.add_node!(pool1)
 
     pool2 = Pool.new('pool2', :activation => :automatic)
@@ -111,7 +113,7 @@ class DiagramTesting < Test::Unit::TestCase
     edge1 = Edge.new('connector1', 'source', 'pool1')
     p.add_edge!(edge1)
 
-    assert_raise('RuntimeError') { p.get_node('pool2') }
+    assert_raises(RuntimeError) { p.get_node('pool2') }
 
   end
 
@@ -150,6 +152,33 @@ class DiagramTesting < Test::Unit::TestCase
   end
 
 =begin
+
+def test_one_source_two_pools_typed_pull
+
+    p = Diagram.new('one source two pools types pull')
+
+    source = Source.new('source', :types =>[:green])
+    p.add_node!(source)
+
+    pool1 = Pool.new('pool1',:types => [:green,:red])
+    p.add_node!(pool1)
+
+    pool2 = Pool.new('pool2', :activation => :automatic, :types => [:green, :yellow])
+    p.add_node!(pool2)
+
+    edge1 = Edge.new('connector1', 'source', 'pool1')
+    p.add_edge!(edge1)
+
+    edge2 = Edge.new('connector2', 'pool1', 'pool2', :types => [:green, :red, :blue])
+    p.add_edge!(edge2)
+
+    p.run!(5)
+
+    assert_equal(1, p.get_node("pool1").resource_count(:green))
+    assert_equal(4, p.get_node("pool2").resource_count(:green))
+
+
+  end
 
   def test_nodes_dont_accept_resources_of_other_types
 

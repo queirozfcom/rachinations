@@ -1,9 +1,9 @@
 require_relative '../models/diagram'
 require "rubygems"
-gem "test-unit"
-require "test/unit"
+gem 'minitest'
+require "minitest/autorun"
 
-class PoolTest < Test::Unit::TestCase
+class PoolTest < MiniTest::Test
 
   # Called before every test method runs. Can be used
   # to set up fixture information.
@@ -20,7 +20,7 @@ class PoolTest < Test::Unit::TestCase
 
   def test_create_simple_Pool_sending_all_parameters
 
-    pool = Pool.new 'pool0', activation: :automatic, mode: :push, initial_value: 78
+    pool = Pool.new 'pool0', :activation => :automatic, :mode => :push, :initial_value => 78
 
     assert_equal 78 ,pool.resource_count
     assert_equal 'pool0',pool.name
@@ -63,8 +63,8 @@ class PoolTest < Test::Unit::TestCase
     assert_equal :push,pool.mode
     assert_equal [:azul], pool.types
 
-    assert_raise(ArgumentError) { pool.resource_count }
-    assert_raise(ArgumentError) { pool.resource_count(:rosa) }
+    assert_raises(ArgumentError) { pool.resource_count }
+    assert_raises(ArgumentError) { pool.resource_count(:rosa) }
 
   end
 
@@ -78,8 +78,8 @@ class PoolTest < Test::Unit::TestCase
     assert_equal 0, pool.resource_count(:vermelho)
     assert_equal :automatic, pool.activation
 
-    assert_raise(ArgumentError) { pool.resource_count(:azul) }
-    assert_raise(ArgumentError) { pool.resource_count }
+    assert_raises(ArgumentError) { pool.resource_count(:azul) }
+    assert_raises(ArgumentError) { pool.resource_count }
 
   end
 
@@ -91,8 +91,8 @@ class PoolTest < Test::Unit::TestCase
     assert_equal 10, pool.resource_count(:azul)
     assert_equal 40, pool.resource_count(:roxo)
 
-    assert_raise(ArgumentError) { pool.resource_count(:verde) }
-    assert_raise(ArgumentError) { pool.resource_count }
+    assert_raises(ArgumentError) { pool.resource_count(:verde) }
+    assert_raises(ArgumentError) { pool.resource_count }
 
   end
 

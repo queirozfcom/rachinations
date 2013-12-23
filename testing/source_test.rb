@@ -1,9 +1,9 @@
 require_relative '../models/diagram'
 require "rubygems"
-gem "test-unit"
-require "test/unit"
+gem 'minitest'
+require "minitest/autorun"
 
-class SourceTest < Test::Unit::TestCase
+class SourceTest < MiniTest::Test
 
   # Called before every test method runs. Can be used
   # to set up fixture information.

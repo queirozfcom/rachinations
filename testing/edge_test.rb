@@ -1,9 +1,9 @@
 require_relative '../models/edge'
 require "rubygems"
-gem "test-unit"
-require "test/unit"
+gem 'minitest'
+require "minitest/autorun"
 
-class MyTest < Test::Unit::TestCase
+class MyTest < MiniTest::Test
 
   # Called before every test method runs. Can be used
   # to set up fixture information.
