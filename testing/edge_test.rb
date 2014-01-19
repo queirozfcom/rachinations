@@ -1,4 +1,4 @@
-require_relative '../models/edge'
+require_relative '../domain/edge'
 require "rubygems"
 gem 'minitest'
 require "minitest/autorun"

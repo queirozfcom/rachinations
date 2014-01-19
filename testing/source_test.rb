@@ -1,4 +1,4 @@
-require_relative '../models/diagram'
+require_relative '../domain/diagram'
 require "rubygems"
 gem 'minitest'
 require "minitest/autorun"

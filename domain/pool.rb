@@ -135,6 +135,18 @@ class Pool < Node
     @resources.is_a? Hash
   end
 
+  def push?
+    @mode === :push
+  end
+
+  def automatic?
+    @activation === :automatic
+  end
+
+  def each_type &blk
+    @types.each &blk
+  end
+
   def to_s
     p "Pool '#{@name}': Current Resources: #{@resources}"
   end

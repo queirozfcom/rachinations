@@ -1,9 +1,10 @@
-require_relative '../models/diagram'
+require_relative '../domain/diagram'
 gem 'minitest'
 require "minitest/autorun"
 require 'minitest/reporters'
 
-Minitest::Reporters.use!
+#pretty outputs
+MiniTest::Reporters.use!
 
 class DiagramTest < MiniTest::Test
 
@@ -148,6 +149,47 @@ class DiagramTest < MiniTest::Test
 
     assert_equal(5, p.get_node('pool1').resource_count(:green))
     assert_equal(0, p.get_node('pool1').resource_count(:red))
+
+  end
+
+
+  def test_two_automatics_pulling_and_pushing
+
+    d = Diagram.new 'my-diagram'
+
+    d.add_node! Pool.new 'pool1', :initial_value => 25, :mode => :push, :activation => :automatic
+
+    d.add_node! Pool.new 'pool2', :initial_value => 0, :mode => :pull, :activation => :automatic
+
+    d.add_edge! Edge.new 'edge1','pool1','pool2'
+
+    d.run!(5)
+
+    assert_equal 20, d.get_node('pool1').resource_count
+    assert_equal 5,d.get_node('pool2').resource_count
+
+  end
+
+  def test_leaves_but_doesnt_arrive
+
+    d = Diagram.new 'my-diagram'
+
+    d.add_node! Pool.new 'pool1', :initial_value => { :blue => 25 }, :mode => :push, :activation => :automatic
+
+    d.add_node! Pool.new 'pool2', :initial_value => { :black => 20 }, :mode => :push, :activation => :automatic
+
+    d.add_node! Pool.new 'pool3', :initial_value => {:blue => 0}
+    d.add_edge! Edge.new 'edge1','pool1','pool3', :types=> [:blue, :black]
+
+    d.add_edge! Edge.new 'edge2','pool2','pool3', :types=> [:blue, :black]
+
+    d.run!(5)
+
+    assert_equal 20, d.get_node('pool1').resource_count(:blue)
+    assert_equal 5,d.get_node('pool3').resource_count(:blue)
+
+    assert_equal 15,d.get_node('pool2').resource_count(:black)
+
 
   end
 
