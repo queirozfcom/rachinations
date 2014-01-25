@@ -79,7 +79,7 @@ class Diagram
     if node.push?
 
       edges
-      .select { |edge| edge.links? node.name }
+      .select { |edge| edge.connects? node.name }
       .each do |edge|
 
         if node.typed?
@@ -128,7 +128,7 @@ class Diagram
     elsif node.mode == :pull
 
       edges
-      .select { |edge| edge.links? node.name }
+      .select { |edge| edge.connects? node.name }
       .each do |edge|
 
         # will be run for each edge pointing *to* Node node

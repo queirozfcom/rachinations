@@ -1,4 +1,6 @@
 require_relative 'node'
+require 'rubygems'
+require 'active_support/all'
 
 class Pool < Node
 
@@ -11,7 +13,7 @@ class Pool < Node
     #watch out for unknown options - might be typos!
     hsh.each_pair do |key, value|
 
-      if !accepted_options.include?(key)
+      if accepted_options.exclude?(key)
         raise ArgumentError.new "Unknown option: in parameter hash: #{key} "
       end
 

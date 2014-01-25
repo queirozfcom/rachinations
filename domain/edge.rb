@@ -33,7 +33,7 @@ class Edge
     @sent = @received = false
   end
 
-  def links?(node_name)
+  def connects?(node_name)
     @to_node_name === node_name || @from_node_name === node_name
   end
 
