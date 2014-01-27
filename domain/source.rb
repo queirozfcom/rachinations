@@ -7,7 +7,8 @@ class Source < Pool
     if hsh.has_key?(:types)
       values = Hash.new
       hsh[:types].each do |key|
-        values[key] = Float::INFINITY
+        #TODO think of a better way to create nodes with infinite resources.. maybe create Tokens on demand would be good.
+        values[key] = 999
       end
       hsh[:initial_value] = values
     end
@@ -18,25 +19,12 @@ class Source < Pool
 
     #default values
     hsh = {
-      :types => [],
-      :initial_value => Float::INFINITY
+        :types => [],
+        :initial_value => 999
     }.merge hsh
 
     super(hsh)
 
-  end
-
-  #same things as a pool, basically
-  def remove_resource!(type=nil)
-    if type.nil?
-      #do nothing
-    else
-      if @resources.has_key? type
-        #do nothing
-      else
-        raise ArgumentError.new "You tried to remove a resource of type #{type} but I don't deal with those types."
-      end
-    end
   end
 
   def to_s

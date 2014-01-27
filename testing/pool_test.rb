@@ -55,16 +55,18 @@ class PoolTest < MiniTest::Test
 
   def test_create_one_custom_type_implicitly_via_initial_values
 
-    pool = Pool.new name: 'pool1', initial_value: {azul: 50} , mode: :push
+    kLASS = Class.new(Token)
 
-    assert_equal 50, pool.resource_count(:azul)
+    pool = Pool.new name: 'pool1', initial_value: {kLASS => 50} , mode: :push
+
+    assert_equal 50, pool.resource_count(kLASS)
     assert_equal 'pool1', pool.name
     assert_equal :passive, pool.activation
     assert_equal :push,pool.mode
-    assert_equal [:azul], pool.types
+    assert_equal [kLASS], pool.types
 
     assert_raises(ArgumentError) { pool.resource_count }
-    assert_raises(ArgumentError) { pool.resource_count(:rosa) }
+    assert_raises(ArgumentError) { pool.resource_count(Hash) }
 
   end
 
@@ -85,13 +87,17 @@ class PoolTest < MiniTest::Test
 
   def test_create_two_custom_types_implicitly_via_initial_value
 
-    pool = Pool.new name:'pool1', initial_value: { azul: 10 , roxo: 40 }
+    fOOTBALL = Class.new(Token)
 
-    assert_equal [:azul,:roxo], pool.types
-    assert_equal 10, pool.resource_count(:azul)
-    assert_equal 40, pool.resource_count(:roxo)
+    pERSON   = Class.new(Token)
 
-    assert_raises(ArgumentError) { pool.resource_count(:verde) }
+    pool = Pool.new name:'pool1', initial_value: { fOOTBALL => 10 , pERSON => 40 }
+
+    assert_equal [fOOTBALL,pERSON], pool.types
+    assert_equal 10, pool.resource_count(fOOTBALL)
+    assert_equal 40, pool.resource_count(pERSON)
+
+    assert_raises(ArgumentError) { pool.resource_count(Object) }
     assert_raises(ArgumentError) { pool.resource_count }
 
   end
