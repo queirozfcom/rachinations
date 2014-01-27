@@ -2,8 +2,7 @@ require_relative 'node'
 
 class Source < Pool
 
-  def initialize(name,hsh={})
-
+  def initialize(hsh={})
 
     if hsh.has_key?(:types)
       values = Hash.new
@@ -12,7 +11,6 @@ class Source < Pool
       end
       hsh[:initial_value] = values
     end
-
 
     #sources are always automatic push
     hsh[:mode] = :push
@@ -24,7 +22,7 @@ class Source < Pool
       :initial_value => Float::INFINITY
     }.merge hsh
 
-    super(name,hsh)
+    super(hsh)
 
   end
 

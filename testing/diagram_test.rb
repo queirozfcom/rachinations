@@ -11,20 +11,26 @@ class DiagramTest < MiniTest::Test
   def test_one_source_one_pool
     p = Diagram.new('one source one pool')
 
-    source = Source.new "source"
-    p.add_node! source
+    p.add_node! Source,{
+      :name => 'source'
+    }
 
-    pool1 = Pool.new "pool1"
-    p.add_node! pool1
+    p.add_node! Pool,{
+        :name => 'pool1'
+    }
 
-    edge1 = Edge.new 'connector1', "source", "pool1"
-    p.add_edge! edge1
+    p.add_edge! Edge,{
+      :name => 'connector1',
+      :from => 'source',
+      :to => 'pool1'
+    }
 
     p.run!(5)
 
     assert_equal 5, p.get_node("pool1").resource_count
   end
 
+=begin
 
   def test_one_source_two_pools
     p = Diagram.new('one source two pools')

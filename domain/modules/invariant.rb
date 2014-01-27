@@ -1,8 +1,7 @@
 module Invariant
 
   #used to insert assertions into code
-  #remember that assertions should not be used to control program flow!
-  #assert things that should ALWAYS be false.
+  #remember that assertions should not be used to control program flow!!! assert things that should ALWAYS be false.
 
   class AssertionError < RuntimeError
 
@@ -12,6 +11,7 @@ module Invariant
     raise AssertionError unless yield
   end
 
+  #alias of invariant
   def inv &block
     invariant &block
   end

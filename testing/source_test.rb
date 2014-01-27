@@ -19,7 +19,7 @@ class SourceTest < MiniTest::Test
   end
 
   def test_attributes
-    source = Source.new 'source'
+    source = Source.new name:'source'
 
     assert_equal 'source', source.name
     assert_equal :automatic, source.activation

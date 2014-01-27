@@ -1,9 +1,7 @@
 require_relative '../domain/edge'
-require "rubygems"
-gem 'minitest'
 require "minitest/autorun"
 
-class MyTest < MiniTest::Test
+class EdgeTest < MiniTest::Test
 
   # Called before every test method runs. Can be used
   # to set up fixture information.
@@ -20,7 +18,7 @@ class MyTest < MiniTest::Test
 
   def test_simple
 
-    edge = Edge.new 'edge1', 'foo', 'bar'
+    edge = Edge.new name: 'edge1', from: 'foo',to: 'bar'
 
     assert_equal 1, edge.label
     assert_equal [], edge.types
@@ -29,7 +27,7 @@ class MyTest < MiniTest::Test
 
   def test_types_allowed
 
-    edge = Edge.new 'edge1', 'foo', 'bar', :types => [:blue, :black]
+    edge = Edge.new name:'edge1', from:'foo',to: 'bar', types: [:blue, :black]
 
     assert_equal 'edge1', edge.name
     assert_equal 'foo', edge.from_node_name
@@ -41,7 +39,7 @@ class MyTest < MiniTest::Test
 
   def test_label
 
-    edge = Edge.new 'edge1', 'foo', 'bar', :types => [:blue, :red], :label => 5
+    edge = Edge.new name:'edge1', from:'foo',to: 'bar', types: [:blue, :red], label: 5
 
     assert_equal 'edge1', edge.name
     assert_equal 'foo', edge.from_node_name

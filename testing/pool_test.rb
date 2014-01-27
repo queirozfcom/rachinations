@@ -20,7 +20,7 @@ class PoolTest < MiniTest::Test
 
   def test_create_simple_Pool_sending_all_parameters
 
-    pool = Pool.new 'pool0', :activation => :automatic, :mode => :push, :initial_value => 78
+    pool = Pool.new name: 'pool0', :activation => :automatic, :mode => :push, :initial_value => 78
 
     assert_equal 78 ,pool.resource_count
     assert_equal 'pool0',pool.name
@@ -32,7 +32,7 @@ class PoolTest < MiniTest::Test
 
   def test_create_simple_pool_default_attributes
 
-    pool = Pool.new 'pool1'
+    pool = Pool.new name:'pool1'
 
     assert_equal 0, pool.resource_count
     assert_equal 'pool1', pool.name
@@ -43,7 +43,7 @@ class PoolTest < MiniTest::Test
 
   def test_create_one_custom_type_no_initial_values
 
-    pool = Pool.new 'pool1',types: [:amarelo]
+    pool = Pool.new name: 'pool1',types: [:amarelo]
 
     assert_equal 0, pool.resource_count(:amarelo)
     assert_equal 'pool1', pool.name
@@ -55,7 +55,7 @@ class PoolTest < MiniTest::Test
 
   def test_create_one_custom_type_implicitly_via_initial_values
 
-    pool = Pool.new 'pool1', initial_value: {azul: 50} , mode: :push
+    pool = Pool.new name: 'pool1', initial_value: {azul: 50} , mode: :push
 
     assert_equal 50, pool.resource_count(:azul)
     assert_equal 'pool1', pool.name
@@ -70,7 +70,7 @@ class PoolTest < MiniTest::Test
 
   def test_create_two_custom_types_no_initial_values
 
-    pool = Pool.new 'pool1', types: [:verde,:vermelho], activation: :automatic
+    pool = Pool.new name: 'pool1', types: [:verde,:vermelho], activation: :automatic
 
     assert_equal 'pool1', pool.name
     assert_equal [:verde, :vermelho], pool.types
@@ -85,7 +85,7 @@ class PoolTest < MiniTest::Test
 
   def test_create_two_custom_types_implicitly_via_initial_value
 
-    pool = Pool.new 'pool1', initial_value: { azul: 10 , roxo: 40 }
+    pool = Pool.new name:'pool1', initial_value: { azul: 10 , roxo: 40 }
 
     assert_equal [:azul,:roxo], pool.types
     assert_equal 10, pool.resource_count(:azul)

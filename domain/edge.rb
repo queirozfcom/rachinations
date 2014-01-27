@@ -2,13 +2,15 @@ class Edge
 
   attr_reader :from_node_name, :to_node_name, :name, :label, :types
 
-  def initialize(name, from_node_name, to_node_name, hsh={})
+  def initialize(hsh={})
 
-    @name = name
+    #TODO assert that hsh has at least the required keys: :name, :from and :to
 
-    @from_node_name = from_node_name
+    @name = hsh[:name]
 
-    @to_node_name = to_node_name
+    @from_node_name = hsh[:from]
+
+    @to_node_name = hsh[:to]
 
     #setting default values
     hsh = defaults.merge hsh

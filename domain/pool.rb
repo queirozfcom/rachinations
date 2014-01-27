@@ -5,9 +5,9 @@ class Pool < Node
 
   attr_reader :name, :activation, :mode, :types
 
-  def initialize(name, hsh={})
+  def initialize(hsh={})
 
-    accepted_options = [:activation, :mode, :types, :initial_value]
+    accepted_options = [:name,:activation, :mode, :types, :initial_value,:diagram]
 
     #watch out for unknown options - might be typos!
     hsh.each_pair do |key, value|
@@ -26,7 +26,7 @@ class Pool < Node
     }.merge hsh
 
     #this node's identifier
-    @name = name
+    @name = hsh[:name]
 
     #whether this node is passive or automatic (active)
     @activation = hsh[:activation]
@@ -69,9 +69,11 @@ class Pool < Node
       raise ArgumentError.new
     end
 
-
     #pull or push
     @mode = hsh[:mode]
+
+    #reference to the overlying diagram
+    @diagram = hsh[:diagram]
 
   end
 
@@ -144,6 +146,7 @@ class Pool < Node
     @activation === :automatic
   end
 
+  #this method is revealing too much.. it's exposing too much.
   def each_type &blk
     @types.each &blk
   end

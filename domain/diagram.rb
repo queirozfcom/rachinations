@@ -30,27 +30,31 @@ class Diagram
   end
 
   #destrutivo
-  def add_node!(node)
+  def add_node!(node_klass,params)
+
+    #TODO assert that node_klass responds_to the methods we're going to call
+
+    #make the diagram available to the node
+    params[:diagram] = self
+
+    node = node_klass.new(params)
+
     nodes.push(node)
+
     nil
   end
 
   #destrutivo
-  def add_edge!(edge)
+  def add_edge!(edge_klass,params)
+
+    #TODO assert that edge_klass responds_to the methods we're going to call
+
+    params[:diagram] = self
+
+    edge = edge_klass.new(params)
+
     edges.push(edge)
     nil
-  end
-
-  def add_node(node)
-    copy = self.clone
-    copy.add_node!(node)
-    copy
-  end
-
-  def add_edge(edge)
-    copy = self.clone
-    copy.add_edge!(edge)
-    copy
   end
 
   def run!(rounds=5)
@@ -65,7 +69,7 @@ class Diagram
 
     #only automatic nodes cause changes in other nodes
     automatic_nodes.each do |node|
-      post_execution_nodes = perform_action node, post_execution_nodes
+      post_execution_nodes = perform_action(node, post_execution_nodes)
     end
 
     self.nodes = post_execution_nodes
