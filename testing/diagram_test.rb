@@ -152,7 +152,6 @@ class DiagramTest < MiniTest::Test
 
   end
 
-
   def test_two_automatics_pulling_and_pushing
 
     d = Diagram.new 'my-diagram'

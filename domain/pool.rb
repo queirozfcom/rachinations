@@ -1,5 +1,4 @@
 require_relative 'node'
-require 'rubygems'
 require 'active_support/all'
 
 class Pool < Node
