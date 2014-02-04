@@ -4,7 +4,19 @@ GEM
     active_support (3.0.0)
       activesupport (= 3.0.0)
     activesupport (3.0.0)
+    ansi (1.4.3)
+    builder (3.2.2)
+    hashie (2.0.5)
     i18n (0.6.9)
+    minitest (5.2.0)
+    minitest-reporters (1.0.0)
+      ansi
+      builder
+      minitest (>= 5.0)
+      powerbar
+    powerbar (1.0.11)
+      ansi (~> 1.4.0)
+      hashie (>= 1.1.0)
     rake (10.1.0)
 
 PLATFORMS
@@ -13,4 +25,6 @@ PLATFORMS
 DEPENDENCIES
   active_support
   i18n
+  minitest
+  minitest-reporters
   rake

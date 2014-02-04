@@ -8,21 +8,49 @@ MiniTest::Reporters.use!
 
 class DiagramTest < MiniTest::Test
 
+  def test_two_pools
+    p = Diagram.new 'two pools'
+
+    p.add_node! Pool, {
+        :name => 'pool1',
+        :initial_value => 7,
+        :mode => :push,
+        :activation => :automatic
+    }
+
+    p.add_node! Pool, {
+        :name => 'pool2',
+    }
+
+    p.add_edge! Edge, {
+        :name => 'connector1',
+        :from => 'pool1',
+        :to => 'pool2'
+    }
+
+    p.run!(5)
+
+    assert_equal 2,p.get_node('pool1').resource_count
+    assert_equal 5,p.get_node('pool2').resource_count
+
+
+  end
+
   def test_one_source_one_pool
     p = Diagram.new('one source one pool')
 
-    p.add_node! Source,{
-      :name => 'source'
+    p.add_node! Source, {
+        :name => 'source'
     }
 
-    p.add_node! Pool,{
+    p.add_node! Pool, {
         :name => 'pool1'
     }
 
-    p.add_edge! Edge,{
-      :name => 'connector1',
-      :from => 'source',
-      :to => 'pool1'
+    p.add_edge! Edge, {
+        :name => 'connector1',
+        :from => 'source',
+        :to => 'pool1'
     }
 
     p.run!(5)
@@ -30,25 +58,38 @@ class DiagramTest < MiniTest::Test
     assert_equal 5, p.get_node("pool1").resource_count
   end
 
-=begin
-
-  def test_one_source_two_pools
+  def test_one_source_two_pools_single_run
     p = Diagram.new('one source two pools')
 
-    source = Source.new('source')
-    p.add_node!(source)
+    p.add_node!(Source, {name: 'source'})
 
-    pool1 = Pool.new('pool1')
-    p.add_node!(pool1)
+    p.add_node!(Pool, {name: 'pool1'})
 
-    pool2 = Pool.new('pool2', :activation => :automatic)
-    p.add_node!(pool2)
+    p.add_node!(Pool, {name: 'pool2', activation: :automatic})
 
-    edge1 = Edge.new('connector1', 'source', 'pool1')
-    p.add_edge!(edge1)
+    p.add_edge!(Edge, {name: 'edge1', from: 'source', to: 'pool1'})
 
-    edge2 = Edge.new('connector2', 'pool1', 'pool2')
-    p.add_edge!(edge2)
+    p.add_edge!(Edge, {name: 'connector2', from: 'pool1', to: 'pool2'})
+
+    p.run!(1)
+
+    assert_equal(1, p.get_node("pool1").resource_count)
+    assert_equal(0, p.get_node("pool2").resource_count)
+  end
+
+
+  def test_one_source_two_pools_multiple_runs
+    p = Diagram.new('one source two pools')
+
+    p.add_node!(Source, {name: 'source'})
+
+    p.add_node!(Pool, {name: 'pool1'})
+
+    p.add_node!(Pool, {name: 'pool2', activation: :automatic})
+
+    p.add_edge!(Edge, {name: 'edge1', from: 'source', to: 'pool1'})
+
+    p.add_edge!(Edge, {name: 'connector2', from: 'pool1', to: 'pool2'})
 
     p.run!(3)
 
@@ -56,17 +97,15 @@ class DiagramTest < MiniTest::Test
     assert_equal(2, p.get_node("pool2").resource_count)
   end
 
+
   def test_two_pools_pull_automatic
     p = Diagram.new('two pools pull automatic')
 
-    pool1 = Pool.new('pool1', :initial_value => 5)
-    p.add_node!(pool1)
+    p.add_node!(Pool,name: 'pool1', :initial_value => 5)
 
-    pool2 = Pool.new('pool2', :activation => :automatic)
-    p.add_node!(pool2)
+    p.add_node!(Pool,name:'pool2', :activation => :automatic)
 
-    edge2 = Edge.new('connector2', 'pool1', 'pool2')
-    p.add_edge!(edge2)
+    p.add_edge!(Edge,name:'connector2',from: 'pool1',to: 'pool2')
 
     #i know this is too much
     p.run!(10)
@@ -74,7 +113,7 @@ class DiagramTest < MiniTest::Test
     assert_equal(0, p.get_node("pool1").resource_count)
     assert_equal(5, p.get_node("pool2").resource_count)
   end
-
+=begin
   def test_one_source_three_pools
     p = Diagram.new('one source three pools')
 

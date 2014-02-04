@@ -22,34 +22,36 @@ class PoolTest < MiniTest::Test
 
     pool = Pool.new name: 'pool0', :activation => :automatic, :mode => :push, :initial_value => 78
 
-    assert_equal 78 ,pool.resource_count
-    assert_equal 'pool0',pool.name
-    assert_equal :automatic,pool.activation  
-    assert_equal :push, pool.mode
-    assert_equal [], pool.types
-    
+    assert_equal 78, pool.resource_count
+    assert_equal 'pool0', pool.name
+    assert pool.automatic?
+    assert pool.push?
+    assert pool.untyped?
+
   end
 
   def test_create_simple_pool_default_attributes
 
-    pool = Pool.new name:'pool1'
+    pool = Pool.new name: 'pool1'
 
     assert_equal 0, pool.resource_count
     assert_equal 'pool1', pool.name
-    assert_equal :passive, pool.activation
-    assert_equal :pull, pool.mode
-    assert_equal [],pool.types
+    assert pool.passive?
+    assert pool.pull?
+    assert pool.untyped?
   end
 
   def test_create_one_custom_type_no_initial_values
+    mYCLASS = Class.new(Token)
 
-    pool = Pool.new name: 'pool1',types: [:amarelo]
+    pool = Pool.new name: 'pool1', types: [mYCLASS]
 
-    assert_equal 0, pool.resource_count(:amarelo)
+    assert_equal 0, pool.resource_count(mYCLASS)
     assert_equal 'pool1', pool.name
-    assert_equal :passive, pool.activation
-    assert_equal :pull, pool.mode
-    assert_equal [:amarelo], pool.types
+    assert pool.passive?
+    assert pool.pull?
+    assert pool.typed?
+    assert pool.supports? mYCLASS
 
   end
 
@@ -57,13 +59,14 @@ class PoolTest < MiniTest::Test
 
     kLASS = Class.new(Token)
 
-    pool = Pool.new name: 'pool1', initial_value: {kLASS => 50} , mode: :push
+    pool = Pool.new name: 'pool1', initial_value: {kLASS => 50}, mode: :push
 
     assert_equal 50, pool.resource_count(kLASS)
     assert_equal 'pool1', pool.name
-    assert_equal :passive, pool.activation
-    assert_equal :push,pool.mode
-    assert_equal [kLASS], pool.types
+    assert pool.passive?
+    assert pool.push?
+    assert pool.supports? kLASS
+    assert pool.typed?
 
     assert_raises(ArgumentError) { pool.resource_count }
     assert_raises(ArgumentError) { pool.resource_count(Hash) }
@@ -72,15 +75,21 @@ class PoolTest < MiniTest::Test
 
   def test_create_two_custom_types_no_initial_values
 
-    pool = Pool.new name: 'pool1', types: [:verde,:vermelho], activation: :automatic
+    vERDE = Class.new(Token)
+    aMARELO = Class.new(Token)
+    aZUL = Class.new(Token)
+
+    pool = Pool.new name: 'pool1', types: [vERDE,aMARELO], activation: :automatic
 
     assert_equal 'pool1', pool.name
-    assert_equal [:verde, :vermelho], pool.types
-    assert_equal 0, pool.resource_count(:verde)
-    assert_equal 0, pool.resource_count(:vermelho)
-    assert_equal :automatic, pool.activation
+    assert pool.supports? vERDE
+    assert pool.supports? aMARELO
+    assert_equal 0, pool.resource_count(vERDE)
+    assert_equal 0, pool.resource_count(aMARELO)
+    assert pool.typed?
+    assert pool.automatic?
 
-    assert_raises(ArgumentError) { pool.resource_count(:azul) }
+    assert_raises(ArgumentError) { pool.resource_count(aZUL) }
     assert_raises(ArgumentError) { pool.resource_count }
 
   end
@@ -88,18 +97,23 @@ class PoolTest < MiniTest::Test
   def test_create_two_custom_types_implicitly_via_initial_value
 
     fOOTBALL = Class.new(Token)
+    pERSON = Class.new(Token)
 
-    pERSON   = Class.new(Token)
+    pool = Pool.new name: 'pool1', initial_value: {fOOTBALL => 10, pERSON => 40}
 
-    pool = Pool.new name:'pool1', initial_value: { fOOTBALL => 10 , pERSON => 40 }
+    assert pool.supports? fOOTBALL
+    assert pool.supports? pERSON
 
-    assert_equal [fOOTBALL,pERSON], pool.types
     assert_equal 10, pool.resource_count(fOOTBALL)
     assert_equal 40, pool.resource_count(pERSON)
 
-    assert_raises(ArgumentError) { pool.resource_count(Object) }
-    assert_raises(ArgumentError) { pool.resource_count }
+    assert pool.typed?
 
+    err=assert_raises(ArgumentError) { pool.resource_count(Object) }
+    assert_match /unsupported/i, err.message
+
+    err=assert_raises(ArgumentError) { pool.resource_count }
+    assert_match /typed/i, err.message
   end
 
 end

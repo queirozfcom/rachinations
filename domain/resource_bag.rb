@@ -1,24 +1,14 @@
 require 'active_support/all'
 
 class ResourceBag
-  def initialize(allowed_types=nil)
-
-    if(allowed_types.nil?)
-      @allowed_classes = [Token]
-    else
-      @allowed_classes = allowed_types
-    end
-
+  def initialize
     @store = Array.new
   end
 
-  def allows? (klass)
-    allowed_classes.include?(klass)
-  end
+  def initialize_copy(orig)
+    super
+    @store=@store.map{|el| el.clone}
 
-  #alias
-  def allow?(klass)
-    allows?(klass)
   end
 
   def add(obj)
@@ -26,13 +16,13 @@ class ResourceBag
   end
 
   #retrieve
-  def get(klass=nil)
+  def get(klass)
 
-    if klass.nil?
-      obj = store.select{|el| el.is_a?(Token)}.sample
-    else
-      obj = store.select{|el| el.is_a?(klass)}.sample
+    if count(klass) === 0
+      raise NoElementsOfGivenTypeError
     end
+
+    obj = store.select { |el| el.is_a?(klass) }.sample
 
     remove_element!(obj)
     obj
@@ -40,8 +30,7 @@ class ResourceBag
   end
 
   def count(klass)
-
-    store.select{|el| el.is_a?(klass)}.length
+    store.select{ |el| el.is_a?(klass) }.length
   end
 
   private
@@ -57,9 +46,9 @@ class ResourceBag
   def remove_element!(obj)
 
     if @store.delete(obj).nil?
-      raise Exception.new("Unable to remove element form ResourceBag because it couldn't be found.")
+      raise NoElementsOfGivenTypeError
     end
 
-end
+  end
 
 end

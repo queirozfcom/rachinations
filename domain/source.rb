@@ -19,7 +19,6 @@ class Source < Pool
 
     #default values
     hsh = {
-        :types => [],
         :initial_value => 999
     }.merge hsh
 

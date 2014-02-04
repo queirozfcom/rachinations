@@ -1,0 +1,3 @@
+class NoElementsOfGivenTypeError < Exception
+
+end
