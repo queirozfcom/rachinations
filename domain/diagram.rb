@@ -66,17 +66,16 @@ class Diagram
 
   def run_round!
 
-    post_execution_nodes = nodes.map{|el| el.clone }
+    post_execution_nodes = nodes.map { |el| el.clone }
 
     #only automatic nodes cause changes in other nodes
-    nodes.select{|el| el.automatic?}.each do |node|
-
+    nodes.select { |el| el.automatic? }.each do |node|
       # if this node is in push mode and has arrows pointing
       # away from it, we need to send resources, if available.
       if node.push?
 
         edges
-        .select { |edge| edge.connects? node.name }
+        .select { |edge| edge.from? node.name }
         .each do |edge|
 
           if node.typed?
@@ -87,11 +86,11 @@ class Diagram
 
               if node.resource_count(key) > 0
 
-                if edge.has_type?(key) && nodes.detect_by_name{edge.to_node_name}.supports?(key)
+                if edge.has_type?(key) && nodes.detect_by_name { edge.to_node_name }.supports?(key)
                   #resources leave and arrive on the other side
 
-                  post_execution_nodes.detect{|el| el.name=node.name}.remove_resource!(key)
-                  element = nodes.detect{|el| el.name=node.name}.remove_resource!(key)
+                  post_execution_nodes.detect { |el| el.name=node.name }.remove_resource!(key)
+                  element = nodes.detect { |el| el.name=node.name }.remove_resource!(key)
 
                   unless element.nil?
                     post_execution_nodes.detect { |n| n.name == edge.to_node_name }.add_resource!(element)
@@ -100,8 +99,8 @@ class Diagram
 
                 elsif edge.has_type?(key) && !nodes.detect_by_name(edge.to_node_name).has_type?(key)
                   #resources leave but don't arrive on the other side
-                  post_execution_nodes.detect{|el| el.name==node.name}.remove_resource!(key)
-                  nodes.detect{|el| el.name==node.name}.remove_resource!(key)
+                  post_execution_nodes.detect { |el| el.name==node.name }.remove_resource!(key)
+                  nodes.detect { |el| el.name==node.name }.remove_resource!(key)
                 else
                   #if edge doesn't allow this type, nothing gets done - resources don't even leave base
                 end
@@ -110,6 +109,7 @@ class Diagram
                 #no resources of this type to send, do nothing.
               end
             end
+
           else
             # just numbers, business as usual
 
@@ -119,15 +119,17 @@ class Diagram
 
               #inv {node.eql?(nodes.detect_by_name(edge.from_node_name))}
 
-              post_execution_nodes.detect{|el| el.name==node.name}.remove_resource!
-              element = nodes.detect{|el| el.name==node.name}.remove_resource!
+              element = nil
+
+              post_execution_nodes.detect { |el| el.name==node.name }.remove_resource!
+              element = nodes.detect { |el| el.name==node.name }.remove_resource!
 
               unless element.nil?
-                post_execution_nodes.detect{|el| el.name === edge.to_node_name}.add_resource!(element)
+                post_execution_nodes.detect { |el| el.name === edge.to_node_name }.add_resource!(element)
               end
 
               # in case this inner loop runs more than once (if there is more than one edge pointing away from this node)
-              # does decrement make sense? in other iterations it'll just get assigned again like in line (this - 10), no?
+              # does decrement make sense? in other iterations it'll just get assigned again like in line (this - 15), no?
               available_resources -= 1
             end
 
@@ -139,12 +141,12 @@ class Diagram
       elsif node.pull?
 
         edges
-        .select { |edge| edge.connects? node.name }
+        .select { |edge| edge.to? node.name }
         .each do |edge|
 
           # will be run for each edge pointing *to* Node node
 
-          from_node = nodes.detect{|el| el.name==edge.from_node_name}
+          from_node = nodes.detect { |el| el.name==edge.from_node_name }
 
           if from_node.automatic? && from_node.push?
             next #otherwise this is done twice
@@ -170,14 +172,14 @@ class Diagram
                   if edge.has_type?(key) && nodes.detect { |n| n.name == edge.from_node_name }.supports?(key)
 
                     #resources leave and arrive on the other side
-                    post_execution_nodes.detect{|el| el.name === edge.from_node_name}.remove_resource!(key)
-                    element = nodes.detect{|el| el.name === edge.from_node_name}.remove_resource!(key)
+                    post_execution_nodes.detect { |el| el.name === edge.from_node_name }.remove_resource!(key)
+                    element = nodes.detect { |el| el.name === edge.from_node_name }.remove_resource!(key)
 
                     unless element.nil?
                       post_execution_nodes.detect { |n| n.name == node.name }.add_resource!(element)
                     end
 
-                  #will this elseif ever be accessed? if the current target node doesn't have that type, then this loop was never entered (node.types.each, remember?)
+                    #will this elseif ever be accessed? if the current target node doesn't have that type, then this loop was never entered (node.types.each, remember?)
                   elsif edge.has_type?(key) && !post_execution_nodes.detect { |n| n.name == edge.to_node_name }.has_type?(key)
                     #resources leave but don't arrive on the other side
                     post_execution_nodes.detect { |n| n.name == edge.from_node_name }.remove_resource!(key)

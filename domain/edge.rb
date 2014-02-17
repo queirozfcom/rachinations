@@ -39,6 +39,14 @@ class Edge
     @to_node_name === node_name || @from_node_name === node_name
   end
 
+  def from?(node_name)
+    node_name === @from_node_name
+  end
+
+  def to?(node_name)
+    node_name === @to_node_name
+  end
+
   def sent?
     sent
   end
