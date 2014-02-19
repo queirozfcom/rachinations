@@ -1,4 +1,4 @@
-require_relative '../domain/edge'
+require_relative '../domain/diagram'
 require "minitest/autorun"
 
 class EdgeTest < MiniTest::Test
@@ -21,30 +21,39 @@ class EdgeTest < MiniTest::Test
     edge = Edge.new name: 'edge1', from: 'foo',to: 'bar'
 
     assert_equal 1, edge.label
-    assert_equal [], edge.types
 
   end
 
   def test_types_allowed
 
-    edge = Edge.new name:'edge1', from:'foo',to: 'bar', types: [:blue, :black]
+    blue = Class.new(Token)
+    black = Class.new(Token)
+
+    edge = Edge.new name:'edge1', from:'foo',to: 'bar', types: [blue, black]
 
     assert_equal 'edge1', edge.name
-    assert_equal 'foo', edge.from_node_name
-    assert_equal 'bar', edge.to_node_name
-    assert_equal [:blue, :black], edge.types
+    assert edge.from? 'foo'
+    assert edge.to? 'bar'
+    assert edge.support? blue
+    assert edge.support? black
 
   end
 
 
   def test_label
 
-    edge = Edge.new name:'edge1', from:'foo',to: 'bar', types: [:blue, :red], label: 5
+    blue = Class.new(Token)
+    red = Class.new(Token)
+    green = Class.new(Token)
+
+    edge = Edge.new name:'edge1', from:'foo',to: 'bar', types: [blue, red], label: 5
 
     assert_equal 'edge1', edge.name
-    assert_equal 'foo', edge.from_node_name
-    assert_equal 'bar', edge.to_node_name
-    assert_equal [:blue, :red], edge.types
+    assert edge.from? 'foo'
+    assert edge.to? 'bar'
+    assert edge.support? blue
+    assert edge.support? red
+    refute edge.support? green
     assert_equal 5, edge.label
 
   end

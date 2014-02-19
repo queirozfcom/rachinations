@@ -79,7 +79,7 @@ class PoolTest < MiniTest::Test
     aMARELO = Class.new(Token)
     aZUL = Class.new(Token)
 
-    pool = Pool.new name: 'pool1', types: [vERDE,aMARELO], activation: :automatic
+    pool = Pool.new name: 'pool1', types: [vERDE, aMARELO], activation: :automatic
 
     assert_equal 'pool1', pool.name
     assert pool.supports? vERDE
@@ -114,6 +114,28 @@ class PoolTest < MiniTest::Test
 
     err=assert_raises(ArgumentError) { pool.resource_count }
     assert_match /typed/i, err.message
+  end
+
+  def test_each_resource_is_unique
+    #if a source generates 4 Footballs, then the Footballs that will end up in the other nodes are not
+    #just *any* Footballs, but the same Footballs, as identified by their object_id.
+
+    football = Class.new(Token)
+
+    n1 = Pool.new name:'n1',initial_value: {football=>1}
+
+    n2 = Pool.new name:'n1', types: [football]
+
+    tk = n1.remove_resource!(football)
+
+    obj_id_1 = tk.object_id
+
+    n2.add_resource!(tk)
+
+    obj_id_2 = n2.remove_resource!(football).object_id
+
+    assert obj_id_1===obj_id_2
+
   end
 
 end

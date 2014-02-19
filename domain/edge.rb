@@ -26,6 +26,14 @@ class Edge
 
   end
 
+  def supports?(type)
+    has_type?(type)
+  end
+
+  def support?(type)
+    has_type?(type)
+  end
+
   def has_type?(type)
     types.empty? || types.include?(type)
   end

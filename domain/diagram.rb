@@ -86,21 +86,20 @@ class Diagram
 
               if node.resource_count(key) > 0
 
-                if edge.has_type?(key) && nodes.detect_by_name { edge.to_node_name }.supports?(key)
+                if edge.has_type?(key) && nodes.detect{|el| el.name==edge.to_node_name}.supports?(key)
                   #resources leave and arrive on the other side
 
-                  post_execution_nodes.detect { |el| el.name=node.name }.remove_resource!(key)
-                  element = nodes.detect { |el| el.name=node.name }.remove_resource!(key)
+                  post_execution_nodes.detect { |el| el.name == edge.from_node_name }.remove_resource!(key)
+                  element = nodes.detect { |el| el.name == edge.from_node_name }.remove_resource!(key)
 
                   unless element.nil?
                     post_execution_nodes.detect { |n| n.name == edge.to_node_name }.add_resource!(element)
-
                   end
 
-                elsif edge.has_type?(key) && !nodes.detect_by_name(edge.to_node_name).has_type?(key)
+                elsif edge.has_type?(key) && !nodes.detect{|el| el.name == edge.to_node_name}.supports?(key)
                   #resources leave but don't arrive on the other side
-                  post_execution_nodes.detect { |el| el.name==node.name }.remove_resource!(key)
-                  nodes.detect { |el| el.name==node.name }.remove_resource!(key)
+                  post_execution_nodes.detect { |el| el.name == edge.from_node_name }.remove_resource!(key)
+                  nodes.detect { |el| el.name == edge.from_node_name }.remove_resource!(key)
                 else
                   #if edge doesn't allow this type, nothing gets done - resources don't even leave base
                 end
@@ -160,10 +159,10 @@ class Diagram
 
             # TODO what if I'm of type X and I want to pull from a node of type Y, even though I can't receive it? shouldn't the resources leave node type Y regardless?
 
-            node.types.each do |key|
+            node.each_type do |key|
 
               #node we are pulling resources FROM
-              if from_node.has_type?(key)
+              if from_node.supports?(key)
 
                 available_resources = from_node.resource_count(key)
 
@@ -180,7 +179,7 @@ class Diagram
                     end
 
                     #will this elseif ever be accessed? if the current target node doesn't have that type, then this loop was never entered (node.types.each, remember?)
-                  elsif edge.has_type?(key) && !post_execution_nodes.detect { |n| n.name == edge.to_node_name }.has_type?(key)
+                  elsif edge.has_type?(key) && !post_execution_nodes.detect { |n| n.name == edge.to_node_name }.support?(key)
                     #resources leave but don't arrive on the other side
                     post_execution_nodes.detect { |n| n.name == edge.from_node_name }.remove_resource!(key)
                     nodes.detect { |n| n.name == edge.from_node_name }.remove_resource!(key)
