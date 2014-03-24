@@ -197,7 +197,13 @@ class DiagramTest < MiniTest::Test
   def test_two_pools_different_types_edge_allows_types
 
     gREEN = Class.new(Token)
+
+    #setting the constant so I can reference this class by name..
+    # this is useful when I need to see the contents of a pool
+    Object.const_set(:Green,gREEN)
+
     rED = Class.new(Token)
+    Object.const_set(:Red,rED)
 
     p = Diagram.new('two pools different types')
 

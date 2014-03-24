@@ -60,6 +60,9 @@ class Diagram
 
   def run!(rounds=5)
     rounds.times { run_round! }
+
+    print "========== END ==========\n\n"
+
   end
 
   private
@@ -68,8 +71,17 @@ class Diagram
 
     post_execution_nodes = nodes.map { |el| el.clone }
 
-    #only automatic nodes cause changes in other nodes
-    nodes.select { |el| el.automatic? }.each do |node|
+    print "========NEW ROUND========\n\n"
+
+    nodes.each do |node|
+
+      puts node
+
+      if node.passive?
+        #only automatic nodes cause changes in other nodes
+        next
+      end
+
       # if this node is in push mode and has arrows pointing
       # away from it, we need to send resources, if available.
       if node.push?
@@ -159,6 +171,7 @@ class Diagram
 
             # TODO what if I'm of type X and I want to pull from a node of type Y, even though I can't receive it? shouldn't the resources leave node type Y regardless?
 
+
             node.each_type do |key|
 
               #node we are pulling resources FROM
@@ -221,16 +234,6 @@ class Diagram
     self.nodes = post_execution_nodes
 
   end
-
-  #def perform_action(node, current_round_nodes)
-  #
-  #  current_round_nodes_copy = current_round_nodes.map{|el| el.clone}
-  #
-  #
-  #
-  #  current_round_nodes
-  #
-  #end
 
   def nodes
     @nodes

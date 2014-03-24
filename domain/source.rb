@@ -27,7 +27,7 @@ class Source < Pool
   end
 
   def to_s
-    p "Source '#{@name}': Current Resources: #{@resources}"
+    "Source '#{@name}':  #{@resources.to_s}"
   end
 
 end

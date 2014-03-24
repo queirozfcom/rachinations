@@ -163,7 +163,7 @@ class Pool < Node
   end
 
   def to_s
-    p "Pool '#{@name}'\n #{@resources.to_s}"
+    "Pool '#{@name}':  #{@resources.to_s}"
   end
 
   private
