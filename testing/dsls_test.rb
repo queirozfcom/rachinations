@@ -23,11 +23,13 @@ class DSLSTest < MiniTest::Test
 
   def test_no_types
 
-    diagram 'test_diagram' do
+   diagram 'test_diagram' do
       node 'source', Source
       node 'pool1', Pool
       edge 'edge1', Edge, 'source', 'pool1'
     end
+
+
 
   end
 end

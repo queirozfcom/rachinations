@@ -200,10 +200,10 @@ class DiagramTest < MiniTest::Test
 
     #setting the constant so I can reference this class by name..
     # this is useful when I need to see the contents of a pool
-    Object.const_set(:Green,gREEN)
+    Object.const_set(:Green, gREEN)
 
     rED = Class.new(Token)
-    Object.const_set(:Red,rED)
+    Object.const_set(:Red, rED)
 
     p = Diagram.new('two pools different types')
 
@@ -262,7 +262,7 @@ class DiagramTest < MiniTest::Test
 
   end
 
-def test_one_source_two_pools_typed_pull
+  def test_one_source_two_pools_typed_pull
 
     green = Class.new(Token)
     red = Class.new(Token)
@@ -272,15 +272,15 @@ def test_one_source_two_pools_typed_pull
 
     p = Diagram.new('one source two pools types pull')
 
-    p.add_node!(Source, name:'source', :types =>[green])
+    p.add_node!(Source, name: 'source', :types => [green])
 
-    p.add_node!(Pool, name:'pool1',:types => [green,red])
+    p.add_node!(Pool, name: 'pool1', :types => [green, red])
 
-    p.add_node!(Pool, name:'pool2', :activation => :automatic, :types => [green, yellow])
+    p.add_node!(Pool, name: 'pool2', :activation => :automatic, :types => [green, yellow])
 
     p.add_edge! Edge, name: 'connector1', from: 'source', to: 'pool1'
 
-    p.add_edge!(Edge, name:'connector2',from: 'pool1',to: 'pool2', :types => [green, red, blue])
+    p.add_edge!(Edge, name: 'connector2', from: 'pool1', to: 'pool2', :types => [green, red, blue])
 
     p.run!(5)
 
@@ -298,30 +298,28 @@ def test_one_source_two_pools_typed_pull
 
     p = Diagram.new ('test nodes don\'t accept resources of foreign types')
 
-    p.add_node!(Source,:name=>'source',:types=>[football])
+    p.add_node!(Source, :name => 'source', :types => [football])
 
-    p.add_node!(Pool,:name=>'pool1',:mode=>:push,:activation=>:automatic,types:[football])
+    p.add_node!(Pool, :name => 'pool1', :mode => :push, :activation => :automatic, types: [football])
 
-    p.add_node!(Pool, :name=>'pool2',:types=>[football,basketball])
+    p.add_node!(Pool, :name => 'pool2', :types => [football, basketball])
 
-    p.add_node!(Pool,:name=>'pool3',:activation=>:automatic,:types=>[basketball,baseball])
+    p.add_node!(Pool, :name => 'pool3', :activation => :automatic, :types => [basketball, baseball])
 
-    p.add_edge!(Edge, name: 'connector1', from:'source', to: 'pool1')
+    p.add_edge!(Edge, name: 'connector1', from: 'source', to: 'pool1')
 
-    p.add_edge!(Edge, name:'connector2', from: 'pool1', to: 'pool2')
+    p.add_edge!(Edge, name: 'connector2', from: 'pool1', to: 'pool2')
 
-    p.add_edge!(Edge, name:'connector3',from:'pool2',to:'pool3')
+    p.add_edge!(Edge, name: 'connector3', from: 'pool2', to: 'pool3')
 
     p.run!(4)
 
 
-    assert_equal 1,p.get_node('pool1').resource_count(football)
-    assert_equal 0,p.get_node('pool2').resource_count(basketball)
-    assert_equal 3,p.get_node('pool2').resource_count(football)
+    assert_equal 1, p.get_node('pool1').resource_count(football)
+    assert_equal 0, p.get_node('pool2').resource_count(basketball)
+    assert_equal 3, p.get_node('pool2').resource_count(football)
 
   end
-
-
 
 
 end

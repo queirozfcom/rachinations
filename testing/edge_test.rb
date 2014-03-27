@@ -13,6 +13,7 @@ class EdgeTest < MiniTest::Test
   # down fixture information.
 
   def teardown
+
     # Do nothing
   end
 
