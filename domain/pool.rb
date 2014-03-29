@@ -107,6 +107,8 @@ class Pool < Node
 
   def add_resource!(obj)
 
+    inv { obj.unlocked? }
+
     if supports? obj.class
       @resources.add(obj)
     else
