@@ -4,6 +4,8 @@ require_relative '../domain/resource_bag'
 
 class Node
 
+  include Invariant
+
   def initialize_copy(orig)
     super
 
