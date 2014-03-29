@@ -55,10 +55,14 @@ class Diagram
     edge = edge_klass.new(params)
 
     edges.push(edge)
+
     nil
   end
 
   def run!(rounds=5)
+
+    print "========= BEGIN =========\n\n"
+
     rounds.times { run_round! }
 
     print "========== END ==========\n\n"
@@ -98,7 +102,7 @@ class Diagram
 
               if node.resource_count(key) > 0
 
-                if edge.has_type?(key) && nodes.detect{|el| el.name==edge.to_node_name}.supports?(key)
+                if edge.has_type?(key) && nodes.detect { |el| el.name==edge.to_node_name }.supports?(key)
                   #resources leave and arrive on the other side
 
                   post_execution_nodes.detect { |el| el.name == edge.from_node_name }.remove_resource!(key)
@@ -108,7 +112,7 @@ class Diagram
                     post_execution_nodes.detect { |n| n.name == edge.to_node_name }.add_resource!(element)
                   end
 
-                elsif edge.has_type?(key) && !nodes.detect{|el| el.name == edge.to_node_name}.supports?(key)
+                elsif edge.has_type?(key) && !nodes.detect { |el| el.name == edge.to_node_name }.supports?(key)
                   #resources leave but don't arrive on the other side
                   post_execution_nodes.detect { |el| el.name == edge.from_node_name }.remove_resource!(key)
                   nodes.detect { |el| el.name == edge.from_node_name }.remove_resource!(key)
@@ -128,7 +132,7 @@ class Diagram
 
             if available_resources > 0
 
-              #inv {node.eql?(nodes.detect_by_name(edge.from_node_name))}
+              inv { node.eql?(nodes.detect { |node| node.name === edge.from_node_name }) }
 
               element = nil
 
@@ -250,13 +254,5 @@ class Diagram
   def edges=(what)
     @edges=what
   end
-
-  #def automatic_nodes
-  #  nodes.select { |node| node.activation === :automatic }
-  #end
-  #
-  #def passive_nodes
-  #  nodes.select { |node| node.activation === :passive }
-  #end
 
 end
