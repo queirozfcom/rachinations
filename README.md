@@ -1,4 +1,4 @@
-machinations-project
+rachinations
 ====================
 
 An attempt to model J. Dorman's **Machinations** Game Diagrams (http://www.jorisdormans.nl/machinations/) in Ruby, to allow for larger-scale composing and scripting of diagrams.
