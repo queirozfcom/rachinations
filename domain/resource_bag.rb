@@ -67,9 +67,6 @@ class ResourceBag
 
   private
 
-  def allowed_classes
-    @allowed_classes
-  end
 
   def store
     @store
