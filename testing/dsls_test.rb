@@ -30,6 +30,18 @@ class DSLSTest < MiniTest::Test
     end
 
 
-
   end
+  
+  def test_return_diagram
+
+    d=diagram 'test_diagram' do
+      node 'source', Source
+      node 'pool1', Pool
+      edge 'edge1', Edge, 'source', 'pool1'
+    end
+
+    assert d.is_a? Diagram
+    
+  end
+  
 end

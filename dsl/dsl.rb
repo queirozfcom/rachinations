@@ -5,6 +5,9 @@ module DSL
   def diagram(name, &blk)
     dia = Diagram.new name
     dia.instance_eval &blk
+
+    dia
+
   end
 
   #add these methods to existing class Diagram here
