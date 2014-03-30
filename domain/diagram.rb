@@ -61,25 +61,38 @@ class Diagram
 
   def run!(rounds=5)
 
-    print "========= BEGIN =========\n\n"
 
-    rounds.times { run_round! }
+    print "\033[1;32m===== INITIAL STATE =====\e[00m\n\n"
 
-    print "========== END ==========\n\n"
+    run_round! TRUE
 
+    (rounds-1).times { run_round! TRUE,TRUE }
+
+    print "\033[1;32m====== FINAL STATE ======\e[00m\n\n"
+
+    puts self
+
+    print "\033[1;31m========== END ==========\e[00m\n\n"
+
+    self
+
+  end
+
+  def to_s
+    nodes.reduce(""){|carry,n| carry+n.to_s}
   end
 
   private
 
-  def run_round!
+  def run_round!(debug=FALSE,header=FALSE)
 
     post_execution_nodes = nodes.map { |el| el.clone }
 
-    print "========NEW ROUND========\n\n"
+    print "======= NEW ROUND =======\n\n" if header
 
     nodes.each do |node|
 
-      puts node
+      puts node if debug
 
       if node.passive?
         #only automatic nodes cause changes in other nodes
