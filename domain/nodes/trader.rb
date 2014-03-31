@@ -1,0 +1,3 @@
+class Trader < Node
+
+end
