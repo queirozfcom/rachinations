@@ -1,0 +1,3 @@
+class Gate < Node
+
+end

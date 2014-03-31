@@ -1,6 +1,6 @@
 require 'set'
-require_relative '../domain/resources/token'
-require_relative '../domain/resource_bag'
+require_relative '../resources/token'
+require_relative '../resource_bag'
 
 class Node
 
