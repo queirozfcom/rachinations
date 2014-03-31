@@ -59,20 +59,20 @@ class Diagram
     nil
   end
 
-  def run!(rounds=5)
+  def run!(rounds=5,reporting=false)
 
 
-    print "\033[1;32m===== INITIAL STATE =====\e[00m\n\n"
+    print "\033[1;32m===== INITIAL STATE =====\e[00m\n\n" if reporting
 
-    run_round! TRUE
+    run_round! reporting
 
-    (rounds-1).times { run_round! TRUE,TRUE }
+    (rounds-1).times { run_round! reporting }
 
-    print "\033[1;32m====== FINAL STATE ======\e[00m\n\n"
+    print "\033[1;32m====== FINAL STATE ======\e[00m\n\n" if reporting
 
-    puts self
+    puts self if reporting
 
-    print "\033[1;31m========== END ==========\e[00m\n\n"
+    print "\033[1;31m========== END ==========\e[00m\n\n" if reporting
 
     self
 
@@ -83,16 +83,16 @@ class Diagram
   end
 
   private
-
-  def run_round!(debug=FALSE,header=FALSE)
+  
+  def run_round!(reporting=false)
 
     post_execution_nodes = nodes.map { |el| el.clone }
 
-    print "======= NEW ROUND =======\n\n" if header
+    print "======= NEW ROUND =======\n\n" if reporting
 
     nodes.each do |node|
 
-      puts node if debug
+      puts node if reporting
 
       if node.passive?
         #only automatic nodes cause changes in other nodes
