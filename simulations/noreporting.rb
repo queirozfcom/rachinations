@@ -39,9 +39,11 @@ generator.add_edge! Edge, {
 }
 
 # I want to check the initial state
+puts "#### Estado inicial ####"
 puts generator
 
 # run and get the end
-generator.run!(5,false)
+generator.run!(10,true)
 
+puts "#### Estado final ####"
 puts generator
