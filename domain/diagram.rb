@@ -90,9 +90,10 @@ class Diagram
 
     print "======= NEW ROUND =======\n\n" if reporting
 
-    nodes.each do |node|
+    nodes.shuffle.each do |node|
 
       puts node if reporting
+
 
       if node.passive?
         #only automatic nodes cause changes in other nodes
@@ -105,6 +106,7 @@ class Diagram
 
         edges
         .select { |edge| edge.from? node.name }
+        .shuffle
         .each do |edge|
 
           if node.typed?
@@ -170,6 +172,7 @@ class Diagram
 
         edges
         .select { |edge| edge.to? node.name }
+        .shuffle
         .each do |edge|
 
           # will be run for each edge pointing *to* Node node
