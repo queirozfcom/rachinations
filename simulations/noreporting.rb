@@ -43,4 +43,5 @@ puts generator
 
 # run and get the end
 generator.run!(5,false)
+
 puts generator
