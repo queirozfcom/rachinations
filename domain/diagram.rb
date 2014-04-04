@@ -61,23 +61,10 @@ class Diagram
 
   def run!(rounds=5,reporting=false)
 
-
-    print "\033[1;32m===== INITIAL STATE =====\e[00m\n\n" if reporting
-
-    run_round! reporting
-
-    (rounds-1).times do |x|
-      print "======= ROUND #{x} =======\n\n" if reporting
-      run_round! reporting
+    run_while!(reporting) do |i|
+      i<=rounds
     end
 
-    print "\033[1;32m====== FINAL STATE ======\e[00m\n\n" if reporting
-
-    puts self if reporting
-
-    print "\033[1;31m========== END ==========\e[00m\n\n" if reporting
-
-    self
 
   end
 
@@ -86,9 +73,10 @@ class Diagram
 
     print "\033[1;32m===== INITIAL STATE =====\e[00m\n\n" if reporting
 
-    run_round! reporting
+    #run_round! reporting
+    puts self if reporting
 
-    i=0
+    i=1
 
     while yield i do
       print "======= ROUND #{i} =======\n\n" if reporting
@@ -125,7 +113,7 @@ class Diagram
 
     nodes.shuffle.each do |node|
 
-      puts node if reporting
+      #puts node if reporting
 
 
       if node.passive?
@@ -285,6 +273,7 @@ class Diagram
     end
 
     self.nodes = post_execution_nodes
+    puts nodes if reporting
 
   end
 
