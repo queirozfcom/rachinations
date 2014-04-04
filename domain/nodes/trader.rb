@@ -1,3 +1,3 @@
-class Trader < Node
+class Trader < ExtendedNode
 
 end

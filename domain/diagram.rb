@@ -1,6 +1,7 @@
 require_relative 'modules/invariant'
 require_relative 'edge'
 require_relative 'nodes/node'
+require_relative 'nodes/extended_node'
 require_relative 'nodes/pool'
 require_relative 'nodes/source'
 require_relative 'resource'

@@ -1,3 +1,3 @@
-class Gate < Node
+class Gate < ExtendedNode
 
 end

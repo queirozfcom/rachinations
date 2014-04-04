@@ -1,7 +1,7 @@
-require_relative 'node'
+require_relative 'extended_node'
 require 'active_support/all'
 
-class Pool < Node
+class Pool < ExtendedNode
 
   def initialize(hsh={})
 
