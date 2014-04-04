@@ -1,4 +1,4 @@
-require_relative 'node'
+require_relative 'extended_node'
 
 class Source < Pool
 
