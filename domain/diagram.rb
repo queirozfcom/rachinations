@@ -10,13 +10,14 @@ require_relative 'exceptions/no_elements_of_given_type'
 
 #noinspection RubyArgCount
 class Diagram
+
   include Invariant
 
+  attr_accessor :name
 
   def initialize(name)
     @nodes = NodeCollection.new
     @edges = EdgeCollection.new
-
     @name = name
   end
 
@@ -93,10 +94,6 @@ class Diagram
     self
 
   end
-
-
-
-
 
   def to_s
     nodes.reduce(""){|carry,n| carry+n.to_s}

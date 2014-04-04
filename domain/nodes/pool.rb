@@ -3,8 +3,6 @@ require 'active_support/all'
 
 class Pool < Node
 
-  attr_reader :name, :activation, :mode
-
   def initialize(hsh={})
 
     #set nil to stuff that wasn't initialized
@@ -76,6 +74,9 @@ class Pool < Node
 
   end
 
+
+  # pools are about resources
+
   def supports?(klass)
     if klass.eql?(Token)
       untyped?
@@ -134,6 +135,9 @@ class Pool < Node
     end
   end
 
+
+  # this should be at node?
+
   def typed?
     !untyped?
   end
@@ -143,20 +147,10 @@ class Pool < Node
     types.nil?
   end
 
-  def pull?
-    @mode === :pull
-  end
 
-  def push?
-    @mode === :push
-  end
 
-  def automatic?
-    @activation === :automatic
-  end
-
-  def passive?
-    @activation === :passive
+  def to_s
+    "Pool '#{@name}':  #{@resources.to_s}"
   end
 
   #this method is revealing too much.. it's exposing too much.
@@ -164,14 +158,11 @@ class Pool < Node
     @types.each &blk
   end
 
-  def to_s
-    "Pool '#{@name}':  #{@resources.to_s}"
-  end
 
   private
 
   def normalize(hsh)
-    accepted_options = [:name, :activation, :mode, :types, :initial_value, :diagram]
+    accepted_options = [:name, :activation, :mode, :modetype, :types, :initial_value, :diagram]
 
     #watch out for unknown options - might be typos!
     hsh.each_pair do |key, value|
@@ -194,8 +185,32 @@ class Pool < Node
 
   end
 
+  # controlling the resources
+
   def types
     @types
+  end
+
+
+  # new functions !
+  # should be implemented soon
+
+  private
+
+  def pushall
+    false
+  end
+
+  def pushany
+    false
+  end
+
+  def pullall
+    false
+  end
+
+  def pullany
+    false
   end
 
 end

@@ -12,7 +12,7 @@ describe Diagram do
     d.name.should == 'empty'
   end
 
-  it 'should allow the creation of a simple diagram and run' do
+  it 'should allow the creation of a simple source-pool diagram and run n times' do
     d=Diagram.new 'simple'
     d.add_node! Pool, {
         :name => 'deposit',
@@ -30,7 +30,7 @@ describe Diagram do
     d.get_node('deposit').resource_count.should == 10
   end
 
-  it 'should allow the creation of a simple diagram and run while a condition is true' do
+  it 'should allow the creation of a simple source-pool diagram and run while a condition is true' do
     d=Diagram.new 'simple'
     d.add_node! Pool, {
         :name => 'deposit',
