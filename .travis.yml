@@ -2,3 +2,4 @@ language: ruby
 rvm:
     - "ruby-head"
     - "ruby 2.0.0"
+install: bundle install
