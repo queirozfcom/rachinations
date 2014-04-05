@@ -75,7 +75,6 @@ class Diagram
 
     print "\033[1;32m===== INITIAL STATE =====\e[00m\n\n" if reporting
 
-    #run_round! reporting
     puts self if reporting
 
     i=1
@@ -106,13 +105,7 @@ class Diagram
 
     post_execution_nodes = nodes.map { |el| el.clone }
 
-#    print "======= NEW ROUND =======\n\n" if reporting
-#    removed (now it is caller responsability)
-
     nodes.shuffle.each do |node|
-
-      #puts node if reporting
-
 
       if node.passive?
         #only automatic nodes cause changes in other nodes

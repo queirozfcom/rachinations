@@ -4,6 +4,8 @@ class Edge
 
   def initialize(hsh={})
 
+
+
     #TODO assert that hsh has at least the required keys: :name, :from and :to
 
     @name = hsh[:name]
