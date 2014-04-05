@@ -53,7 +53,6 @@ class Diagram
     #TODO assert that edge_klass responds_to the methods we're going to call
 
     params[:diagram] = self
-
     edge = edge_klass.new(params)
 
     edges.push(edge)
