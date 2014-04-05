@@ -1,4 +1,5 @@
 require 'rspec'
+require_relative '../../../domain/diagram'
 
 describe Pool do
 
