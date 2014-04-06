@@ -1,5 +1,5 @@
 require 'rspec'
-require_relative '../domain/diagram'
+require_relative '../../domain/diagram'
 
 describe Edge do
 
@@ -24,7 +24,6 @@ describe Edge do
     to = Object.stub(:name).and_return('node2')
 
     edge = Edge.new name:'edge1', from: from,to: to, types: [blue, black]
-
 
 
     expect(edge.name).to eq('edge1')

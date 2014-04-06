@@ -16,11 +16,14 @@ class Edge
     @label = hsh.fetch(:label)
     @types = hsh.fetch(:types)
 
-
     #these are used to make sure that an edge sends resources
     #from a node to another only once per round.
     @sent = false
     @received = false
+
+  end
+
+  def stage_carry!
 
   end
 
@@ -43,16 +46,16 @@ class Edge
     @sent = @received = false
   end
 
-  def connects?(node_name)
-    to.name === node_name || from.name === node_name
+  def connects?(obj)
+    to.equal?(obj) || from.equal?(obj)
   end
 
-  def from?(node_name)
-    node_name === from.name
+  def from?(obj)
+    from.equal?(obj)
   end
 
-  def to?(node_name)
-    node_name === to.name
+  def to?(obj)
+    to.equal?(obj)
   end
 
   def sent?

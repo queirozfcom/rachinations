@@ -1,2 +1,2 @@
-class RandomEdge
+class RandomEdge < Edge
 end

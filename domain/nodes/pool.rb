@@ -1,7 +1,7 @@
-require_relative 'extended_node'
+require_relative 'resourceful_node'
 require 'active_support/all'
 
-class Pool < ExtendedNode
+class Pool < ResourcefulNode
 
   def initialize(hsh={})
 
@@ -72,18 +72,11 @@ class Pool < ExtendedNode
 
     # @types and @resources are set within the previous big loop
 
+    #calling parent constructor to setup aother variables.
+    super()
+
   end
 
-
-  # pools are about resources
-
-  def supports?(klass)
-    if klass.eql?(Token)
-      untyped?
-    else
-      typed? and types.include? klass
-    end
-  end
 
   def resource_count(type=nil)
 
@@ -137,16 +130,13 @@ class Pool < ExtendedNode
 
 
   # this should be at node?
-
   def typed?
     !untyped?
   end
 
   def untyped?
-    #outer world doesn't need to know that untyped Pools have this Type
     types.nil?
   end
-
 
 
   def to_s
