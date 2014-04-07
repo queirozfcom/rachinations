@@ -1,8 +1,6 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    active_support (3.0.0)
-      activesupport (= 3.0.0)
     activesupport (3.0.0)
     ansi (1.4.3)
     builder (3.2.2)
@@ -43,7 +41,7 @@ PLATFORMS
   x64-mingw32
 
 DEPENDENCIES
-  active_support
+  activesupport (= 3.0.0)
   cucumber
   i18n
   minitest

@@ -1,10 +1,9 @@
 require_relative 'modules/invariant'
-require_relative 'edge'
+require_relative 'edges/edge'
 require_relative 'nodes/node'
 require_relative 'nodes/extended_node'
 require_relative 'nodes/pool'
 require_relative 'nodes/source'
-require_relative 'resource'
 require_relative 'node_collection'
 require_relative 'edge_collection'
 require_relative 'exceptions/no_elements_of_given_type'
@@ -53,7 +52,6 @@ class Diagram
     #TODO assert that edge_klass responds_to the methods we're going to call
 
     params[:diagram] = self
-
     edge = edge_klass.new(params)
 
     edges.push(edge)
@@ -75,7 +73,6 @@ class Diagram
 
     print "\033[1;32m===== INITIAL STATE =====\e[00m\n\n" if reporting
 
-    #run_round! reporting
     puts self if reporting
 
     i=1
@@ -106,13 +103,7 @@ class Diagram
 
     post_execution_nodes = nodes.map { |el| el.clone }
 
-#    print "======= NEW ROUND =======\n\n" if reporting
-#    removed (now it is caller responsability)
-
     nodes.shuffle.each do |node|
-
-      #puts node if reporting
-
 
       if node.passive?
         #only automatic nodes cause changes in other nodes
