@@ -12,7 +12,6 @@ class ResourceBag
   def initialize_copy(orig)
     super
     @store=@store.map{|el| el.clone}
-
   end
 
   def add(obj)

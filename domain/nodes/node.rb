@@ -13,4 +13,27 @@ class Node
 
   end
 
+ def run! # should be called by diagram
+    if @activation==:automatic
+      execute!
+    elsif @is_start and @activation == :start
+      execute!
+    else
+      # do nothing for a while
+    end
+  end
+
+
+  def commit! # should be called by diagram
+    @state=:before
+    false
+  end
+
+  def execute! # can be called by any node/thing
+    @state=:after
+    false
+  end
+
+
+
 end
