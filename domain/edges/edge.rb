@@ -1,23 +1,20 @@
 class Edge
 
-  attr_reader :from_node_name, :to_node_name, :name, :label, :types
+  attr_reader :from, :to, :name, :label, :types
 
-  def initialize(hsh={})
+  def initialize(hsh)
 
-    #TODO assert that hsh has at least the required keys: :name, :from and :to
+    @name = hsh.fetch(:name)
 
-    @name = hsh[:name]
+    @from = hsh.fetch(:from)
 
-    @from_node_name = hsh[:from]
+    @to = hsh.fetch(:to)
 
-    @to_node_name = hsh[:to]
-
-    #setting default values
+    #setting default values if needed.
     hsh = defaults.merge hsh
 
-    @label = hsh[:label]
-    @types = hsh[:types]
-
+    @label = hsh.fetch(:label)
+    @types = hsh.fetch(:types)
 
     #these are used to make sure that an edge sends resources
     #from a node to another only once per round.
@@ -26,10 +23,16 @@ class Edge
 
   end
 
+  def stage_carry!
+
+  end
+
+  #alias
   def supports?(type)
     has_type?(type)
   end
 
+  #alias
   def support?(type)
     has_type?(type)
   end
@@ -43,16 +46,16 @@ class Edge
     @sent = @received = false
   end
 
-  def connects?(node_name)
-    @to_node_name === node_name || @from_node_name === node_name
+  def connects?(obj)
+    to.equal?(obj) || from.equal?(obj)
   end
 
-  def from?(node_name)
-    node_name === @from_node_name
+  def from?(obj)
+    from.equal?(obj)
   end
 
-  def to?(node_name)
-    node_name === @to_node_name
+  def to?(obj)
+    to.equal?(obj)
   end
 
   def sent?

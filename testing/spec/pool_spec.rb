@@ -1,9 +1,10 @@
 require 'rspec'
-require_relative '../../../domain/diagram'
+require_relative '../../domain/diagram'
 
 describe Pool do
 
   it 'should be possible to create a pool with just a name' do
+
 
     true.should == false
   end
