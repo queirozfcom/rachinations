@@ -15,15 +15,15 @@ class NodeCollection
   end
 
   def passive
-    @array.select{|el| el.passive?}
+    @array.select{|el| el.passive? }
   end
 
   def automatic
-    @array.select{|el| el.automatic?}
+    @array.select{|el| el.automatic? }
   end
 
   def detect_by_name(name)
-    @array.detect{|el| el.name === name}
+    @array.detect{|el| el.name === name }
   end
 
 end
