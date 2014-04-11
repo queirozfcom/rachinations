@@ -1,5 +1,5 @@
 require 'rspec'
-require_relative '../../domain/diagram'
+require_relative '../../domain/diagrams/diagram'
 
 describe Diagram do
 

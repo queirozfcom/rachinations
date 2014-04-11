@@ -68,7 +68,7 @@ class ResourcefulNode < Node
   end
 
   # this method only 'stages' changes, but not not commit them (drawing from git terms)
-  def stage!(reporting)
+  def stage!
 
     if push?
 

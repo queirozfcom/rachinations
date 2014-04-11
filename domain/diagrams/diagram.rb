@@ -1,12 +1,12 @@
-require_relative 'modules/invariant'
-require_relative 'edges/edge'
-require_relative 'nodes/node'
-require_relative 'nodes/resourceful_node'
-require_relative 'nodes/pool'
-require_relative 'nodes/source'
-require_relative 'node_collection'
-require_relative 'edge_collection'
-require_relative 'exceptions/no_elements_of_given_type'
+require_relative '../modules/invariant'
+require_relative '../edges/edge'
+require_relative '../nodes/node'
+require_relative '../nodes/resourceful_node'
+require_relative '../nodes/pool'
+require_relative '../nodes/source'
+require_relative '../node_collection'
+require_relative '../edge_collection'
+require_relative '../exceptions/no_elements_of_given_type'
 
 #noinspection RubyArgCount
 class Diagram
@@ -80,23 +80,21 @@ class Diagram
 
   def run_while!(reporting=false)
 
-    print "\033[1;32m===== INITIAL STATE =====\e[00m\n\n" if reporting
-
-    puts self if reporting
+    before_run
 
     i=1
 
     while yield i do
-      print "======= ROUND #{i} =======\n\n" if reporting
-      run_round! reporting
+      before_round i
+
+      run_round!
+
+      after_round i
+
       i+=1
     end
 
-    print "\033[1;32m====== FINAL STATE ======\e[00m\n\n" if reporting
-
-    puts self if reporting
-
-    print "\033[1;31m========== END ==========\e[00m\n\n" if reporting
+    after_run
 
     self
 
@@ -106,17 +104,23 @@ class Diagram
     nodes.reduce("") { |carry, n| carry+n.to_s }
   end
 
-  private
 
-  def run_round!(reporting=false)
+  def before_round(node_no); end #template method
+
+  def after_round(node_no); end #template method
+
+  def before_run; end #template method
+
+  def after_run; end  #template method
+
+  def run_round!
 
     nodes.shuffle.each do |node|
-      node.stage! reporting
+      node.stage!
     end
 
     nodes.each{ |n| n.commit! }
 
-    puts nodes if reporting
   end
 
   def nodes
