@@ -1,3 +1,3 @@
-class Converter < ExtendedNode
+class Converter < Node
 
 end

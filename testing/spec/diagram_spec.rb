@@ -1,8 +1,4 @@
-require 'rspec'
-require_relative '../../domain/diagrams/diagram'
-
-require 'coveralls'
-Coveralls.wear!
+require_relative 'spec_helper'
 
 describe Diagram do
 
