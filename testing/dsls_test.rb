@@ -2,7 +2,8 @@ require_relative '../domain/diagram'
 require_relative '../dsl/dsl.rb'
 gem 'minitest'
 require "minitest/autorun"
-
+require 'coveralls'
+Coveralls.wear!
 
 class DSLSTest < MiniTest::Test
   include DSL

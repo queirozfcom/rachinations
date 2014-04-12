@@ -3,6 +3,8 @@ require_relative '../domain/node_collection'
 gem 'minitest'
 require "minitest/autorun"
 require 'minitest/reporters'
+require 'coveralls'
+Coveralls.wear!
 
 #pretty outputs
 MiniTest::Reporters.use!
