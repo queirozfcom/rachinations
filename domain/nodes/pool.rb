@@ -182,25 +182,5 @@ class Pool < ResourcefulNode
   end
 
 
-  # new functions !
-  # should be implemented soon
-
-  private
-
-  def pushall
-    false
-  end
-
-  def pushany
-    false
-  end
-
-  def pullall
-    false
-  end
-
-  def pullany
-    false
-  end
 
 end

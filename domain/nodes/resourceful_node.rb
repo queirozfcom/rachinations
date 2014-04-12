@@ -109,36 +109,11 @@ class ResourcefulNode < Node
     @activation === :passive
   end
 
-  #def all?
-  #  @modetype === :all
-  #end
-  #
-  #def any?
-  #  @modetype === :any
-  #end
-
   def resource_count(type=nil)
     raise NotImplementedError, "Please update class #{self.class} to respond to: "
   end
 
   private
-
-
-  #def push
-  #  if any?
-  #    push_any
-  #  elsif all?
-  #    push_all
-  #  end
-  #end
-  #
-  #def pull
-  #  if any?
-  #    pull_any
-  #  elsif all?
-  #    pull_all
-  #  end
-  #end
 
   def push_any
     raise NotImplementedError, "Please update class #{self.class} to respond to: "

@@ -1,6 +1,9 @@
 require 'rspec'
 require_relative '../../domain/diagrams/diagram'
 
+require 'coveralls'
+Coveralls.wear!
+
 describe Edge do
 
   it 'can be created' do

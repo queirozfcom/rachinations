@@ -4,7 +4,7 @@ class Node
 
   include Invariant
 
-  attr_accessor :name
+  attr_reader :name
 
   def initialize_copy(orig)
     super
