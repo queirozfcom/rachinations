@@ -1,9 +1,9 @@
 require 'rspec'
-require_relative '../../domain/diagram'
+require_relative '../../domain/diagrams/diagram'
 
 describe Edge do
 
-  it 'should be possible to create a simple edge' do
+  it 'can be created' do
 
     # i only want to test edge methods so I'll use a mock object and stub the method I need
     # to call, namely :name.
@@ -16,7 +16,7 @@ describe Edge do
   end
 
 
-  it 'should be possible to assign types to an edge' do
+  it 'can be created with types' do
     blue = Class.new(Token)
     black = Class.new(Token)
 
@@ -34,7 +34,7 @@ describe Edge do
 
   end
 
-  it 'should be possible to assign an integer label to an edge' do
+  it 'can be assigned an integer label' do
     blue = Class.new(Token)
     Object.const_set(:Blue,blue)
 
