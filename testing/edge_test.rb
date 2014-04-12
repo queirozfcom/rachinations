@@ -1,5 +1,7 @@
 require_relative '../domain/diagram'
 require "minitest/autorun"
+require 'coveralls'
+Coveralls.wear!
 
 class EdgeTest < MiniTest::Test
 

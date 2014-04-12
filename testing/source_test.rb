@@ -2,6 +2,8 @@ require_relative '../domain/diagram'
 require "rubygems"
 gem 'minitest'
 require "minitest/autorun"
+require 'coveralls'
+Coveralls.wear!
 
 class SourceTest < MiniTest::Test
 
