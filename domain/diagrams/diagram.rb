@@ -1,14 +1,5 @@
-require_relative '../modules/invariant'
-require_relative '../edges/edge'
-require_relative '../nodes/node'
-require_relative '../nodes/resourceful_node'
-require_relative '../nodes/pool'
-require_relative '../nodes/source'
-require_relative '../node_collection'
-require_relative '../edge_collection'
-require_relative '../exceptions/no_elements_of_given_type'
+require 'modules/invariant'
 
-#noinspection RubyArgCount
 class Diagram
 
   include Invariant

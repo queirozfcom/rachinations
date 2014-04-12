@@ -1,18 +1,17 @@
 require 'coveralls'
 Coveralls.wear!
 
+# so that i can require stuff as if these dirctories were in ruby's default PATH
 $: << File.expand_path(File.dirname(__FILE__))+"/../../domain"
 $: << File.expand_path(File.dirname(__FILE__))+"/../../dsl"
 
 require 'rspec'
-
 
 require 'diagrams/diagram'
 require 'diagrams/debug_diagram'
 require 'edges/edge'
 require 'edges/random_edge'
 require 'exceptions/no_elements_of_given_type'
-require 'modules/invariant'
 require 'nodes/node'
 require 'nodes/resourceful_node'
 require 'nodes/pool'

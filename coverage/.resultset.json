@@ -1316,15 +1316,6 @@
     "coverage": {
       "/home/felipe/Desktop/projeto_final/code/ruby/domain/diagrams/diagram.rb": [
         1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        null,
         null,
         1,
         null,
@@ -1479,6 +1470,33 @@
         null,
         null
       ],
+      "/home/felipe/Desktop/projeto_final/code/ruby/domain/diagrams/debug_diagram.rb": [
+        1,
+        null,
+        1,
+        0,
+        null,
+        0,
+        null,
+        null,
+        1,
+        0,
+        null,
+        0,
+        null,
+        0,
+        null,
+        null,
+        1,
+        0,
+        null,
+        null,
+        1,
+        null,
+        null,
+        null,
+        null
+      ],
       "/home/felipe/Desktop/projeto_final/code/ruby/domain/edges/edge.rb": [
         1,
         null,
@@ -1568,6 +1586,15 @@
         null,
         5,
         null,
+        null,
+        null
+      ],
+      "/home/felipe/Desktop/projeto_final/code/ruby/domain/edges/random_edge.rb": [
+        1,
+        null
+      ],
+      "/home/felipe/Desktop/projeto_final/code/ruby/domain/exceptions/no_elements_of_given_type.rb": [
+        1,
         null,
         null
       ],
@@ -2121,6 +2148,40 @@
         null,
         null
       ],
+      "/home/felipe/Desktop/projeto_final/code/ruby/domain/nodes/sink.rb": [
+        1,
+        null,
+        null
+      ],
+      "/home/felipe/Desktop/projeto_final/code/ruby/domain/nodes/gate.rb": [
+        1,
+        null,
+        null
+      ],
+      "/home/felipe/Desktop/projeto_final/code/ruby/domain/nodes/trader.rb": [
+        1,
+        null,
+        null
+      ],
+      "/home/felipe/Desktop/projeto_final/code/ruby/domain/nodes/converter.rb": [
+        1,
+        null,
+        null
+      ],
+      "/home/felipe/Desktop/projeto_final/code/ruby/domain/edge_collection.rb": [
+        1,
+        null,
+        1,
+        1,
+        null,
+        1,
+        null,
+        1,
+        3,
+        null,
+        null,
+        null
+      ],
       "/home/felipe/Desktop/projeto_final/code/ruby/domain/node_collection.rb": [
         1,
         null,
@@ -2149,76 +2210,6 @@
         1,
         0,
         null,
-        null,
-        null
-      ],
-      "/home/felipe/Desktop/projeto_final/code/ruby/domain/edge_collection.rb": [
-        1,
-        null,
-        1,
-        1,
-        null,
-        1,
-        null,
-        1,
-        3,
-        null,
-        null,
-        null
-      ],
-      "/home/felipe/Desktop/projeto_final/code/ruby/domain/exceptions/no_elements_of_given_type.rb": [
-        1,
-        null,
-        null
-      ],
-      "/home/felipe/Desktop/projeto_final/code/ruby/domain/diagrams/debug_diagram.rb": [
-        1,
-        null,
-        1,
-        0,
-        null,
-        0,
-        null,
-        null,
-        1,
-        0,
-        null,
-        0,
-        null,
-        0,
-        null,
-        null,
-        1,
-        0,
-        null,
-        null,
-        1,
-        null,
-        null,
-        null,
-        null
-      ],
-      "/home/felipe/Desktop/projeto_final/code/ruby/domain/edges/random_edge.rb": [
-        1,
-        null
-      ],
-      "/home/felipe/Desktop/projeto_final/code/ruby/domain/nodes/sink.rb": [
-        1,
-        null,
-        null
-      ],
-      "/home/felipe/Desktop/projeto_final/code/ruby/domain/nodes/gate.rb": [
-        1,
-        null,
-        null
-      ],
-      "/home/felipe/Desktop/projeto_final/code/ruby/domain/nodes/trader.rb": [
-        1,
-        null,
-        null
-      ],
-      "/home/felipe/Desktop/projeto_final/code/ruby/domain/nodes/converter.rb": [
-        1,
         null,
         null
       ],
@@ -2380,6 +2371,6 @@
         null
       ]
     },
-    "timestamp": 1397322583
+    "timestamp": 1397324560
   }
 }
