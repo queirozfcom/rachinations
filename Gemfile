@@ -7,6 +7,7 @@ gem 'minitest'
 gem 'minitest-reporters'
 gem 'rspec'
 gem 'cucumber'
+gem 'coveralls', require: false
 
 
 
