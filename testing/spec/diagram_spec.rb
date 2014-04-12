@@ -13,16 +13,17 @@ describe Diagram do
 
   it 'should be created with a source and a pool and run n times' do
 
-    d=Diagram.new 'simple'
-
-    d.add_node! Pool, {
-        :name => 'deposit',
-        :initial_value => 0
-    }
+    d=DebugDiagram.new 'simple'
 
     d.add_node! Source, {
         :name => 'source'
     }
+
+    d.add_node! Pool, {
+    :name => 'deposit',
+    :initial_value => 0
+    }
+
 
     d.add_edge! Edge, {
         :name => 'connector',

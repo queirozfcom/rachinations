@@ -61,15 +61,15 @@ class Diagram
     nil
   end
 
-  def run!(rounds=5, reporting=false)
+  def run!(rounds=5)
 
-    run_while!(reporting) do |i|
+    run_while! do |i|
       i<=rounds
     end
 
   end
 
-  def run_while!(reporting=false)
+  def run_while!
 
     before_run
 
@@ -111,6 +111,8 @@ class Diagram
     end
 
     nodes.each{ |n| n.commit! }
+
+
 
   end
 
