@@ -1,10 +1,11 @@
+require 'coveralls'
+Coveralls.wear!
+
 $: << File.expand_path(File.dirname(__FILE__))+"/../../domain"
 $: << File.expand_path(File.dirname(__FILE__))+"/../../dsl"
 
 require 'rspec'
 
-require 'coveralls'
-Coveralls.wear!
 
 require 'diagrams/diagram'
 require 'diagrams/debug_diagram'

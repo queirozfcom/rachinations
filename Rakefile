@@ -9,5 +9,5 @@ Rake::TestTask.new do |t|
 end
 
 RSpec::Core::RakeTask.new do |t|
-  t.rspec_opts= '--default-path testing/spec'
+  t.rspec_opts= ['--default-path testing/spec','--color']
 end
