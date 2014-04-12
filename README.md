@@ -2,7 +2,7 @@ rachinations
 ====================
 
 [![Build Status](https://travis-ci.org/queirozfcom/rachinations.svg?branch=new_main_loop)](https://travis-ci.org/queirozfcom/rachinations)
-[![Code Climate](https://codeclimate.com/github/queirozfcom/rachinations.png)](https://codeclimate.com/github/queirozfcom/rachinations)
+[![Code Climate](https://codeclimate.com/github/queirozfcom/rachinations.png)](https://codeclimate.com/github/queirozfcom/rachinations/compare/new_main_loop)
 [![Coverage Status](https://coveralls.io/repos/queirozfcom/rachinations/badge.png?branch=new_main_loop)](https://coveralls.io/r/queirozfcom/rachinations?branch=new_main_loop)
 
 An attempt to model J. Dorman's **Machinations** Game Diagrams (http://www.jorisdormans.nl/machinations/) in Ruby, to allow for larger-scale composing and scripting of diagrams.
