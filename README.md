@@ -10,4 +10,4 @@ An attempt to model J. Dorman's **Machinations** Game Diagrams (http://www.joris
 
 - Classes to model the domain
 - Tests
-- A simple DSL (Domain-specific language) whose objective is to enable anyone to write Machinations diagrams, run them, obtain metrics, compose subdiagrams and so on.
+- A simple DSL (Domain-specific language) whose objective is to enable anyone to write Machinations diagrams, run them, obtain metrics, compose subdiagrams and so on..
