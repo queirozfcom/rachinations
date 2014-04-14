@@ -1,19 +1,22 @@
 require 'set'
-require_relative '../resources/token'
-require_relative '../resource_bag'
+require 'resources/token'
+require 'nodes/node'
 
 class ResourcefulNode < Node
 
   include Invariant
 
+  attr_reader :staged_resources
+
   # mode= :push, :pull
   # modetype = any, all
   # activation = :automatic, :passive, :start
 
-  attr_accessor :activation, :mode, :modetype, :state
-
+  # attr_accessor :activation, :mode
+  #
   def initialize
     @is_start = true
+    @staged_resources = []
     @state = :before
   end
 
@@ -58,7 +61,6 @@ class ResourcefulNode < Node
 
 # pools are about resources
 
-
   def supports?(klass)
     if klass.eql?(Token)
       untyped?
@@ -67,17 +69,17 @@ class ResourcefulNode < Node
     end
   end
 
-  # this method only 'stages' changes, but not not commit them (drawing from git terms)
+  # this method only 'stages' changes; does not commit them (drawing from git terms)
   def stage!
 
-    if push?
+    if push? and (automatic? or start?)
 
       edges
       .shuffle
       .select { |e| e.from?(self) }
       .each {|e| e.stage_carry! }
 
-    elsif pull?
+    elsif pull? and (automatic? or start?)
 
       edges
       .shuffle
@@ -88,10 +90,6 @@ class ResourcefulNode < Node
 
   end
 
-  #replace current state with staged state
-  def commit!
-
-  end
 
   def pull?
     @mode === :pull
@@ -109,31 +107,32 @@ class ResourcefulNode < Node
     @activation === :passive
   end
 
-  def resource_count(type=nil)
-    raise NotImplementedError, "Please update class #{self.class} to respond to: "
+  def start?
+    @activation === :start
   end
+
+  def commit!; raise NotImplementedError,"Please update class #{self.class} to respond to: "; end
+
+  def resource_count(type=nil) raise NotImplementedError, "Please update class #{self.class} to respond to: "; end
+
+  def push_any; raise NotImplementedError,"Please update class #{self.class} to respond to: "; end
+
+  def push_all; raise NotImplementedError, "Please update class #{self.class} to respond to: "; end
+
+  def pull_any; raise NotImplementedError, "Please update class #{self.class} to respond to: "; end
+
+  def pull_all; raise NotImplementedError, "Please update class #{self.class} to respond to: "; end
+
+  def remove_resource!; raise NotImplementedError, "Please update class #{self.class} to respond to: "; end
+
+  def add_resource!; raise NotImplementedError, "Please update class #{self.class} to respond to: "; end
+
+  #use this lazily?
 
   private
 
-  def push_any
-    raise NotImplementedError, "Please update class #{self.class} to respond to: "
-  end
-
-  def push_all
-    raise NotImplementedError, "Please update class #{self.class} to respond to: "
-  end
-
-  def pull_any
-    raise NotImplementedError, "Please update class #{self.class} to respond to: "
-  end
-
-  def pull_all
-    raise NotImplementedError, "Please update class #{self.class} to respond to: "
-  end
-
-
   def normalize(hsh)
-    accepted_options = [:name, :activation, :mode, :modetype, :types, :initial_value, :diagram]
+    accepted_options = [:name, :activation, :mode, :types, :initial_value, :diagram]
 
     #watch out for unknown options - might be typos!
     hsh.each_pair do |key, value|

@@ -1,4 +1,4 @@
-require_relative 'pool'
+require 'nodes/pool'
 
 class Source < Pool
 

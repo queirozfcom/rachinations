@@ -1,5 +1,5 @@
 require 'active_support/all'
-require_relative 'modules/invariant'
+require 'modules/invariant'
 
 
 class ResourceBag
@@ -23,7 +23,7 @@ class ResourceBag
   def get(klass)
 
     if count(klass) === 0
-      raise NoElementsOfGivenTypeError
+      raise NoElementsOfGivenTypeError,"No elements of class #{klass} found."
     end
 
     obj = store.select { |el| el.is_a?(klass) }.sample
@@ -38,6 +38,55 @@ class ResourceBag
     inv{ klass.is_a?(Class)}
 
     store.select{ |el| el.is_a?(klass) }.length
+
+  end
+
+  def count_where
+
+    raise ArgumentError, 'Please supply a block containing the condition.' unless block_given?
+
+    amount = 0
+
+    store.each{|e|
+      amount += 1 if yield e
+    }
+
+    amount
+
+  end
+
+  def each_where
+    raise ArgumentError, 'Please supply a block containing the condition to apply for each resource.' unless block_given?
+
+    store.each{|r| yield r}
+
+  end
+
+  def get_where &condition
+    raise ArgumentError, 'Please supply a block containing the condition to apply..' unless block_given?
+    raise NoElementsOfGivenTypeError,"No elements of class #{klass} found." unless theres_at_least_one_where &condition
+
+
+    obj = store
+    .select{|r| yield r }
+    .sample
+
+    remove_element!(obj)
+
+    obj
+
+  end
+
+  # created so that I don't have to call count everytime just to see whether there's at least one element matching said condition
+  def theres_at_least_one_where
+    raise ArgumentError, 'Please supply a block containing the condition.' unless block_given?
+
+    store.each{|e|
+      return true if yield e
+    }
+
+    false
+
   end
 
   def to_s

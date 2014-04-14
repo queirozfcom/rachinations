@@ -1,4 +1,5 @@
-require_relative 'resourceful_node'
+require 'nodes/resourceful_node'
+require 'resources/token'
 require 'active_support/all'
 
 class Pool < ResourcefulNode
@@ -85,13 +86,17 @@ class Pool < ResourcefulNode
       if typed?
         raise ArgumentError.new 'This is a typed Node'
       else
-        @resources.count(Token)
+        @resources.count_where {|r|
+          r.is_a?(Token) && r.unlocked?
+        }
       end
 
     else
 
       if supports? type
-        @resources.count(type)
+        @resources.count_where{|r|
+          r.unlocked? && r.is_a?(type)
+        }.count(type)
       else
         raise ArgumentError.new "Unsupported type: #{type.name}"
       end
@@ -99,9 +104,18 @@ class Pool < ResourcefulNode
 
   end
 
-  def add_resource!(obj)
+  def commit!
 
-    inv { obj.unlocked? }
+    @resources.each_where{|r|
+      if r.locked?
+        r.unlock!
+      end
+    }
+
+    self
+  end
+
+  def add_resource!(obj)
 
     if supports? obj.class
       @resources.add(obj)
@@ -116,11 +130,23 @@ class Pool < ResourcefulNode
 
     if type.nil?
       if untyped?
-        @resources.get(Token)
+        if @resources.count_where{|r| r.is_a?(Token) && r.unlocked? } > 0
+          @resources.get_where{|r|
+            r.is_a?(Token) && r.unlocked?
+          }
+        else
+          raise NoElementsOfGivenTypeError, "No resources found in node '#{name}'"
+        end
       end
     else
       if supports? type
-        @resources.get(type)
+        if @resources.count_where{|r| r.is_a?(Token) && r.unlocked? } > 0
+          @resources.get_where{|r|
+            r.is_a?(type) && r.unlocked?
+          }
+        else
+          raise NoElementsOfGivenTypeError, "No resources of type #{type} found in node '#{name}'."
+        end
       else
         # TODO decide if I should raise an Error or not here
         nil
@@ -148,6 +174,21 @@ class Pool < ResourcefulNode
     @types.each &blk
   end
 
+  def take_upto(no_resources,type=nil)
+
+    no_resources.times do
+
+      begin
+        obj = remove_resource!(type).lock!
+      rescue NoElementsOfGivenTypeError
+        return
+      end
+
+      yield obj
+
+    end
+
+  end
 
   private
 

@@ -1,4 +1,5 @@
-require_relative '../modules/invariant'
+require 'modules/invariant'
+
 
 class Node
 
@@ -16,8 +17,6 @@ class Node
     @diagram = nil
 
   end
-
-
 
   def edges
     if @edges.is_a? Array

@@ -25,6 +25,20 @@ class Edge
 
   def stage_carry!
 
+    #assuming nodes are either pull_any or push_any.
+    #i'll deal with pull_all and push_all later
+
+    #whichever node is automatic will trigger changes.
+    #if both are automatic and one is pushing while the other one is pulling,
+    #the two events take place, albeit counter-intuitive.
+
+    if ( from.automatic? and from.push? ) or (to.automatic? and to.pull?)
+      from.take_upto(label) do |resource|
+        to.add_resource!(resource)
+      end
+    end
+
+
   end
 
   #alias

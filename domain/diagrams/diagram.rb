@@ -22,12 +22,8 @@ class Diagram
     raise RuntimeError, "Node with name='#{name}' not found."
   end
 
-  #destrutivo
   def add_node!(node_klass, params)
 
-    #TODO assert that node_klass responds_to the methods we're going to call
-
-    #make the diagram available to the node
     params.store(:diagram, self)
 
     node = node_klass.new(params)
@@ -37,14 +33,11 @@ class Diagram
     nil
   end
 
-  #destrutivo
   def add_edge!(edge_klass, params)
-
-    #TODO assert that edge_klass responds_to the methods we're going to call
 
     params.store(:diagram, self)
 
-    #we need to send the actual noded, not their names
+    #we need to send the actual nodes, not their names
     from = get_node(params.fetch(:from))
     to = get_node(params.fetch(:to))
 
@@ -75,13 +68,11 @@ class Diagram
 
     i=1
 
+    #if condition block turned false, it's time to stop
     while yield i do
       before_round i
-
       run_round!
-
       after_round i
-
       i+=1
     end
 
@@ -95,7 +86,6 @@ class Diagram
     nodes.reduce("") { |carry, n| carry+n.to_s }
   end
 
-
   def before_round(node_no); end #template method
 
   def after_round(node_no); end #template method
@@ -106,13 +96,20 @@ class Diagram
 
   def run_round!
 
+
+
+    # at first we need to execute stuff based upon the previous round state
+    #shuffle simulate a petri net's behaviour
     nodes.shuffle.each do |node|
-      node.stage!
+
+      if node.respond_to? :stage!
+        node.stage!
+      end
+
     end
 
-    nodes.each{ |n| n.commit! }
-
-
+    #only after all nodes have run do we update the actual resources and changes, to be used in the next round.
+    nodes.shuffle.each{ |n| n.commit! if n.respond_to? :commit! }
 
   end
 
