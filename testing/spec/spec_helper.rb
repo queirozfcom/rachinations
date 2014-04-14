@@ -10,7 +10,6 @@ require 'rspec'
 RSpec.configure do |config|
   config.color_enabled = true
   config.default_path = 'testing/spec'
-  config.formatter = :progress
 end
 
 require 'diagrams/diagram'
