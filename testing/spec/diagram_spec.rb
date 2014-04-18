@@ -201,4 +201,20 @@ describe Diagram do
 
   end
 
+  it "does not raise errors when active pushes or pulls are not possible" do
+
+    pending "active pushes from an empty node should not cause errors and neither should active pulls from empty nodes"
+
+  end
+
+  it "correctly carries typed tokens from suitable nodes via suitable edges" do
+
+    pending 'should i subclass edge so as to place type-specific behaviour elsewhere?'
+
+  end
+
+
+
+
+
 end
