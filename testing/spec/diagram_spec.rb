@@ -31,7 +31,7 @@ describe Diagram do
 
   end
 
-  it "runs correctly for 2 turns with two pools using PULL and there's the correct amount of resources at the end" do
+  it "runs for 2 turns with two pools using PULL and there's the correct amount of resources at the end" do
 
     d = Diagram.new 'some_name'
 
@@ -48,7 +48,7 @@ describe Diagram do
 
   end
 
-  it "runs correctly for two turns with two pools using PUSH and there's the correct amount of resources at the end" do
+  it "runs for two turns with two pools using PUSH and there's the correct amount of resources at the end" do
 
     d = Diagram.new 'some_name'
 
@@ -62,6 +62,26 @@ describe Diagram do
 
     expect(d.get_node('pool1').resource_count).to eq 3
     expect(d.get_node('pool2').resource_count).to eq 2
+
+  end
+
+  it "runs for a single turn with one source and two pools and there's the correct amount of resources at the end" do
+    p = Diagram.new('one source two pools')
+
+    p.add_node!(Source, {name: 'source'})
+
+    p.add_node!(Pool, {name: 'pool1'})
+
+    p.add_node!(Pool, {name: 'pool2', activation: :automatic})
+
+    p.add_edge!(Edge, {name: 'edge1', from: 'source', to: 'pool1'})
+
+    p.add_edge!(Edge, {name: 'connector2', from: 'pool1', to: 'pool2'})
+
+    p.run!(1)
+
+    expect(p.get_node('pool1').resource_count).to eq 1
+    expect(p.get_node('pool2').resource_count).to eq 0
 
   end
 
@@ -84,8 +104,6 @@ describe Diagram do
     expect(d.get_node('pool1').resource_count).to eq 1
     expect(d.get_node('pool2').resource_count).to eq 1
     expect(d.get_node('pool3').resource_count).to eq 0
-
-
 
   end
 
@@ -113,47 +131,74 @@ describe Diagram do
 
   end
 
-  # it 'should run with a source and a pool and have the expected amount of resources at the end' do
-  #
-  #   d=Diagram.new 'simple'
-  #
-  #
-  #   d.add_node! Source, {
-  #   :name => 'source'
-  #   }
-  #
-  #   d.add_node! Pool, {
-  #       :name => 'deposit',
-  #   }
-  #
-  #   d.add_edge! Edge, {
-  #       :name => 'connector',
-  #       :from => 'source',
-  #       :to => 'deposit'
-  #   }
-  #
-  #   d.run!(10)
-  #   d.get_node('deposit').resource_count.should == 10
-  #
-  # end
+  it 'runs with a source and a pool and have the expected amount of resources at the end' do
 
-  #it 'should allow the creation of a simple source-pool diagram and run while a condition is true' do
-  #  d=Diagram.new 'simple'
-  #  d.add_node! Pool, {
-  #      :name => 'deposit',
-  #      :initial_value => 0
-  #  }
-  #  d.add_node! Source, {
-  #      :name => 'source'
-  #  }
-  #  d.add_edge! Edge, {
-  #      :name => 'connector',
-  #      :from => 'source',
-  #      :to => 'deposit'
-  #  }
-  #  d.run_while! { d.get_node('deposit').resource_count < 10 }
-  #  d.get_node('deposit').resource_count.should == 10
-  #end
+    d=Diagram.new 'simple'
 
+
+    d.add_node! Source, {
+        :name => 'source'
+    }
+
+    d.add_node! Pool, {
+        :name => 'deposit',
+    }
+
+    d.add_edge! Edge, {
+        :name => 'connector',
+        :from => 'source',
+        :to => 'deposit'
+    }
+
+    d.run!(10)
+
+    expect(d.get_node('deposit').resource_count).to eq 10
+
+  end
+
+  it 'can be run until a given condition is true' do
+    d=Diagram.new 'simple'
+    d.add_node! Pool, {
+        :name => 'deposit',
+        :initial_value => 0
+    }
+    d.add_node! Source, {
+        :name => 'source'
+    }
+    d.add_edge! Edge, {
+        :name => 'connector',
+        :from => 'source',
+        :to => 'deposit'
+    }
+
+    d.run_while! { d.get_node('deposit').resource_count < 10 }
+    expect(d.get_node('deposit').resource_count).to eq 10
+
+  end
+
+  it 'aborts after 999 turns as a safeguard against infinite loops given as stopping condition' do
+
+    # create a subclass for diagram (I recommend the name UnsafeDiagram) in
+    # order to allow arbitrarily long execution loops
+
+    d=Diagram.new 'simple'
+    d.add_node! Pool, {
+        :name => 'deposit',
+        :initial_value => 0
+    }
+    d.add_node! Source, {
+        :name => 'source'
+    }
+    d.add_edge! Edge, {
+        :name => 'connector',
+        :from => 'source',
+        :to => 'deposit'
+    }
+
+    d.run_while! { true == true }
+
+    #not hanging on forever is the success condition.
+
+  end
 
 end

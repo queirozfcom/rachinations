@@ -73,6 +73,7 @@ class Diagram
       before_round i
       run_round!
       after_round i
+      break unless sanity_check? i
       i+=1
     end
 
@@ -94,9 +95,15 @@ class Diagram
 
   def after_run; end  #template method
 
+  def sanity_check?(round_no)
+    if round_no >= 999
+      false
+    else
+      true
+    end
+  end
+
   def run_round!
-
-
 
     # at first we need to execute stuff based upon the previous round state
     #shuffle simulate a petri net's behaviour

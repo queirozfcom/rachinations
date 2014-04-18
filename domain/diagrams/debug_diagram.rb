@@ -24,4 +24,13 @@ class DebugDiagram < Diagram
     puts self
   end
 
+  def sanity_check?(round_no)
+    if round_no >= 999
+      print "\033[1;31m= SAFEGUARD CONDITION REACHED - ABORTING EXECUTION =\e[00m\n\n"
+      false
+    else
+      true
+    end
+  end
+
 end
