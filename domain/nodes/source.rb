@@ -1,4 +1,4 @@
-require_relative 'extended_node'
+require 'nodes/pool'
 
 class Source < Pool
 
@@ -7,19 +7,23 @@ class Source < Pool
     if hsh.has_key?(:types)
       values = Hash.new
       hsh[:types].each do |key|
-        #TODO think of a better way to create nodes with infinite resources.. maybe create Tokens on demand would be good.
+        # TODO think of a better way to create nodes with infinite resources.. maybe create Tokens on demand would be good.
+        # LAZILY!!!!!
+
         values[key] = 999
       end
       hsh[:initial_value] = values
+
     end
 
     #sources are always automatic push
-    hsh[:mode] = :push
-    hsh[:activation] = :automatic
 
     #default values
     hsh = {
-        :initial_value => 999
+        initial_value: 999,
+        types: [],
+        mode:  :push,
+        activation:  :automatic
     }.merge hsh
 
     super(hsh)
@@ -30,4 +34,5 @@ class Source < Pool
     "Source '#{@name}':  #{@resources.to_s}"
   end
 
+  def add_resource!; end
 end

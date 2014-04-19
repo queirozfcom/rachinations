@@ -1,16 +1,35 @@
+require 'modules/invariant'
+
+
 class Node
 
-  attr_accessor  :name
+  include Invariant
 
-  def initialize_copy(orig)
-    super
+  attr_reader :name
 
-    #need to clone the resource bag as well...
-    @resources = @resources.clone()
+  def edges
+    if @edges.is_a? Array
+      @edges
+    else
+      @edges = Array.new
+      @edges
+    end
+  end
 
-    #don't need this. takes too much space
-    @diagram = nil
+  def attach_edge(edge)
+    edges.push(edge)
+  end
+
+  def unattach_edge(edge)
+    if edges.include?(edge)
+      edges.pop(edge)
+    else
+      raise RuntimeError, "This #{self.class} does not include this #{edge.class}"
+    end
 
   end
+
+  def stage!; end
+  def commit!; end
 
 end

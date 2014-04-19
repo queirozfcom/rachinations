@@ -1,4 +1,4 @@
-require_relative '../domain/diagram'
+require 'diagrams/diagram'
 gem 'minitest'
 require "minitest/autorun"
 require 'minitest/reporters'

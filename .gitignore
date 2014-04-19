@@ -1,0 +1,4 @@
+.bundle
+.idea
+coverage
+testing/coverage

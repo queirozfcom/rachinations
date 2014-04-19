@@ -1,41 +1,47 @@
 class Token
 
+  
   def initialize
-    @lock= FALSE
+    @lock= false
   end
 
   def lock!
     if locked?
-      raise RuntimeError.new 'Tried to lock a locked Token.'
+      raise RuntimeError, 'Tried to lock a locked Token.'
     else
-      @lock = TRUE
+      @lock = true
     end
+    self
   end
 
+  def type
+    self.class
+  end
 
   def unlock!
     if unlocked?
-      raise RuntimeError.new 'Tried to unlock an unlocked Token.'
+      raise RuntimeError, 'Tried to unlock an unlocked Token.'
     else
-      @lock = FALSE
+      @lock = false
     end
+    self
   end
 
   def locked?
-    @lock == TRUE
+    @lock == true
   end
 
   def unlocked?
-    @lock == FALSE
+    @lock == false
   end
 
-#hooks which can be overridden in child classes
-  def reached_node(node)
-    #do nothing
-  end
+  #hooks which can be overridden in child classes
+  def reached_node(node); end
 
-  def left_node(node)
-    #do nothing
-  end
+  def left_node(node); end
+
+  def reached_edge(edge); end
+
+  def left_edge(edge); end
 
 end

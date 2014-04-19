@@ -1,81 +1,77 @@
+require 'strategies/valid_types'
+
 class Edge
 
-  attr_reader :from_node_name, :to_node_name, :name, :label, :types
+  attr_reader :from, :to, :name, :label, :types
 
-  def initialize(hsh={})
+  def initialize(hsh)
 
-    #TODO assert that hsh has at least the required keys: :name, :from and :to
+    @name = hsh.fetch(:name)
 
-    @name = hsh[:name]
+    @from = hsh.fetch(:from)
 
-    @from_node_name = hsh[:from]
+    @to = hsh.fetch(:to)
 
-    @to_node_name = hsh[:to]
-
-    #setting default values
+    #setting default values if needed.
     hsh = defaults.merge hsh
 
-    @label = hsh[:label]
-    @types = hsh[:types]
-
-
-    #these are used to make sure that an edge sends resources
-    #from a node to another only once per round.
-    @sent = false
-    @received = false
+    @label = hsh.fetch(:label)
+    @types = hsh.fetch(:types)
 
   end
 
+  def carry!
+
+    #if both are automatic and one is pushing while the other one is pulling,
+    #the two events take place, albeit counter-intuitively.
+
+    #can this be used lazily? this should be tested
+
+    strategy = ValidTypes.new(to.types, self.types)
+    condition = strategy.condition
+
+    label.times do
+
+      begin
+        res = from.remove_resource_where! &condition
+      rescue NoElementsFound
+         break
+       end
+
+      to.add_resource!(res)
+
+    end
+
+  end
+
+  #alias
   def supports?(type)
-    has_type?(type)
-  end
-
-  def support?(type)
-    has_type?(type)
-  end
-
-  def has_type?(type)
     types.empty? || types.include?(type)
   end
 
-  def reset
-    #should be called at the end of a round
-    @sent = @received = false
+  #alias
+  def support?(type)
+    supports?(type)
   end
 
-  def connects?(node_name)
-    @to_node_name === node_name || @from_node_name === node_name
+  def untyped?
+    types.empty?
   end
 
-  def from?(node_name)
-    node_name === @from_node_name
+  def typed?
+    not untyped?
   end
 
-  def to?(node_name)
-    node_name === @to_node_name
+
+  def from?(obj)
+    from.equal?(obj)
   end
 
-  def sent?
-    sent
-  end
-
-  def set_sent
-    @sent = true
-  end
-
-  def set_received
-    @received = true
+  def to?(obj)
+    to.equal?(obj)
   end
 
   private
-
-  def sent
-    @sent
-  end
-
-  def received
-    @received
-  end
 
   def defaults
     {
