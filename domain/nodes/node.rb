@@ -7,17 +7,6 @@ class Node
 
   attr_reader :name
 
-  def initialize_copy(orig)
-    super
-
-    #need to clone the resource bag as well...
-    @resources = @resources.clone()
-
-    #don't need this. takes too much space
-    @diagram = nil
-
-  end
-
   def edges
     if @edges.is_a? Array
       @edges
@@ -40,5 +29,7 @@ class Node
 
   end
 
+  def stage!; end
+  def commit!; end
 
 end

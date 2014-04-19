@@ -178,10 +178,11 @@ describe Diagram do
 
   it 'aborts after 999 turns as a safeguard against infinite loops given as stopping condition' do
 
-    # create a subclass for diagram (I recommend the name UnsafeDiagram) in
+    # you can create a subclass for diagram (I recommend the name UnsafeDiagram) in
     # order to allow arbitrarily long execution loops
 
     d=Diagram.new 'simple'
+
     d.add_node! Pool, {
         :name => 'deposit',
         :initial_value => 0
@@ -213,8 +214,74 @@ describe Diagram do
 
   end
 
+  it "should raise an error in case users try to access a node that doesn't exist" do
 
+    p = Diagram.new('get invalid node')
 
+    p.add_node! Source, name: 'source'
+
+    p.add_node! Pool, name: 'pool1'
+
+    p.add_edge! Edge, {
+        name: 'connector1',
+        from: 'source',
+        to: 'pool1'
+    }
+
+    # use curly brackets instead of parentheses here.
+    expect{ p.get_node('pool')}.to raise_error RuntimeError
+
+  end
+
+  it "runs with typed nodes connected by typeless edges" do
+
+    p = Diagram.new('one source one pool typed')
+
+    p.add_node!(Source, name: 'source', :types => [Green])
+    p.add_node!(Pool, name: 'pool1', :types => [Green, Red])
+    p.add_edge!(Edge, name: 'connector1', from: 'source', to: 'pool1')
+
+    p.run!(5)
+
+    expect(p.get_node('pool1').resource_count(Green)).to eq 5
+    expect(p.get_node('pool1').resource_count(Red)).to eq 0
+
+  end
+
+  it "allows untyped nodes to receive typed resources sent to them via untyped edges" do
+
+    p = Diagram.new 'balls'
+
+    p.add_node!(Source, name: 'source', :types => [Football])
+
+    p.add_node!(Pool, name: 'pool1')
+
+    p.add_edge!(Edge, name: 'connector1', from: 'source', to: 'pool1')
+
+    p.run!(5)
+
+    expect(p.get_node('pool1').resource_count(Football)).to eq 5
+
+  end
+
+  it "allows untyped nodes to receive typed resources sent to them via typed edges" do
+
+    p = Diagram.new 'fruits'
+
+    #by declaring initial values, we're implicitly declaring types.
+    p.add_node! Pool, name: 'pool1', initial_value:  { Peach => 20,Mango => 99 }
+
+    p.add_node! Pool, name: 'pool2', activation: :automatic
+
+    p.add_edge!(Edge, name: 'connector1', from: 'pool1', to: 'pool2', types: [Peach])
+
+    p.run!(5)
+
+    expect(p.get_node('pool1').resource_count(Peach)).to eq 15
+    expect(p.get_node('pool1').resource_count(Mango)).to eq 99
+    expect(p.get_node('pool2').resource_count(Peach)).to eq 5
+
+  end
 
 
 end

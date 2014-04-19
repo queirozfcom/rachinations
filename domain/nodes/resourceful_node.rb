@@ -6,7 +6,7 @@ class ResourcefulNode < Node
 
   include Invariant
 
-  attr_reader :staged_resources
+  # attr_reader :staged_resources
 
   # mode= :push, :pull
   # modetype = any, all
@@ -16,8 +16,17 @@ class ResourcefulNode < Node
   #
   def initialize
     @is_start = true
-    @staged_resources = []
-    @state = :before
+  end
+
+  def initialize_copy(orig)
+    super
+
+    #need to clone the resource bag as well...
+    @resources = @resources.clone()
+
+    #don't need this. takes too much space
+    @diagram = nil
+
   end
 
 # this is the execution cycle of a node
@@ -65,26 +74,31 @@ class ResourcefulNode < Node
     if klass.eql?(Token)
       untyped?
     else
-      typed? and types.include? klass
+      #untyped nodes support everything.
+      if untyped?
+        true
+      else
+        typed? && types.include?(klass)
+      end
     end
   end
 
   # this method only 'stages' changes; does not commit them (drawing from git terms)
   def stage!
 
-    if push? and (automatic? or start?)
+    if push? && (automatic? || start?)
 
       edges
       .shuffle
       .select { |e| e.from?(self) }
-      .each {|e| e.stage_carry! }
+      .each {|e| e.carry! }
 
-    elsif pull? and (automatic? or start?)
+    elsif pull? && (automatic? || start?)
 
       edges
       .shuffle
       .select {|e| e.to?(self) }
-      .each{|e| e.stage_carry! }
+      .each{|e| e.carry! }
 
     end
 

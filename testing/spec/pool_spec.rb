@@ -2,8 +2,14 @@ require_relative 'spec_helper'
 
 describe Pool do
 
-  it 'can be created with just a name attribute' do
+  it 'can be created with just a name attribute and have the expected default attributes' do
     obj = Pool.new name: 'some name'
+
+    expect(obj.types).to eq []
+    expect(obj.passive?).to eq true
+    expect(obj.pull?).to eq true
+    expect(obj.resource_count).to eq 0
+
   end
 
   it 'knows its name' do
@@ -73,5 +79,32 @@ describe Pool do
 
   end
 
+  it "knows that Token and subclasses are not the same thing" do
+
+    #i need to check the types very precisely
+
+    Object.const_set(:Subtype,Class.new(Token))
+
+    p1 = Pool.new name: 'typed pool', initial_value: {Subtype => 10}
+
+    #if nothing is given, just return everything
+    expect{p1.resource_count}.not_to raise_error
+    expect(p1.resource_count).to eq 10
+
+    expect{p1.resource_count(Token)}.to raise_error UnsupportedTypeError
+
+    p2 = Pool.new name: 'untyped pool'
+
+    p2.add_resource! Token.new
+    p2.add_resource! Token.new
+    p2.add_resource! Token.new
+
+    p2.add_resource! Subtype.new
+    p2.add_resource! Subtype.new
+
+    expect(p2.resource_count(Token)).to eq 3
+    expect(p2.resource_count(Subtype)).to eq 2
+
+end
 
 end

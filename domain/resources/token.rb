@@ -14,6 +14,9 @@ class Token
     self
   end
 
+  def type
+    self.class
+  end
 
   def unlock!
     if unlocked?
@@ -36,5 +39,9 @@ class Token
   def reached_node(node); end
 
   def left_node(node); end
+
+  def reached_edge(edge); end
+
+  def left_edge(edge); end
 
 end

@@ -10,29 +10,31 @@ class Pool < ResourcefulNode
     params=normalize(hsh)
 
     #nothing set so it's Tokens
-    if params[:initial_value].nil? && params[:types].nil?
+    if params[:initial_value] === 0 && params[:types].empty?
       @resources = ResourceBag.new
-      @types = nil
+      @types = []
       # implicit declaration of types
-    elsif params[:types].nil? && params[:initial_value].is_a?(Hash)
+    elsif params[:types].empty? && params[:initial_value].is_a?(Hash)
       @resources = ResourceBag.new
-      @types = Array.new
+      @types = []
 
       params[:initial_value].each do |klass, quantity|
         @types.push klass
 
         quantity.times do
-          @resources.add(klass.new)
+          @resources.add!(klass.new)
         end
 
       end
-    elsif params[:types].is_a?(Array) && params[:initial_value].nil?
+    elsif params[:types].is_a?(Array) && (not params[:types].empty?) && params[:initial_value] === 0
       @resources = ResourceBag.new
       @types = params[:types]
 
       #both types and initial values were set!
-    elsif params[:types].is_a?(Array) && params[:initial_value].is_a?(Hash)
+    elsif params[:types].is_a?(Array) && (not params[:types].empty?) && params[:initial_value].is_a?(Hash)
       @resources = ResourceBag.new
+      @types = params[:types]
+
       params[:types].each do |resource_klass|
         #set custom initial value if provided
         if params[:initial_value].has_key?(resource_klass)
@@ -40,7 +42,7 @@ class Pool < ResourcefulNode
           quantity = params[:initial_value][resource_klass]
 
           quantity.times do
-            @resources.add(resource_klass.new)
+            @resources.add!(resource_klass.new)
           end
 
         end
@@ -49,15 +51,14 @@ class Pool < ResourcefulNode
       #no types, just initial value for integer (or float in case of infinity for sources)
     elsif params[:initial_value].is_a? Numeric
       @resources = ResourceBag.new
-
+      @types = []
       params[:initial_value].times do
-        @resources.add(Token.new)
+        @resources.add!(Token.new)
       end
 
     else
       raise ArgumentError.new "You've tried to create a Pool passing the following parameters: #{params}"
     end
-
 
     #reference to the overlying diagram
     @diagram = params[:diagram]
@@ -66,10 +67,10 @@ class Pool < ResourcefulNode
     @name = params[:name]
 
     #whether this node is passive or automatic (active)
-    @activation = params[:activation] ||= :passive
+    @activation = params.fetch(:activation, :passive)
 
     #pull or push
-    @mode = params[:mode] ||= :pull
+    @mode = params.fetch(:mode, :pull)
 
     # @types and @resources are set within the previous big loop
 
@@ -82,23 +83,15 @@ class Pool < ResourcefulNode
   def resource_count(type=nil)
 
     if type.nil?
-
-      if typed?
-        raise ArgumentError.new 'This is a typed Node'
-      else
-        @resources.count_where {|r|
-          r.is_a?(Token) && r.unlocked?
-        }
-      end
-
+      @resources.count_where { |r| r.unlocked? }
     else
 
       if supports? type
-        @resources.count_where{|r|
-          r.unlocked? && r.is_a?(type)
-        }.count(type)
+        @resources.count_where { |r|
+          r.unlocked? && r.instance_of?(type)
+        }
       else
-        raise ArgumentError.new "Unsupported type: #{type.name}"
+        raise UnsupportedTypeError.new "Unsupported type: #{type.name}"
       end
     end
 
@@ -106,7 +99,7 @@ class Pool < ResourcefulNode
 
   def commit!
 
-    @resources.each_where{|r|
+    @resources.each_where { |r|
       if r.locked?
         r.unlock!
       end
@@ -118,7 +111,7 @@ class Pool < ResourcefulNode
   def add_resource!(obj)
 
     if supports? obj.class
-      @resources.add(obj)
+      @resources.add!(obj)
     else
       #it's not an error - no action
     end
@@ -126,23 +119,20 @@ class Pool < ResourcefulNode
   end
 
   #return the object (it'll probably be added to another node)
-  def remove_resource!(type=nil)
+  def remove_resource!(type=nil, run_hooks=true)
 
+    #just take any resource youe find
     if type.nil?
-      if untyped?
-        if @resources.count_where{|r| r.is_a?(Token) && r.unlocked? } > 0
-          @resources.get_where{|r|
-            r.is_a?(Token) && r.unlocked?
-          }
-        else
-          raise NoElementsOfGivenTypeError, "No resources found in node '#{name}'"
-        end
+      if @resources.count_where { |r| r.unlocked? } > 0
+        @resources.get_where { |r| r.unlocked? }
+      else
+        raise NoElementsOfGivenTypeError, "No resources found in node '#{name}'"
       end
     else
       if supports? type
-        if @resources.count_where{|r| r.is_a?(Token) && r.unlocked? } > 0
-          @resources.get_where{|r|
-            r.is_a?(type) && r.unlocked?
+        if @resources.count_where { |r| r.instance_of?(type) && r.unlocked? } > 0
+          @resources.get_where { |r|
+            r.instance_of?(type) && r.unlocked?
           }
         else
           raise NoElementsOfGivenTypeError, "No resources of type #{type} found in node '#{name}'."
@@ -154,6 +144,15 @@ class Pool < ResourcefulNode
     end
   end
 
+  def remove_resource_where! &expression
+
+    begin
+      res = @resources.get_where(&expression).lock!
+    rescue NoElementsMatchingConditionError
+      raise NoElementsFound.new
+    end
+
+  end
 
   # this should be at node?
   def typed?
@@ -161,9 +160,8 @@ class Pool < ResourcefulNode
   end
 
   def untyped?
-    types.nil?
+    types.empty?
   end
-
 
   def to_s
     "Pool '#{@name}':  #{@resources.to_s}"
@@ -174,7 +172,7 @@ class Pool < ResourcefulNode
     @types.each &blk
   end
 
-  def take_upto(no_resources,type=nil)
+  def take_upto(no_resources, type=nil)
 
     no_resources.times do
 
@@ -188,6 +186,10 @@ class Pool < ResourcefulNode
 
     end
 
+  end
+
+  def types
+    @types
   end
 
   private
@@ -206,22 +208,15 @@ class Pool < ResourcefulNode
 
     #in case the user hasn't passed full parameters to the constructor
     hsh = {
-        activation: nil,
-        mode: nil,
-        types: nil,
-        initial_value: nil
+        activation: :passive,
+        mode: :pull,
+        types: [],
+        initial_value: 0
     }.merge hsh
 
     hsh
 
   end
-
-  # controlling the resources
-
-  def types
-    @types
-  end
-
 
 
 end

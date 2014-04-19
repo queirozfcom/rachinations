@@ -87,14 +87,6 @@ class Diagram
     nodes.reduce("") { |carry, n| carry+n.to_s }
   end
 
-  def before_round(node_no); end #template method
-
-  def after_round(node_no); end #template method
-
-  def before_run; end #template method
-
-  def after_run; end  #template method
-
   def sanity_check?(round_no)
     if round_no >= 999
       false
@@ -105,18 +97,10 @@ class Diagram
 
   def run_round!
 
-    # at first we need to execute stuff based upon the previous round state
-    #shuffle simulate a petri net's behaviour
-    nodes.shuffle.each do |node|
-
-      if node.respond_to? :stage!
-        node.stage!
-      end
-
-    end
+    nodes.shuffle.each{ |node| node.stage! }
 
     #only after all nodes have run do we update the actual resources and changes, to be used in the next round.
-    nodes.shuffle.each{ |n| n.commit! if n.respond_to? :commit! }
+    nodes.shuffle.each{ |n| n.commit! }
 
   end
 
@@ -135,5 +119,13 @@ class Diagram
   def edges=(what)
     @edges=what
   end
+
+  def before_round(node_no); end #template method
+
+  def after_round(node_no); end #template method
+
+  def before_run; end #template method
+
+  def after_run; end  #template method
 
 end

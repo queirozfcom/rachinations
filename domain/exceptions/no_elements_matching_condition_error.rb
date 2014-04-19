@@ -1,0 +1,2 @@
+class NoElementsMatchingConditionError < Exception
+end
