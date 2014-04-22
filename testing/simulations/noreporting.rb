@@ -1,4 +1,6 @@
-require_relative '../domain/diagram'
+require_relative '../../domain/diagrams/diagram'
+require_relative '../../domain/nodes/pool'
+require_relative '../../domain/edges/edge'
 
 generator = Diagram.new('1to2')
 
@@ -43,7 +45,7 @@ puts "#### Estado inicial ####"
 puts generator
 
 # run and get the end
-generator.run!(10,true)
+generator.run!(10)
 
 puts "#### Estado final ####"
 puts generator

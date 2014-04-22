@@ -1,6 +1,7 @@
 require_relative '../../domain/nodes/resourceful_node'
 require_relative '../../domain/resources/token'
 require_relative '../resource_bag'
+require_relative '../../domain/exceptions/no_elements_matching_condition_error'
 require 'active_support/all'
 
 class Pool < ResourcefulNode
@@ -25,7 +26,6 @@ class Pool < ResourcefulNode
         quantity.times do
           @resources.add!(klass.new)
         end
-
       end
     elsif params[:types].is_a?(Array) && (not params[:types].empty?) && params[:initial_value] === 0
       @resources = ResourceBag.new

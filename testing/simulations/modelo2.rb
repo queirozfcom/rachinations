@@ -1,6 +1,10 @@
-require_relative '../domain/diagram'
+require_relative '../../domain/diagrams/diagram'
+require_relative '../../dsl/dsl'
+require_relative '../../domain/nodes/pool'
+require_relative '../../domain/nodes/source'
+require_relative '../../domain/edges/edge'
 
-generator = Diagram.new('1to2')
+generator = VerboseDiagram.new('1to2')
 
 generator.add_node! Pool, {
     :name => 'g1' ,

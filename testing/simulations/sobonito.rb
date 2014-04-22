@@ -1,8 +1,11 @@
-require_relative '../domain/diagram'
-require_relative '../dsl/dsl.rb'
+require_relative '../../domain/diagrams/diagram'
+require_relative '../../dsl/dsl'
+require_relative '../../domain/nodes/pool'
+require_relative '../../domain/edges/edge'
+
 include DSL
 
-n=diagram 'test_diagram' do
+n=diagram 'test_diagram',:verbose do
   node 'p1', Pool, mode: :push, activation: :automatic, initial_value: 8
   node 'p2', Pool, mode: :push, activation: :automatic
   node 'p3', Pool, mode: :push, activation: :automatic
@@ -19,7 +22,7 @@ end
 
 d = Diagram.new('bonitinho')
 
-n.run!(20, true)
+n.run!(20)
 
 
 

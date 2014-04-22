@@ -1,8 +1,10 @@
 require_relative '../../domain/diagrams/diagram'
-require_relative '../dsl/dsl.rb'
+require_relative '../../dsl/dsl'
+require_relative '../../domain/nodes/pool'
+require_relative '../../domain/edges/edge'
 include DSL
 
-n=diagram 'test_diagram' do
+n=diagram 'test_diagram', :verbose do
   node 'p1', Pool, mode: :push, activation: :automatic, initial_value: 8
   node 'p2', Pool, mode: :push, activation: :automatic
   node 'p3', Pool, mode: :push, activation: :automatic
@@ -12,6 +14,6 @@ n=diagram 'test_diagram' do
   edge 'e3', Edge, 'p3', 'p4'
 end
 
-n.run!(5,true)
+n.run!(5)
 
 puts n

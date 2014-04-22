@@ -1,4 +1,5 @@
 require_relative '../strategies/valid_types'
+require_relative '../../domain/exceptions/no_elements_found'
 
 class Edge
 

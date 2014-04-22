@@ -12,6 +12,9 @@ n=diagram 'test_diagram' , :verbose do
   edge 'edge1', Edge, 'source', 'pool1'
 end
 
+
+
+
 n.run!(5)
 
 
