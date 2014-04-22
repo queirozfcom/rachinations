@@ -1,0 +1,130 @@
+<graph version="v4.05" name="" author="" interval="1" timeMode="asynchronous" distributionMode="fixed speed" speed="100" actions="1" dice="D6" skill="" strategy="" multiplayer="" width="800" height="1500" numberOfRuns="100" visibleRuns="25" colorCoding="0">
+  <node symbol="Converter" x="400" y="192" color="Black" caption="" thickness="2" captionPos="0.25" activationMode="passive" pullMode="pull any" actions="1" resourceColor="Black"/>
+  <connection type="Resource Connection" start="48" end="49" label="" position="0.5" color="Black" thickness="2"/>
+  <connection type="Resource Connection" start="47" end="0" label="" position="0.5" color="Black" thickness="2"/>
+  <node symbol="Gate" x="228" y="141" color="Black" caption="" thickness="2" captionPos="0.25" activationMode="passive" pullMode="pull any" actions="1" gateType="dice"/>
+  <connection type="Resource Connection" start="49" end="5" label="" position="0.5" color="Black" thickness="2"/>
+  <node symbol="Gate" x="550" y="190" color="Black" caption="" thickness="2" captionPos="0.25" activationMode="passive" pullMode="pull any" actions="1" gateType="skill"/>
+  <connection type="Resource Connection" start="5" end="50" label="50%" position="0.5" color="Black" thickness="2"/>
+  <connection type="State Connection" start="17" end="6" label="+1" position="0.5" color="Black" thickness="2"/>
+  <connection type="Resource Connection" start="0" end="49" label="1" position="0.5" color="Black" thickness="2"/>
+  <connection type="Resource Connection" start="42" end="49" label="0" position="0.5" color="Black" thickness="2"/>
+  <connection type="State Connection" start="18" end="8" label="+1" position="0.5" color="Black" thickness="2"/>
+  <connection type="State Connection" start="45" end="9" label="+1" position="0.5" color="Black" thickness="2"/>
+  <connection type="Resource Connection" start="3" end="47" label="50%" position="0.5" color="Black" thickness="2"/>
+  <connection type="State Connection" start="15" end="14" label="+1" position="0" color="Black" thickness="2"/>
+  <connection type="Resource Connection" start="3" end="48" label="50%" position="0.5" color="Black" thickness="2"/>
+  <node symbol="Register" x="335" y="159" color="Black" caption="" thickness="2" captionPos="0.25" activationMode="interactive" pullMode="pull any" actions="0" min="-9999" max="9999" start="0" step="1"/>
+  <connection type="State Connection" start="15" end="12" label="-1" position="0.5" color="Black" thickness="2"/>
+  <node symbol="Register" x="550" y="123" color="Black" caption="" thickness="2" captionPos="0.25" activationMode="interactive" pullMode="pull any" actions="0" min="-9999" max="9999" start="0" step="5"/>
+  <node symbol="Register" x="406" y="254" color="Black" caption="" thickness="2" captionPos="0.25" activationMode="interactive" pullMode="pull any" actions="0" min="-9999" max="9999" start="0" step="1"/>
+  <connection type="State Connection" start="21" end="20" label="+1" position="0.5" color="Black" thickness="2"/>
+  <connection type="Resource Connection" start="44" end="3" label="1" position="0.5" color="Black" thickness="2"/>
+  <node symbol="Register" x="151" y="219" color="Black" caption="" thickness="2" captionPos="0.25" activationMode="interactive" pullMode="pull any" actions="0" min="-9999" max="9999" start="0" step="1"/>
+  <node symbol="Converter" x="426" y="519" color="Black" caption="" thickness="2" captionPos="0.25" activationMode="passive" pullMode="pull any" actions="1" resourceColor="Black"/>
+  <connection type="Resource Connection" start="118" end="53" label="" position="0.5" color="Black" thickness="2"/>
+  <connection type="Resource Connection" start="52" end="22" label="" position="0.5" color="Black" thickness="2"/>
+  <node symbol="Gate" x="254" y="468" color="Black" caption="" thickness="2" captionPos="0.25" activationMode="passive" pullMode="pull any" actions="1" gateType="dice"/>
+  <connection type="Resource Connection" start="53" end="27" label="" position="0.5" color="Black" thickness="2"/>
+  <node symbol="Gate" x="576" y="517" color="Black" caption="" thickness="2" captionPos="0.25" activationMode="passive" pullMode="pull any" actions="1" gateType="skill"/>
+  <connection type="Resource Connection" start="27" end="54" label="50%" position="0.5" color="Black" thickness="2"/>
+  <connection type="State Connection" start="39" end="28" label="+1" position="0.5" color="Black" thickness="2"/>
+  <node symbol="Register" x="570" y="579" color="Black" caption="" thickness="2" captionPos="0.25" activationMode="interactive" pullMode="pull any" actions="0" min="-9999" max="9999" start="0" step="1"/>
+  <connection type="Resource Connection" start="22" end="53" label="1" position="0.5" color="Black" thickness="2"/>
+  <connection type="Resource Connection" start="41" end="53" label="0" position="0.5" color="Black" thickness="2"/>
+  <connection type="State Connection" start="40" end="31" label="+1" position="0.5" color="Black" thickness="2"/>
+  <connection type="State Connection" start="30" end="32" label="+1" position="0.5" color="Black" thickness="2"/>
+  <connection type="Resource Connection" start="25" end="52" label="50%" position="0.5" color="Black" thickness="2"/>
+  <connection type="State Connection" start="37" end="115" label="+1" position="0" color="Black" thickness="2"/>
+  <node symbol="Register" x="361" y="486" color="Black" caption="" thickness="2" captionPos="0.25" activationMode="interactive" pullMode="pull any" actions="0" min="-9999" max="9999" start="0" step="1"/>
+  <connection type="State Connection" start="37" end="35" label="-1" position="0.5" color="Black" thickness="2"/>
+  <node symbol="Register" x="576" y="450" color="Black" caption="" thickness="2" captionPos="0.25" activationMode="interactive" pullMode="pull any" actions="0" min="-9999" max="9999" start="0" step="5"/>
+  <node symbol="Register" x="432" y="581" color="Black" caption="" thickness="2" captionPos="0.25" activationMode="interactive" pullMode="pull any" actions="0" min="-9999" max="9999" start="0" step="1"/>
+  <node symbol="Source" x="507" y="632" color="Black" caption="New Bugs" thickness="2" captionPos="0.25" activationMode="interactive" pullMode="pull any" actions="1" resourceColor="Black"/>
+  <node symbol="Source" x="479" y="290" color="Black" caption="New Bugs" thickness="2" captionPos="0.25" activationMode="interactive" pullMode="pull any" actions="1" resourceColor="Black"/>
+  <node symbol="GroupBox" x="30" y="40" color="Black" caption="" width="694.8601623535156" height="294.8659912109375" captionPos="7"/>
+  <node symbol="Source" x="70" y="142" color="Black" caption="Original Bugs" thickness="2" captionPos="0.25" activationMode="interactive" pullMode="pull any" actions="1" resourceColor="Black"/>
+  <node symbol="Register" x="544" y="252" color="Black" caption="" thickness="2" captionPos="0.25" activationMode="interactive" pullMode="pull any" actions="0" min="-9999" max="9999" start="0" step="1"/>
+  <connection type="Resource Connection" start="50" end="51" label="" position="0.5" color="Black" thickness="2">
+    <point x="614" y="347"/>
+    <point x="98" y="347"/>
+  </connection>
+  <node symbol="Pool" x="320" y="249" color="Black" caption="Amplified" thickness="2" captionPos="0.25" activationMode="automatic" pullMode="push any" actions="1" resourceColor="Black" startingResources="0" capacity="-1"/>
+  <node symbol="Pool" x="320" y="69" color="Black" caption="Passed Through" thickness="2" captionPos="0.25" activationMode="automatic" pullMode="push any" actions="1" resourceColor="Black" startingResources="0" capacity="-1"/>
+  <node symbol="Pool" x="480" y="190" color="Black" caption="Total Bugs" thickness="2" captionPos="0.25" activationMode="automatic" pullMode="push any" actions="1" resourceColor="Black" startingResources="0" capacity="-1"/>
+  <node symbol="Pool" x="611" y="189" color="Black" caption="Remaining Bugs" thickness="2" captionPos="0.25" activationMode="automatic" pullMode="push any" actions="1" resourceColor="Black" startingResources="0" capacity="-1"/>
+  <node symbol="Pool" x="96" y="468" color="Black" caption="Previous Bugs" thickness="2" captionPos="0.25" activationMode="automatic" pullMode="push any" actions="1" resourceColor="Black" startingResources="0" capacity="-1"/>
+  <node symbol="Pool" x="346" y="576" color="Black" caption="Amplified" thickness="2" captionPos="0.25" activationMode="automatic" pullMode="push any" actions="1" resourceColor="Black" startingResources="0" capacity="-1"/>
+  <node symbol="Pool" x="506" y="517" color="Black" caption="Total Bugs" thickness="2" captionPos="0.25" activationMode="automatic" pullMode="push any" actions="1" resourceColor="Black" startingResources="0" capacity="-1"/>
+  <node symbol="Pool" x="637" y="516" color="Black" caption="Remaining Bugs" thickness="2" captionPos="0.25" activationMode="automatic" pullMode="push any" actions="1" resourceColor="Black" startingResources="0" capacity="-1"/>
+  <connection type="Resource Connection" start="51" end="25" label="1" position="0.5" color="Black" thickness="2"/>
+  <node symbol="Chart" x="397" y="845" color="Black" caption="" width="328.722216796875" height="126.15146484374998" captionPos="5" scaleX="0" scaleY="0"/>
+  <node symbol="Converter" x="435" y="907" color="Black" caption="" thickness="2" captionPos="0.25" activationMode="passive" pullMode="pull any" actions="1" resourceColor="Black"/>
+  <connection type="Resource Connection" start="80" end="81" label="" position="0.5" color="Black" thickness="2"/>
+  <connection type="Resource Connection" start="79" end="57" label="" position="0.5" color="Black" thickness="2"/>
+  <node symbol="Gate" x="263" y="856" color="Black" caption="" thickness="2" captionPos="0.25" activationMode="passive" pullMode="pull any" actions="1" gateType="dice"/>
+  <connection type="Resource Connection" start="81" end="62" label="" position="0.5" color="Black" thickness="2"/>
+  <node symbol="Gate" x="585" y="905" color="Black" caption="" thickness="2" captionPos="0.25" activationMode="passive" pullMode="pull any" actions="1" gateType="skill"/>
+  <connection type="Resource Connection" start="62" end="116" label="50%" position="0.5" color="Black" thickness="2"/>
+  <connection type="State Connection" start="75" end="63" label="+1" position="0.5" color="Black" thickness="2"/>
+  <node symbol="Register" x="579" y="967" color="Black" caption="" thickness="2" captionPos="0.25" activationMode="interactive" pullMode="pull any" actions="0" min="-9999" max="9999" start="0" step="1"/>
+  <connection type="Resource Connection" start="57" end="81" label="1" position="0.5" color="Black" thickness="2"/>
+  <connection type="Resource Connection" start="77" end="81" label="0" position="0.5" color="Black" thickness="2"/>
+  <connection type="State Connection" start="76" end="66" label="+1" position="0.5" color="Black" thickness="2"/>
+  <connection type="State Connection" start="65" end="67" label="+1" position="0.5" color="Black" thickness="2"/>
+  <connection type="Resource Connection" start="60" end="79" label="50%" position="0.5" color="Black" thickness="2"/>
+  <connection type="State Connection" start="73" end="72" label="+1" position="0" color="Black" thickness="2"/>
+  <connection type="Resource Connection" start="60" end="80" label="50%" position="0.5" color="Black" thickness="2"/>
+  <node symbol="Register" x="370" y="874" color="Black" caption="" thickness="2" captionPos="0.25" activationMode="interactive" pullMode="pull any" actions="0" min="-9999" max="9999" start="0" step="1"/>
+  <connection type="State Connection" start="73" end="70" label="-1" position="0.5" color="Black" thickness="2"/>
+  <node symbol="Register" x="585" y="838" color="Black" caption="" thickness="2" captionPos="0.25" activationMode="interactive" pullMode="pull any" actions="0" min="-9999" max="9999" start="0" step="5"/>
+  <node symbol="Register" x="441" y="969" color="Black" caption="" thickness="2" captionPos="0.25" activationMode="interactive" pullMode="pull any" actions="0" min="-9999" max="9999" start="0" step="1"/>
+  <node symbol="Source" x="516" y="1020" color="Black" caption="New Bugs" thickness="2" captionPos="0.25" activationMode="interactive" pullMode="pull any" actions="1" resourceColor="Black"/>
+  <node symbol="Pool" x="105" y="856" color="Black" caption="Previous Bugs" thickness="2" captionPos="0.25" activationMode="automatic" pullMode="push any" actions="1" resourceColor="Black" startingResources="0" capacity="-1"/>
+  <node symbol="Pool" x="355" y="964" color="Black" caption="Amplified" thickness="2" captionPos="0.25" activationMode="automatic" pullMode="push any" actions="1" resourceColor="Black" startingResources="0" capacity="-1"/>
+  <node symbol="Pool" x="355" y="784" color="Black" caption="Passed Through" thickness="2" captionPos="0.25" activationMode="automatic" pullMode="push any" actions="1" resourceColor="Black" startingResources="0" capacity="-1"/>
+  <node symbol="Pool" x="515" y="905" color="Black" caption="Total Bugs" thickness="2" captionPos="0.25" activationMode="automatic" pullMode="push any" actions="1" resourceColor="Black" startingResources="0" capacity="-1"/>
+  <connection type="Resource Connection" start="78" end="60" label="1" position="0.5" color="Black" thickness="2"/>
+  <node symbol="GroupBox" x="39" y="748" color="Black" caption="" width="689.1458557128907" height="341.72470703125" captionPos="7"/>
+  <node symbol="GroupBox" x="34" y="364" color="Black" caption="" width="689.1458557128907" height="341.72470703125" captionPos="7"/>
+  <connection type="Resource Connection" start="54" end="78" label="" position="0.5" color="Black" thickness="2">
+    <point x="623" y="735"/>
+    <point x="107" y="735"/>
+  </connection>
+  <node symbol="Chart" x="417" y="1256" color="Black" caption="" width="328.722216796875" height="126.15146484374998" captionPos="5" scaleX="0" scaleY="0"/>
+  <node symbol="Converter" x="455" y="1318" color="Black" caption="" thickness="2" captionPos="0.25" activationMode="passive" pullMode="pull any" actions="1" resourceColor="Black"/>
+  <connection type="Resource Connection" start="110" end="114" label="" position="0.5" color="Black" thickness="2"/>
+  <connection type="Resource Connection" start="109" end="87" label="" position="0.5" color="Black" thickness="2"/>
+  <node symbol="Gate" x="283" y="1267" color="Black" caption="" thickness="2" captionPos="0.25" activationMode="passive" pullMode="pull any" actions="1" gateType="dice"/>
+  <connection type="Resource Connection" start="114" end="92" label="" position="0.5" color="Black" thickness="2"/>
+  <node symbol="Gate" x="605" y="1316" color="Black" caption="" thickness="2" captionPos="0.25" activationMode="passive" pullMode="pull any" actions="1" gateType="skill"/>
+  <connection type="Resource Connection" start="92" end="111" label="50%" position="0.5" color="Black" thickness="2"/>
+  <connection type="State Connection" start="105" end="93" label="+1" position="0.5" color="Black" thickness="2"/>
+  <node symbol="Register" x="599" y="1378" color="Black" caption="" thickness="2" captionPos="0.25" activationMode="interactive" pullMode="pull any" actions="0" min="-9999" max="9999" start="0" step="1"/>
+  <connection type="Resource Connection" start="87" end="114" label="1" position="0.5" color="Black" thickness="2"/>
+  <connection type="Resource Connection" start="107" end="114" label="0" position="0.5" color="Black" thickness="2"/>
+  <connection type="State Connection" start="106" end="96" label="+1" position="0.5" color="Black" thickness="2"/>
+  <connection type="State Connection" start="95" end="97" label="+1" position="0.5" color="Black" thickness="2"/>
+  <connection type="Resource Connection" start="90" end="109" label="50%" position="0.5" color="Black" thickness="2"/>
+  <connection type="State Connection" start="103" end="102" label="+1" position="0" color="Black" thickness="2"/>
+  <connection type="Resource Connection" start="90" end="110" label="50%" position="0.5" color="Black" thickness="2"/>
+  <node symbol="Register" x="390" y="1285" color="Black" caption="" thickness="2" captionPos="0.25" activationMode="interactive" pullMode="pull any" actions="0" min="-9999" max="9999" start="0" step="1"/>
+  <connection type="State Connection" start="103" end="100" label="-1" position="0.5" color="Black" thickness="2"/>
+  <node symbol="Register" x="605" y="1249" color="Black" caption="" thickness="2" captionPos="0.25" activationMode="interactive" pullMode="pull any" actions="0" min="-9999" max="9999" start="0" step="5"/>
+  <node symbol="Register" x="461" y="1380" color="Black" caption="" thickness="2" captionPos="0.25" activationMode="interactive" pullMode="pull any" actions="0" min="-9999" max="9999" start="0" step="1"/>
+  <node symbol="Source" x="536" y="1431" color="Black" caption="New Bugs" thickness="2" captionPos="0.25" activationMode="interactive" pullMode="pull any" actions="1" resourceColor="Black"/>
+  <node symbol="Pool" x="125" y="1267" color="Black" caption="Previous Bugs" thickness="2" captionPos="0.25" activationMode="automatic" pullMode="push any" actions="1" resourceColor="Black" startingResources="0" capacity="-1"/>
+  <node symbol="Pool" x="375" y="1375" color="Black" caption="Amplified" thickness="2" captionPos="0.25" activationMode="automatic" pullMode="push any" actions="1" resourceColor="Black" startingResources="0" capacity="-1"/>
+  <node symbol="Pool" x="375" y="1195" color="Black" caption="Passed Through" thickness="2" captionPos="0.25" activationMode="automatic" pullMode="push any" actions="1" resourceColor="Black" startingResources="0" capacity="-1"/>
+  <node symbol="Pool" x="666" y="1315" color="Black" caption="Remaining Bugs" thickness="2" captionPos="0.25" activationMode="automatic" pullMode="push any" actions="1" resourceColor="Black" startingResources="0" capacity="-1"/>
+  <connection type="Resource Connection" start="108" end="90" label="1" position="0.5" color="Black" thickness="2"/>
+  <node symbol="GroupBox" x="59" y="1159" color="Black" caption="" width="689.1458557128907" height="341.72470703125" captionPos="7"/>
+  <node symbol="Pool" x="535" y="1316" color="Black" caption="Total Bugs" thickness="2" captionPos="0.25" activationMode="automatic" pullMode="push any" actions="1" resourceColor="Black" startingResources="0" capacity="-1"/>
+  <connection type="Resource Connection" start="25" end="118" label="50%" position="0.5" color="Black" thickness="2"/>
+  <node symbol="Pool" x="646" y="904" color="Black" caption="Remaining Bugs" thickness="2" captionPos="0.5" activationMode="automatic" pullMode="push any" actions="1" resourceColor="Black" startingResources="0" capacity="-1"/>
+  <connection type="Resource Connection" start="116" end="108" label="" position="0.5" color="Black" thickness="2">
+    <point x="643" y="1146"/>
+    <point x="127" y="1146"/>
+  </connection>
+  <node symbol="Pool" x="346" y="396" color="Black" caption="Passed Through" thickness="2" captionPos="0.25" activationMode="automatic" pullMode="push any" actions="1" resourceColor="Black" startingResources="0" capacity="-1"/>
+</graph>
