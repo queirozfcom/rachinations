@@ -1,9 +1,16 @@
-require 'diagrams/diagram'
+require_relative '../domain/diagrams/diagram'
+require_relative '../domain/diagrams/verbose_diagram'
 
 module DSL
 
-  def diagram(name, &blk)
-    dia = Diagram.new name
+  def diagram(name,verbose=:silent,&blk)
+
+    if verbose==:verbose
+      dia= VerboseDiagram.new name
+    else
+      dia = Diagram.new name
+    end
+
     dia.instance_eval &blk
 
     dia

@@ -1,4 +1,6 @@
-require 'nodes/pool'
+require_relative '../../domain/nodes/pool'
+
+INFINITY = 9999
 
 class Source < Pool
 
@@ -10,7 +12,7 @@ class Source < Pool
         # TODO think of a better way to create nodes with infinite resources.. maybe create Tokens on demand would be good.
         # LAZILY!!!!!
 
-        values[key] = 999
+        values[key] = INFINITY
       end
       hsh[:initial_value] = values
 
@@ -20,7 +22,7 @@ class Source < Pool
 
     #default values
     hsh = {
-        initial_value: 999,
+        initial_value: INFINITY,
         types: [],
         mode:  :push,
         activation:  :automatic

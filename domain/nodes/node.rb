@@ -1,4 +1,4 @@
-require 'modules/invariant'
+require_relative '../../domain/modules/invariant'
 
 
 class Node

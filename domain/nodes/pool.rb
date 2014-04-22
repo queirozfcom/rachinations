@@ -1,5 +1,6 @@
-require 'nodes/resourceful_node'
-require 'resources/token'
+require_relative '../../domain/nodes/resourceful_node'
+require_relative '../../domain/resources/token'
+require_relative '../resource_bag'
 require 'active_support/all'
 
 class Pool < ResourcefulNode

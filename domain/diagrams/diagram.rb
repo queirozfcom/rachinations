@@ -1,4 +1,6 @@
-require 'modules/invariant'
+require_relative '../../domain/modules/invariant'
+require_relative '../edge_collection'
+require_relative '../node_collection'
 
 class Diagram
 

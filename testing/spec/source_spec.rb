@@ -10,4 +10,8 @@ describe 'Source Instantiation' do
     expect(s.automatic?).to eq true
     expect(s.push?).to eq true
   end
+
+
+
+
 end

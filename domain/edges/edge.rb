@@ -1,4 +1,4 @@
-require 'strategies/valid_types'
+require_relative '../strategies/valid_types'
 
 class Edge
 

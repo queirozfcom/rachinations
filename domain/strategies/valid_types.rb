@@ -1,3 +1,5 @@
+require_relative 'strategy'
+
 class ValidTypes < Strategy
 
 
