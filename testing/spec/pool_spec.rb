@@ -1,73 +1,110 @@
-require 'rspec'
-require_relative '../../domain/diagram'
+require_relative 'spec_helper'
 
 describe Pool do
 
-  it 'should be possible to create a pool with just a name' do
+  it 'can be created with just a name attribute and have the expected default attributes' do
+    obj = Pool.new name: 'some name'
 
-
-    true.should == false
-  end
-
-  it 'should be possible to get the name of a pool' do
-
-    true.should == false
-  end
-
-  it 'should be possible to set the name of a pool'  do
-
-    true.should == false
-  end
-
-  it 'should be possible to put plain resources in a pool'    do
-
-    true.should == false
+    expect(obj.types).to eq []
+    expect(obj.passive?).to eq true
+    expect(obj.pull?).to eq true
+    expect(obj.resource_count).to eq 0
 
   end
 
-  it 'should be possible to put typed resources in a pool' do
+  it 'knows its name' do
 
-    true.should == false
+    obj = Pool.new name: 'foo'
+
+    expect(obj).to respond_to :name
+    expect(obj.name).to eq 'foo'
   end
 
-  it 'should be possible to ask a pool to PULL ANY tokens around it' do
+  it 'cannot have its name set after creation' do
 
-    true.should == false
+    obj = Pool.new name: 'bar'
+    expect(obj).not_to respond_to :name=
+
   end
 
-  it 'should be possible to ask a pool to PULL ALL tokens around it' do
+  it 'supports simple integers as resources' do
 
-    true.should == false
+    obj = Pool.new name: 'baz', initial_value: 10
+
   end
 
-  it 'should be possible to ask a pool to PUSH ANY tokens on it' do
+  it 'should support types during instantiation' do
 
-    true.should == false
+    #note that there is no check whether this class is suited to play the role of a Token...
+
+    foo = Class.new
+    Object.const_set(:Foo, foo)
+
+
+    obj = Pool.new name: 'qux', types: [Foo]
+
+
   end
 
-  it 'should be possible to ask a pool to PUSH ALL tokens on it' do
-
-    true.should == false
+  it 'should perform a pull_any operation' do
+    pending
   end
 
-  it 'should be possible to make a pool automatic' do
-
-    true.should == false
+  it 'should perform a pull_all operation' do
+    pending
   end
 
-  it 'should be possible to make a pool execute (as manually)' do
-
-    true.should == false
+  it 'should perform a push_any operation' do
+    pending
   end
 
-  it 'should be possible to get how many resources are in the pool' do
-
-    true.should == false
+  it 'should perform a push all operation' do
+    pending
   end
 
 
+  it 'can be set to automatic upon instantiation' do
+    Pool.new name: 'bar', activation: :automatic
+  end
 
+  it 'can be executed on an individual basis, i.e. not via calling diagram.run! but a method on the pool itself' do
+    pending 'how do i test this without bringing the whole diagram in?'
+  end
 
+  it "knows how many resources it's got" do
 
+    p=Pool.new name: 'foo', initial_value: 82
+
+    expect(p.resource_count).to eq 82
+
+  end
+
+  it "knows that Token and subclasses are not the same thing" do
+
+    #i need to check the types very precisely
+
+    Object.const_set(:Subtype,Class.new(Token))
+
+    p1 = Pool.new name: 'typed pool', initial_value: {Subtype => 10}
+
+    #if nothing is given, just return everything
+    expect{p1.resource_count}.not_to raise_error
+    expect(p1.resource_count).to eq 10
+
+    expect{p1.resource_count(Token)}.to raise_error UnsupportedTypeError
+
+    p2 = Pool.new name: 'untyped pool'
+
+    p2.add_resource! Token.new
+    p2.add_resource! Token.new
+    p2.add_resource! Token.new
+
+    p2.add_resource! Subtype.new
+    p2.add_resource! Subtype.new
+
+    expect(p2.resource_count(Token)).to eq 3
+    expect(p2.resource_count(Subtype)).to eq 2
+
+end
 
 end

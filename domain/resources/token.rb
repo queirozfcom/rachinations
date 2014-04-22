@@ -11,8 +11,12 @@ class Token
     else
       @lock = true
     end
+    self
   end
 
+  def type
+    self.class
+  end
 
   def unlock!
     if unlocked?
@@ -20,6 +24,7 @@ class Token
     else
       @lock = false
     end
+    self
   end
 
   def locked?
@@ -31,12 +36,12 @@ class Token
   end
 
   #hooks which can be overridden in child classes
-  def reached_node(node)
-    #default behaviour - do nothing
-  end
+  def reached_node(node); end
 
-  def left_node(node)
-    #default behaviour - do nothing
-  end
+  def left_node(node); end
+
+  def reached_edge(edge); end
+
+  def left_edge(edge); end
 
 end

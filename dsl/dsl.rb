@@ -1,4 +1,4 @@
-require_relative '../domain/diagram'
+require 'diagrams/diagram'
 
 module DSL
 

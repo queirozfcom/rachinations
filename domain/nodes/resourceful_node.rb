@@ -1,20 +1,32 @@
 require 'set'
-require_relative '../resources/token'
-require_relative '../resource_bag'
+require 'resources/token'
+require 'nodes/node'
 
 class ResourcefulNode < Node
 
   include Invariant
 
+  # attr_reader :staged_resources
+
   # mode= :push, :pull
   # modetype = any, all
   # activation = :automatic, :passive, :start
 
-  attr_accessor :activation, :mode, :modetype, :state
-
+  # attr_accessor :activation, :mode
+  #
   def initialize
     @is_start = true
-    @state = :before
+  end
+
+  def initialize_copy(orig)
+    super
+
+    #need to clone the resource bag as well...
+    @resources = @resources.clone()
+
+    #don't need this. takes too much space
+    @diagram = nil
+
   end
 
 # this is the execution cycle of a node
@@ -58,40 +70,40 @@ class ResourcefulNode < Node
 
 # pools are about resources
 
-
   def supports?(klass)
     if klass.eql?(Token)
       untyped?
     else
-      typed? and types.include? klass
+      #untyped nodes support everything.
+      if untyped?
+        true
+      else
+        typed? && types.include?(klass)
+      end
     end
   end
 
-  # this method only 'stages' changes, but not not commit them (drawing from git terms)
-  def stage!(reporting)
+  # this method only 'stages' changes; does not commit them (drawing from git terms)
+  def stage!
 
-    if push?
+    if push? && (automatic? || start?)
 
       edges
       .shuffle
       .select { |e| e.from?(self) }
-      .each {|e| e.stage_carry! }
+      .each {|e| e.carry! }
 
-    elsif pull?
+    elsif pull? && (automatic? || start?)
 
       edges
       .shuffle
       .select {|e| e.to?(self) }
-      .each{|e| e.stage_carry! }
+      .each{|e| e.carry! }
 
     end
 
   end
 
-  #replace current state with staged state
-  def commit!
-
-  end
 
   def pull?
     @mode === :pull
@@ -109,56 +121,32 @@ class ResourcefulNode < Node
     @activation === :passive
   end
 
-  #def all?
-  #  @modetype === :all
-  #end
-  #
-  #def any?
-  #  @modetype === :any
-  #end
-
-  def resource_count(type=nil)
-    raise NotImplementedError, "Please update class #{self.class} to respond to: "
+  def start?
+    @activation === :start
   end
+
+  def commit!; raise NotImplementedError,"Please update class #{self.class} to respond to: "; end
+
+  def resource_count(type=nil) raise NotImplementedError, "Please update class #{self.class} to respond to: "; end
+
+  def push_any; raise NotImplementedError,"Please update class #{self.class} to respond to: "; end
+
+  def push_all; raise NotImplementedError, "Please update class #{self.class} to respond to: "; end
+
+  def pull_any; raise NotImplementedError, "Please update class #{self.class} to respond to: "; end
+
+  def pull_all; raise NotImplementedError, "Please update class #{self.class} to respond to: "; end
+
+  def remove_resource!; raise NotImplementedError, "Please update class #{self.class} to respond to: "; end
+
+  def add_resource!; raise NotImplementedError, "Please update class #{self.class} to respond to: "; end
+
+  #use this lazily?
 
   private
 
-
-  #def push
-  #  if any?
-  #    push_any
-  #  elsif all?
-  #    push_all
-  #  end
-  #end
-  #
-  #def pull
-  #  if any?
-  #    pull_any
-  #  elsif all?
-  #    pull_all
-  #  end
-  #end
-
-  def push_any
-    raise NotImplementedError, "Please update class #{self.class} to respond to: "
-  end
-
-  def push_all
-    raise NotImplementedError, "Please update class #{self.class} to respond to: "
-  end
-
-  def pull_any
-    raise NotImplementedError, "Please update class #{self.class} to respond to: "
-  end
-
-  def pull_all
-    raise NotImplementedError, "Please update class #{self.class} to respond to: "
-  end
-
-
   def normalize(hsh)
-    accepted_options = [:name, :activation, :mode, :modetype, :types, :initial_value, :diagram]
+    accepted_options = [:name, :activation, :mode, :types, :initial_value, :diagram]
 
     #watch out for unknown options - might be typos!
     hsh.each_pair do |key, value|

@@ -1,3 +1,5 @@
+require 'strategies/valid_types'
+
 class Edge
 
   attr_reader :from, :to, :name, :label, :types
@@ -16,39 +18,50 @@ class Edge
     @label = hsh.fetch(:label)
     @types = hsh.fetch(:types)
 
-    #these are used to make sure that an edge sends resources
-    #from a node to another only once per round.
-    @sent = false
-    @received = false
-
   end
 
-  def stage_carry!
+  def carry!
+
+    #if both are automatic and one is pushing while the other one is pulling,
+    #the two events take place, albeit counter-intuitively.
+
+    #can this be used lazily? this should be tested
+
+    strategy = ValidTypes.new(to.types, self.types)
+    condition = strategy.condition
+
+    label.times do
+
+      begin
+        res = from.remove_resource_where! &condition
+      rescue NoElementsFound
+         break
+       end
+
+      to.add_resource!(res)
+
+    end
 
   end
 
   #alias
   def supports?(type)
-    has_type?(type)
+    types.empty? || types.include?(type)
   end
 
   #alias
   def support?(type)
-    has_type?(type)
+    supports?(type)
   end
 
-  def has_type?(type)
-    types.empty? || types.include?(type)
+  def untyped?
+    types.empty?
   end
 
-  def reset
-    #should be called at the end of a round
-    @sent = @received = false
+  def typed?
+    not untyped?
   end
 
-  def connects?(obj)
-    to.equal?(obj) || from.equal?(obj)
-  end
 
   def from?(obj)
     from.equal?(obj)
@@ -58,27 +71,7 @@ class Edge
     to.equal?(obj)
   end
 
-  def sent?
-    sent
-  end
-
-  def set_sent
-    @sent = true
-  end
-
-  def set_received
-    @received = true
-  end
-
   private
-
-  def sent
-    @sent
-  end
-
-  def received
-    @received
-  end
 
   def defaults
     {
