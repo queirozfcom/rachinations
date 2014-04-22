@@ -12,14 +12,14 @@ class ValidTypes < Strategy
   def condition
 
     if @edge_types.empty? && @node_types.empty?
-      proc {|res| true == true }
+      Proc.new{|res| true == true }
     else
       if @edge_types.empty? && (not @node_types.empty?)
-        proc {|res| @node_types.include?(res.type) }
+        Proc.new{|res| @node_types.include?(res.type) }
       elsif @node_types.empty? && (not @edge_types.empty?)
-        proc {|res| @edge_types.include?(res.type) }
+        Proc.new{|res| @edge_types.include?(res.type) }
       else
-        proc {|res| @edge_types.include?(res.type) && @node_types.include?(res.type) }
+        Proc.new{|res| @edge_types.include?(res.type) && @node_types.include?(res.type) }
       end
     end
 
