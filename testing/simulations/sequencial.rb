@@ -1,4 +1,4 @@
-require_relative '../domain/diagram'
+require_relative '../../domain/diagrams/diagram'
 require_relative '../dsl/dsl.rb'
 include DSL
 

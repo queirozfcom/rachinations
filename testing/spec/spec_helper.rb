@@ -14,6 +14,7 @@ end
 
 require 'diagrams/diagram'
 require 'diagrams/debug_diagram'
+require 'dsl'
 require 'strategies/strategy'
 require 'strategies/valid_types'
 require 'edges/edge'
@@ -34,6 +35,8 @@ require 'resources/token'
 require 'edge_collection'
 require 'node_collection'
 require 'resource_bag'
+
+include DSL
 
 #resource classes to be used in tests
 Blue=Class.new(Token)
