@@ -6,6 +6,8 @@ class ResourcefulNode < Node
 
   include Invariant
 
+  @is_start = true
+
   # attr_reader :staged_resources
 
   # mode= :push, :pull
@@ -86,14 +88,23 @@ class ResourcefulNode < Node
   # this method only 'stages' changes; does not commit them (drawing from git terms)
   def stage!
 
-    if push? && (automatic? || start?)
+    if  automatic? || is_start?
+      trigger_stage!
+    end
+
+
+  end
+
+  def trigger_stage!
+
+    if push?
 
       edges
       .shuffle
       .select { |e| e.from?(self) }
       .each {|e| e.carry! }
 
-    elsif pull? && (automatic? || start?)
+    elsif pull?
 
       edges
       .shuffle
@@ -103,7 +114,6 @@ class ResourcefulNode < Node
     end
 
   end
-
 
   def pull?
     @mode === :pull
@@ -123,6 +133,16 @@ class ResourcefulNode < Node
 
   def start?
     @activation === :start
+  end
+
+  def is_start?
+    if @activation===:start
+      answer=@is_start
+      @is_start=false
+    else
+      answer=false
+    end
+    answer
   end
 
   def commit!; raise NotImplementedError,"Please update class #{self.class} to respond to: "; end

@@ -30,6 +30,7 @@ class Node
   end
 
   def stage!; end
+  def trigger_stage!; end
   def commit!; end
 
 end

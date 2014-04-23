@@ -1,6 +1,6 @@
 require_relative '../../domain/nodes/pool'
 
-INFINITY = 9999
+INFINITY = 99
 
 class Source < Pool
 

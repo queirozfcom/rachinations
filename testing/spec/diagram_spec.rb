@@ -283,5 +283,32 @@ describe Diagram do
 
   end
 
+  it "should execute start nodes only once" do
+
+    d=Diagram.new 'simple'
+
+    d.add_node! Source, {
+        :name => 'source',
+        :activation => :start
+    }
+
+    d.add_node! Pool, {
+        :name => 'deposit',
+        :initial_value => 0
+    }
+
+
+    d.add_edge! Edge, {
+        :name => 'connector',
+        :from => 'source',
+        :to => 'deposit'
+    }
+
+    d.run!(10)
+
+
+    expect(d.get_node('deposit').resource_count).to eq  1
+
+  end
 
 end
