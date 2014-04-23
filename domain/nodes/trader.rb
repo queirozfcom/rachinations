@@ -1,4 +1,4 @@
-require 'nodes/node'
+require_relative '../../domain/nodes/node'
 
 class Trader < Node
 

@@ -2,8 +2,8 @@ require 'coveralls'
 Coveralls.wear!
 
 # so that i can require stuff as if these dirctories were in ruby's default PATH
-$: << File.expand_path(File.dirname(__FILE__))+"/../../domain"
-$: << File.expand_path(File.dirname(__FILE__))+"/../../dsl"
+#$: << File.expand_path(File.dirname(__FILE__))+"/../../domain"
+#$: << File.expand_path(File.dirname(__FILE__))+"/../../dsl"
 
 require 'rspec'
 
@@ -12,29 +12,33 @@ RSpec.configure do |config|
   config.default_path = 'testing/spec'
 end
 
-require 'diagrams/diagram'
-require 'diagrams/debug_diagram'
-require 'dsl'
-require 'strategies/strategy'
-require 'strategies/valid_types'
-require 'edges/edge'
-require 'edges/random_edge'
-require 'exceptions/no_elements_of_given_type'
-require 'exceptions/unsupported_type_error'
-require 'exceptions/no_elements_matching_condition_error'
-require 'exceptions/no_elements_found'
-require 'nodes/node'
-require 'nodes/resourceful_node'
-require 'nodes/pool'
-require 'nodes/source'
-require 'nodes/sink'
-require 'nodes/gate'
-require 'nodes/trader'
-require 'nodes/converter'
-require 'resources/token'
-require 'edge_collection'
-require 'node_collection'
-require 'resource_bag'
+
+
+
+require_relative '../../domain/diagrams/diagram'
+require_relative '../../domain/diagrams/verbose_diagram'
+require_relative '../../dsl/dsl'
+require_relative '../../domain/strategies/strategy'
+require_relative '../../domain/strategies/valid_types'
+require_relative '../../domain/edges/random_edge'
+require_relative '../../domain/edges/edge'
+require_relative '../../domain/exceptions/no_elements_of_given_type'
+require_relative '../../domain/exceptions/unsupported_type_error'
+require_relative '../../domain/exceptions/no_elements_matching_condition_error'
+require_relative '../../domain/exceptions/no_elements_found'
+require_relative '../../domain/nodes/node'
+require_relative '../../domain/nodes/resourceful_node'
+require_relative '../../domain/nodes/pool'
+require_relative '../../domain/nodes/source'
+require_relative '../../domain/nodes/sink'
+require_relative '../../domain/nodes/gate'
+require_relative '../../domain/nodes/trader'
+require_relative '../../domain/nodes/converter'
+require_relative '../../domain/resources/token'
+require_relative '../../domain/edge_collection'
+require_relative '../../domain/node_collection'
+require_relative '../../domain/resource_bag'
+
 
 include DSL
 
