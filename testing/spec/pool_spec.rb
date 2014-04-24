@@ -79,6 +79,20 @@ describe Pool do
 
   end
 
+  it 'knows how many resources were added' do
+
+    p1 = Pool.new name: 'typed pool'
+    5.times {p1.add_resource! Token.new}
+    2.times {p1.remove_resource!}
+
+
+    expect(p1.resources_added).to eq 5
+    expect(p1.resources_removed).to eq 2
+    expect(p1.resource_count).to eq 3
+
+  end
+
+
   it "knows that Token and subclasses are not the same thing" do
 
     #i need to check the types very precisely
@@ -104,6 +118,7 @@ describe Pool do
 
     expect(p2.resource_count(Token)).to eq 3
     expect(p2.resource_count(Subtype)).to eq 2
+
 
 end
 

@@ -7,10 +7,11 @@ module Invariant
 
   end
 
-  alias_method :inv, :invariant
+
 
   def invariant &block
     raise AssertionError unless yield
   end
 
+  alias_method :inv, :invariant
 end

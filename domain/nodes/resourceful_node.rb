@@ -6,7 +6,7 @@ class ResourcefulNode < Node
 
   include Invariant
 
-  alias_method :support?, :supports?
+
 
   @is_start = true
 
@@ -86,6 +86,8 @@ class ResourcefulNode < Node
       end
     end
   end
+
+  alias_method :support?, :supports?
 
   # this method only 'stages' changes; does not commit them (drawing from git terms)
   def stage!

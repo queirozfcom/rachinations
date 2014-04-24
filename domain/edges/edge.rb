@@ -5,7 +5,7 @@ class Edge
 
   attr_reader :from, :to, :name, :label, :types
 
-  alias_method :support?, :supports?
+
 
   def initialize(hsh)
 
@@ -50,6 +50,7 @@ class Edge
   def supports?(type)
     types.empty? || types.include?(type)
   end
+  alias_method :support?, :supports?
 
   def untyped?
     types.empty?
