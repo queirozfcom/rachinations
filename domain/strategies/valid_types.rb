@@ -11,7 +11,7 @@ class ValidTypes < Strategy
   end
 
 
-  def condition
+  def get_condition
 
     if @edge_types.empty? && @node_types.empty?
       Proc.new{|res| true == true }

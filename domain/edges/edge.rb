@@ -5,6 +5,8 @@ class Edge
 
   attr_reader :from, :to, :name, :label, :types
 
+  alias_method :support?, :supports?
+
   def initialize(hsh)
 
     @name = hsh.fetch(:name)
@@ -29,7 +31,7 @@ class Edge
     #can this be used lazily? this should be tested
 
     strategy = ValidTypes.new(to.types, self.types)
-    condition = strategy.condition
+    condition = strategy.get_condition
 
     label.times do
 
@@ -45,14 +47,8 @@ class Edge
 
   end
 
-  #alias
   def supports?(type)
     types.empty? || types.include?(type)
-  end
-
-  #alias
-  def support?(type)
-    supports?(type)
   end
 
   def untyped?

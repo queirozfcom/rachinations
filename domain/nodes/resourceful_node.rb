@@ -6,6 +6,8 @@ class ResourcefulNode < Node
 
   include Invariant
 
+  alias_method :support?, :supports?
+
   @is_start = true
 
   # attr_reader :staged_resources
