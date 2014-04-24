@@ -51,6 +51,47 @@ describe Diagram do
 
   end
 
+  it "runs for 2 turns with two pools using PULL and add  the correct amount" do
+
+    d = Diagram.new 'some_name'
+
+    d.add_node! Pool, name: 'pool1', initial_value: 5
+
+    d.add_node! Pool, name: 'pool2', activation: :automatic
+
+    d.add_edge! Edge, name: 'edge', from: 'pool1', to: 'pool2'
+
+    d.run!(2)
+
+
+    expect(d.get_node('pool1').resources_added).to eq 0
+    expect(d.get_node('pool2').resources_added).to eq 2
+    expect(d.get_node('pool2').resources_removed).to eq 0
+    expect(d.get_node('pool1').resources_removed).to eq 2
+
+  end
+
+  it "runs for 2 turns with source and pool using PULL and add and remove the correct amount" do
+
+    d = Diagram.new 'some_name'
+
+    d.add_node! Source, name: 's1', activation: :automatic
+
+    d.add_node! Pool, name: 'pool2'
+
+    d.add_edge! Edge, name: 'edge', from: 's1', to: 'pool2'
+
+    d.run!(2)
+
+
+    expect(d.get_node('s1').resources_added).to eq 0
+    expect(d.get_node('pool2').resources_added).to eq 2
+    expect(d.get_node('pool2').resources_removed).to eq 0
+    expect(d.get_node('s1').resources_removed).to eq 2
+
+  end
+
+
   it "runs for two turns with two pools using PUSH and there's the correct amount of resources at the end" do
 
     d = Diagram.new 'some_name'
