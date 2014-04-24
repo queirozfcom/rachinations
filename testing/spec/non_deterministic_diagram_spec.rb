@@ -1,6 +1,7 @@
 require_relative 'spec_helper'
 require_relative '../../domain/modules/verbose'
 require_relative '../../domain/diagrams/non_deterministic_diagram'
+require_relative '../../dsl/dsl'
 
 
 describe NonDeterministicDiagram do
@@ -45,10 +46,31 @@ describe NonDeterministicDiagram do
         to: 'g1',
     }
 
-  generator.run!(100)
+  generator.run!(100) #should be enough
 
     # don´t know what to test...
+    expect(generator.get_node('g3').resource_count).to eq 5
 
   end
+
+  include DSL
+
+  it 'should make a train run' do
+    n=non_deterministic_diagram 'test_diagram' do
+      node 'p1', Pool, mode: :push, activation: :automatic, initial_value: 8
+      node 'p2', Pool, mode: :push, activation: :automatic
+      node 'p3', Pool, mode: :push, activation: :automatic
+      node 'p4', Pool, mode: :push, activation: :automatic
+      edge 'e1', Edge, 'p1', 'p2'
+      edge 'e2', Edge, 'p2', 'p3'
+      edge 'e4', Edge, 'p3', 'p4'
+    end
+
+    n.run!(200)
+
+    expect(n.get_node('p4').resource_count).to eq 8
+
+  end
+
 
 end

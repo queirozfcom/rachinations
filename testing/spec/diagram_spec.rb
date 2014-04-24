@@ -29,6 +29,9 @@ describe Diagram do
 
     d.run!(10)
 
+    expect(d.resources_count).to eq 10
+    expect(d.get_node('deposit').resource_count).to eq 10
+
   end
 
   it "runs for 2 turns with two pools using PULL and there's the correct amount of resources at the end" do

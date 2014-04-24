@@ -37,4 +37,8 @@ class Source < Pool
   end
 
   def add_resource!; end
+
+  def resource_count(klass=nil )
+    return 0
+  end
 end

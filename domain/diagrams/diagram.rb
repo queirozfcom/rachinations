@@ -140,4 +140,12 @@ class Diagram
 
   def after_run; end  #template method
 
+  def resources_count(klass=nil)
+    total=0
+    @nodes.each do |n|
+      total+=n.resource_count(klass)
+    end
+    total
+  end
+
 end
