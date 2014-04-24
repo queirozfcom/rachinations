@@ -122,4 +122,13 @@ describe Pool do
 
 end
 
+  it 'is enabled by default'    do
+
+    p2 = Pool.new name: 'simpler yet'
+
+    expect(p2.enabled?).to eq true
+
+  end
+
+
 end

@@ -10,8 +10,7 @@ class Pool < ResourcefulNode
 
   def initialize(hsh={})
 
-    @resources_added=Hash.new
-    @resources_removed=Hash.new
+
 
     #set nil to stuff that wasn't initialized
     params=normalize(hsh)
@@ -80,8 +79,8 @@ class Pool < ResourcefulNode
 
     # @types and @resources are set within the previous big loop
 
-    #calling parent constructor to setup aother variables.
-    super()
+    #calling parent constructor to setup another variables.
+    super(hsh)
 
   end
 
@@ -117,7 +116,7 @@ class Pool < ResourcefulNode
   def add_resource!(obj)
 
     if supports? obj.class
-      @resources_added[obj.class]=@resources_added[obj.class].nil? ? 1 :  @resources_added[obj.class]+1
+      @resources_added[obj.class]=@resources_added[obj.class]+1
       @resources.add!(obj)
     else
       #it's not an error - no action
@@ -131,7 +130,7 @@ class Pool < ResourcefulNode
     #just take any resource youe find
     if type.nil?
       if @resources.count_where { |r| r.unlocked? } > 0
-        @resources_removed[type]=@resources_removed[type].nil? ? 1 : @resources_removed[type]+1
+        @resources_removed[type]=@resources_removed[type]+1
         @resources.get_where { |r| r.unlocked? }
       else
         raise NoElementsOfGivenTypeError, "No resources found in node '#{name}'"
@@ -139,7 +138,7 @@ class Pool < ResourcefulNode
     else
       if supports? type
         if @resources.count_where { |r| r.instance_of?(type) && r.unlocked? } > 0
-         @resources_removed[type]=@resources_removed[type].nil? ? 1 : @resources_removed[type]+1
+         @resources_removed[type]=@resources_removed[type]+1
           @resources.get_where { |r|
             r.instance_of?(type) && r.unlocked?
           }
@@ -157,7 +156,7 @@ class Pool < ResourcefulNode
 
     begin
       res = @resources.get_where(&expression).lock!
-      @resources_removed[res.class]=@resources_removed[res.class].nil? ? 1 : @resources_removed[res.class]+1
+      @resources_removed[res.class]= @resources_removed[res.class]+1
     rescue NoElementsMatchingConditionError
       raise NoElementsFound.new
     end
@@ -203,31 +202,13 @@ class Pool < ResourcefulNode
     @types
   end
 
-  def resources_added(klass=nil)
-    if klass.nil?
-      total=0
-      @resources_added.each_value {|n| total=total+n }
-      total
-    else
-      @resources_added[klass]
-    end
-  end
-
-  def resources_removed(klass=nil)
-     if klass.nil?
-       total=0
-       @resources_removed.each_value {|n| total=total+n }
-       total
-     else
-       @resources_removed[klass]
-     end
-   end
-
   private
 
-  def normalize(hsh)
-    accepted_options = [:name, :activation, :mode, :modetype, :types, :initial_value, :diagram]
 
+
+  def normalize(hsh)
+
+    accepted_options =  [:@conditions, :name, :activation, :mode, :types, :initial_value, :diagram]
     #watch out for unknown options - might be typos!
     hsh.each_pair do |key, value|
 

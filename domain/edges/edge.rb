@@ -30,19 +30,22 @@ class Edge
 
     #can this be used lazily? this should be tested
 
-    strategy = ValidTypes.new(to.types, self.types)
-    condition = strategy.get_condition
+    if from.enabled? and to.enabled?
 
-    label.times do
+      strategy = ValidTypes.new(to.types, self.types)
+      condition = strategy.get_condition
 
-      begin
-        res = from.remove_resource_where! &condition
-      rescue NoElementsFound
-         break
-       end
+      label.times do
 
-      to.add_resource!(res)
+        begin
+          res = from.remove_resource_where! &condition
+        rescue NoElementsFound
+           break
+         end
 
+        to.add_resource!(res)
+
+      end
     end
 
   end

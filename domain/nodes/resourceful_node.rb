@@ -4,6 +4,7 @@ require_relative '../../domain/nodes/node'
 
 class ResourcefulNode < Node
 
+
   include Invariant
 
 
@@ -18,8 +19,11 @@ class ResourcefulNode < Node
 
   # attr_accessor :activation, :mode
   #
-  def initialize
+  def initialize(hsh=nil)
     @is_start = true
+    @resources_added=Hash.new(0)
+    @resources_removed=Hash.new(0)
+    super(hsh)
   end
 
   def initialize_copy(orig)
@@ -101,19 +105,22 @@ class ResourcefulNode < Node
 
   def trigger_stage!
 
-    if push?
+    if enabled?
+      if push?
 
-      edges
-      .shuffle
-      .select { |e| e.from?(self) }
-      .each {|e| e.carry! }
+        edges
+        .shuffle
+        .select { |e| e.from?(self) }
+        .each {|e| e.carry! }
 
-    elsif pull?
+      elsif pull?
 
-      edges
-      .shuffle
-      .select {|e| e.to?(self) }
-      .each{|e| e.carry! }
+        edges
+        .shuffle
+        .select {|e| e.to?(self) }
+        .each{|e| e.carry! }
+
+      end
 
     end
 
@@ -137,6 +144,27 @@ class ResourcefulNode < Node
 
   def start?
     @activation === :start
+  end
+
+
+  def resources_added(klass=nil)
+    if klass.nil?
+      total=0
+      @resources_added.each_value { |n| total=total+n }
+      total
+    else
+      @resources_added[klass]
+    end
+  end
+
+  def resources_removed(klass=nil)
+    if klass.nil?
+      total=0
+      @resources_removed.each_value { |n| total=total+n }
+      total
+    else
+      @resources_removed[klass]
+    end
   end
 
   def is_start?
@@ -169,8 +197,10 @@ class ResourcefulNode < Node
 
   private
 
+
   def normalize(hsh)
-    accepted_options = [:name, :activation, :mode, :types, :initial_value, :diagram]
+
+    accepted_options =  [:@conditions, :name, :activation, :mode, :types, :initial_value, :diagram]
 
     #watch out for unknown options - might be typos!
     hsh.each_pair do |key, value|
