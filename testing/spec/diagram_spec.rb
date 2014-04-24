@@ -199,6 +199,32 @@ describe Diagram do
     d.run_while! { true == true }
 
     #not hanging on forever is the success condition.
+    expect(d.get_node('deposit').resource_count).to eq 999
+
+  end
+
+  it 'aborts after specified turns as a safeguard against infinite loops given as stopping condition' do
+
+    d=Diagram.new 'simple'
+    d.max_iterations=9
+
+    d.add_node! Pool, {
+        :name => 'deposit',
+        :initial_value => 0
+    }
+    d.add_node! Source, {
+        :name => 'source'
+    }
+    d.add_edge! Edge, {
+        :name => 'connector',
+        :from => 'source',
+        :to => 'deposit'
+    }
+
+    d.run_while! { true == true }
+
+    #not hanging on forever is the success condition.
+    expect(d.get_node('deposit').resource_count).to eq 9
 
   end
 

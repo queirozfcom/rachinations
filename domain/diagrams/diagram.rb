@@ -7,11 +7,14 @@ class Diagram
   include Invariant
 
   attr_accessor :name
+  attr_accessor :max_iterations
+
 
   def initialize(name)
     @nodes = NodeCollection.new
     @edges = EdgeCollection.new
     @name = name
+    @max_iterations = 999
   end
 
   def get_node(name)
@@ -90,7 +93,8 @@ class Diagram
   end
 
   def sanity_check?(round_no)
-    if round_no >= 999
+    if round_no >= @max_iterations
+      sanity_check_message
       false
     else
       true
@@ -102,7 +106,13 @@ class Diagram
     nodes.shuffle.each{ |node| node.stage! }
 
     #only after all nodes have run do we update the actual resources and changes, to be used in the next round.
-    nodes.shuffle.each{ |n| n.commit! }
+    #nodes.shuffle.each{ |n| n.commit! }
+    nodes.each{ |n| n.commit! }
+
+  end
+
+
+  def sanity_check_message
 
   end
 

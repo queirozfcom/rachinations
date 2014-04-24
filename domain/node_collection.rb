@@ -3,7 +3,7 @@ require 'forwardable'
 class NodeCollection
   extend Forwardable
 
-  def_delegators :@array, :[], :<<, :each, :push, :map, :select, :detect , :reduce, :shuffle
+  def_delegators :@array, :[], :<<, :each, :push, :map, :select, :detect , :reduce, :shuffle, :sample
 
   def initialize(init_array=nil)
 

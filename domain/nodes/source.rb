@@ -1,6 +1,6 @@
 require_relative '../../domain/nodes/pool'
 
-INFINITY = 99
+INFINITY = 999
 
 class Source < Pool
 
@@ -18,7 +18,7 @@ class Source < Pool
 
     end
 
-    #sources are always automatic push
+    #sources are  automatic push by default
 
     #default values
     hsh = {
