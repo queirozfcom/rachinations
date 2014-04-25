@@ -7,8 +7,6 @@ class ResourcefulNode < Node
 
   include Invariant
 
-
-
   @is_start = true
 
   # attr_reader :staged_resources
@@ -19,6 +17,7 @@ class ResourcefulNode < Node
 
   # attr_accessor :activation, :mode
   #
+
   def initialize(hsh=nil)
     @is_start = true
     @resources_added=Hash.new(0)
@@ -177,7 +176,9 @@ class ResourcefulNode < Node
     answer
   end
 
-  def commit!; raise NotImplementedError,"Please update class #{self.class} to respond to: "; end
+  def commit!;
+    super
+  end
 
   def resource_count(type=nil) raise NotImplementedError, "Please update class #{self.class} to respond to: "; end
 

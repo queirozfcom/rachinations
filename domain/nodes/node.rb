@@ -46,6 +46,42 @@ class Node
 
   end
 
+  def attach_trigger(trig)
+    triggers.push(trig+[true])
+  end
+
+  def triggers
+    if @triggers.is_a? Array
+      @triggers
+    else
+      @triggers = Array.new
+      @triggers
+    end
+  end
+
+  def clear_triggers
+    triggers.each do |t|
+      t[2]=true
+    end
+  end
+
+
+
+  # @param [Node] b
+  def trigger!
+    triggers.each do | n |
+      if (n[0].is_a? Proc) && n[2]
+        if n[0].call
+          n[2]=false
+          n[1].trigger_stage!
+        end
+      elsif n[0] && n[2]
+        n[2]=false
+        n[1].trigger_stage!
+      end
+    end
+  end
+
   def enabled?
     res=true
     conditions.each do |cond|
@@ -62,6 +98,9 @@ class Node
 
   def stage!; end
   def trigger_stage!; end
-  def commit!; end
+  def commit!;
+    clear_triggers
+    self
+  end
 
 end

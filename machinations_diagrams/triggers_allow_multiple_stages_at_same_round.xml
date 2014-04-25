@@ -1,0 +1,19 @@
+<graph version="v4.05" name="" author="" interval="1" timeMode="asynchronous" distributionMode="fixed speed" speed="100" actions="1" dice="D6" skill="" strategy="" multiplayer="" width="600" height="560" numberOfRuns="100" visibleRuns="25" colorCoding="0">
+  <connection type="Resource Connection" start="7" end="10" label="" position="0.5" color="Black" thickness="2"/>
+  <connection type="State Connection" start="10" end="3" label="*" position="0.5" color="Black" thickness="2"/>
+  <connection type="Resource Connection" start="3" end="9" label="" position="0.5" color="Black" thickness="2"/>
+  <node symbol="Source" x="271" y="180" color="Black" caption="" thickness="2" captionPos="0.25" activationMode="passive" pullMode="pull any" actions="1" resourceColor="Black"/>
+  <connection type="State Connection" start="7" end="11" label="*" position="0.5" color="Black" thickness="2"/>
+  <connection type="Resource Connection" start="11" end="8" label="" position="0.5" color="Black" thickness="2"/>
+  <connection type="State Connection" start="11" end="3" label="*" position="0.5" color="Black" thickness="2"/>
+  <node symbol="Source" x="104" y="101" color="Black" caption="" thickness="2" captionPos="0.25" activationMode="automatic" pullMode="push any" actions="1" resourceColor="Black"/>
+  <node symbol="Pool" x="464" y="312" color="Black" caption="" thickness="2" captionPos="0.25" activationMode="passive" pullMode="push any" actions="1" resourceColor="Black" startingResources="0" capacity="-1"/>
+  <node symbol="Pool" x="458" y="183" color="Black" caption="" thickness="2" captionPos="0.25" activationMode="passive" pullMode="pull any" actions="1" resourceColor="Black" startingResources="0" capacity="-1"/>
+  <node symbol="Pool" x="460" y="68" color="Black" caption="" thickness="2" captionPos="0.25" activationMode="passive" pullMode="pull any" actions="1" resourceColor="Black" startingResources="0" capacity="-1"/>
+  <node symbol="Source" x="264" y="311" color="Black" caption="" thickness="2" captionPos="0.25" activationMode="passive" pullMode="push any" actions="1" resourceColor="Black"/>
+  <node symbol="Pool" x="459" y="408" color="Black" caption="" thickness="2" captionPos="0.25" activationMode="passive" pullMode="pull any" actions="1" resourceColor="Black" startingResources="0" capacity="-1"/>
+  <connection type="Resource Connection" start="14" end="12" label="" position="0.5" color="Black" thickness="2"/>
+  <node symbol="Source" x="269" y="408" color="Black" caption="" thickness="2" captionPos="0.25" activationMode="passive" pullMode="pull any" actions="1" resourceColor="Black"/>
+  <connection type="State Connection" start="8" end="14" label=">2" position="0.5" color="Black" thickness="2"/>
+  <connection type="State Connection" start="7" end="14" label="*" position="0.5" color="Black" thickness="2"/>
+</graph>

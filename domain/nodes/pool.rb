@@ -1,4 +1,5 @@
 require_relative '../../domain/nodes/resourceful_node'
+require_relative '../../domain/nodes/node'
 require_relative '../../domain/resources/token'
 require_relative '../resource_bag'
 require_relative '../../domain/exceptions/no_elements_matching_condition_error'
@@ -86,7 +87,6 @@ class Pool < ResourcefulNode
 
 
   def resource_count(type=nil)
-
     if type.nil?
       @resources.count_where { |r| r.unlocked? }
     else
@@ -99,8 +99,25 @@ class Pool < ResourcefulNode
         raise UnsupportedTypeError.new "Unsupported type: #{type.name}"
       end
     end
-
   end
+
+  def instant_resource_count(type=nil)
+    if type.nil?
+      @resources.count_where { true }
+    else
+
+      if supports? type
+        @resources.count_where { |r|
+          r.instance_of?(type)
+        }
+      else
+        raise UnsupportedTypeError.new "Unsupported type: #{type.name}"
+      end
+    end
+  end
+
+
+
 
   def commit!
 
@@ -110,23 +127,25 @@ class Pool < ResourcefulNode
       end
     }
 
-    self
+    super
+
   end
 
   def add_resource!(obj)
 
     if supports? obj.class
       @resources_added[obj.class]=@resources_added[obj.class]+1
-      @resources.add!(obj)
+      ans=@resources.add!(obj)
+      trigger!
+      ans
     else
       #it's not an error - no action
     end
-
   end
 
   #return the object (it'll probably be added to another node)
   def remove_resource!(type=nil, run_hooks=true)
-
+    ans=nil
     #just take any resource youe find
     if type.nil?
       if @resources.count_where { |r| r.unlocked? } > 0
@@ -160,6 +179,7 @@ class Pool < ResourcefulNode
     rescue NoElementsMatchingConditionError
       raise NoElementsFound.new
     end
+    trigger!
     res
 
   end

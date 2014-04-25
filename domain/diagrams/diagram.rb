@@ -111,9 +111,6 @@ class Diagram
   end
 
 
-  def sanity_check_message
-
-  end
 
   def nodes
     @nodes
@@ -138,6 +135,8 @@ class Diagram
   def before_run; end #template method
 
   def after_run; end  #template method
+
+  def sanity_check_message;  end #template method
 
   def resources_count(klass=nil)
     total=0
