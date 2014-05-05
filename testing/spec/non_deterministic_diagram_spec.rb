@@ -1,5 +1,5 @@
 require_relative 'spec_helper'
-require_relative '../../domain/modules/verbose'
+require_relative '../../domain/modules/diagrams/verbose'
 require_relative '../../domain/diagrams/non_deterministic_diagram'
 require_relative '../../dsl/dsl'
 

@@ -1,4 +1,4 @@
-require_relative '../../domain/modules/invariant'
+require_relative '../../domain/modules/common/invariant'
 require_relative '../edge_collection'
 require_relative '../node_collection'
 
@@ -138,7 +138,7 @@ class Diagram
 
   def sanity_check_message;  end #template method
 
-  def resources_count(klass=nil)
+  def resource_count(klass=nil)
     total=0
     @nodes.each do |n|
       total+=n.resource_count(klass)

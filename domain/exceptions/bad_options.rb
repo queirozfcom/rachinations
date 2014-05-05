@@ -1,0 +1,3 @@
+class BadOptions < ArgumentError
+
+end

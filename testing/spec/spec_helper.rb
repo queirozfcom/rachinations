@@ -13,8 +13,6 @@ RSpec.configure do |config|
 end
 
 
-
-
 require_relative '../../domain/diagrams/diagram'
 require_relative '../../domain/diagrams/verbose_diagram'
 require_relative '../../dsl/dsl'
@@ -24,6 +22,7 @@ require_relative '../../domain/edges/random_edge'
 require_relative '../../domain/edges/edge'
 require_relative '../../domain/exceptions/no_elements_of_given_type'
 require_relative '../../domain/exceptions/unsupported_type_error'
+require_relative '../../domain/exceptions/bad_options'
 require_relative '../../domain/exceptions/no_elements_matching_condition_error'
 require_relative '../../domain/exceptions/no_elements_found'
 require_relative '../../domain/nodes/node'

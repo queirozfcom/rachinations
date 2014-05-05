@@ -1,5 +1,5 @@
 require 'active_support/all'
-require_relative '../domain/modules/invariant'
+require_relative '../domain/modules/common/invariant'
 
 
 class ResourceBag

@@ -9,14 +9,6 @@ class ResourcefulNode < Node
 
   @is_start = true
 
-  # attr_reader :staged_resources
-
-  # mode= :push, :pull
-  # modetype = any, all
-  # activation = :automatic, :passive, :start
-
-  # attr_accessor :activation, :mode
-  #
 
   def initialize(hsh=nil)
     @is_start = true
@@ -35,45 +27,6 @@ class ResourcefulNode < Node
     @diagram = nil
 
   end
-
-# this is the execution cycle of a node
-# it can be called by diagram or by any node/edge
-# however, it can only be called once per turn
-# since, two states: :before and :after
-# we use 2 states to allow for more states if needed
-
-#
-#def run! # should be called by diagram
-#  if @state==:before
-#    if @activation==:automatic
-#    execute!
-#    elsif @is_start and @activation == :start
-#      execute!
-#    else
-#      # do nothing for a while
-#    end
-#  end
-#  @state=:after
-#end
-#
-#def commit! # should be called by diagram
-#  @state=:before
-#  false
-#end
-#
-#def execute! # can be called by any node/thing
-#  if @state==:before
-#    if push?
-#      push(:modetype)
-#    elsif pull?
-#      pull(:modetype)
-#    end
-#  end
-#  @state=:after
-#  @is_start=false
-#end
-
-# about my state (every node has a complete set of states)
 
 # pools are about resources
 
@@ -98,7 +51,6 @@ class ResourcefulNode < Node
     if  automatic? || is_start?
       trigger_stage!
     end
-
 
   end
 
@@ -176,9 +128,11 @@ class ResourcefulNode < Node
     answer
   end
 
-  def commit!;
+  def commit!
     super
   end
+
+
 
   def resource_count(type=nil) raise NotImplementedError, "Please update class #{self.class} to respond to: "; end
 
@@ -194,24 +148,19 @@ class ResourcefulNode < Node
 
   def add_resource!; raise NotImplementedError, "Please update class #{self.class} to respond to: "; end
 
-  #use this lazily?
-
-  private
-
-
-  def normalize(hsh)
-
-    accepted_options =  [:@conditions, :name, :activation, :mode, :types, :initial_value, :diagram]
-
-    #watch out for unknown options - might be typos!
-    hsh.each_pair do |key, value|
-
-      if accepted_options.exclude?(key)
-        raise ArgumentError.new "Unknown option: in parameter hash: #{key} "
-      end
-
-    end
-  end
+  #   def normalize(hsh)
+  #
+  #   accepted_options =  [:@conditions, :name, :activation, :mode, :types, :initial_value, :diagram]
+  #
+  #   #watch out for unknown options - might be typos!
+  #   hsh.each_pair do |key, value|
+  #
+  #     if accepted_options.exclude?(key)
+  #       raise ArgumentError.new "Unknown option: in parameter hash: #{key} "
+  #     end
+  #
+  #   end
+  # end
 
 end
 

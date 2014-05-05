@@ -20,7 +20,6 @@ describe Diagram do
         :initial_value => 0
     }
 
-
     d.add_edge! Edge, {
         :name => 'connector',
         :from => 'source',
@@ -29,7 +28,7 @@ describe Diagram do
 
     d.run!(10)
 
-    expect(d.resources_count).to eq 10
+    expect(d.resource_count).to eq 10
     expect(d.get_node('deposit').resource_count).to eq 10
 
   end
@@ -405,7 +404,7 @@ describe Diagram do
 
     d.run!(10)
 
-    expect(d.resources_count).to eq 0
+    expect(d.resource_count).to eq 0
     expect(d.get_node('deposit').resource_count).to eq 0
 
   end
@@ -434,7 +433,7 @@ describe Diagram do
 
     d.run!(10)
 
-    expect(d.resources_count).to eq 3
+    expect(d.resource_count).to eq 3
     expect(d.get_node('deposit').resource_count).to eq 3
 
   end
@@ -458,13 +457,13 @@ describe Diagram do
         :to => 'deposit'
     }
 
-    d.get_node('deposit').attach_condition(lambda do
+    d.get_node('deposit').attach_condition( lambda do
       d.get_node('deposit').resource_count < 3
     end)
 
     d.run!(10)
 
-    expect(d.resources_count).to eq 3
+    expect(d.resource_count).to eq 3
     expect(d.get_node('deposit').resource_count).to eq 3
 
   end
@@ -492,7 +491,7 @@ describe Diagram do
 
     d.run!(10)
 
-    expect(d.resources_count).to eq 11
+    expect(d.resource_count).to eq 11
     expect(d.get_node('deposit').resource_count).to eq 11
 
   end
@@ -539,7 +538,7 @@ describe Diagram do
     #d.extend(Verbose)
     d.run!(6)
 
-    expect(d.resources_count).to eq 10
+    expect(d.resource_count).to eq 10
     expect(d.get_node('d1').resource_count).to eq 8
     expect(d.get_node('d2').resource_count).to eq 2
 
@@ -588,7 +587,7 @@ describe Diagram do
     #d.extend(Verbose)
     d.run!(6)
 
-    expect(d.resources_count).to eq 12
+    expect(d.resource_count).to eq 12
     expect(d.get_node('d1').resource_count).to eq 9
     expect(d.get_node('d2').resource_count).to eq 3
 

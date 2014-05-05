@@ -9,6 +9,7 @@ describe 'Source Instantiation' do
     expect(s.types).to eq []
     expect(s.automatic?).to eq true
     expect(s.push?).to eq true
+
   end
 
 

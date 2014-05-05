@@ -1,7 +1,7 @@
 require_relative '../domain/diagrams/diagram'
 require_relative '../domain/diagrams/verbose_diagram'
 require_relative '../domain/diagrams/non_deterministic_diagram'
-require_relative '../domain/modules/verbose'
+require_relative '../domain/modules/diagrams/verbose'
 
 module DSL
 

@@ -1,15 +1,14 @@
-require_relative '../../domain/modules/invariant'
-
+require_relative '../../domain/modules/common/invariant'
+require_relative '../../domain/modules/common/hash_init'
 
 class Node
 
   include Invariant
+  include HashInit
 
   attr_reader :name
 
-  def initialize(hsh=nil)
-    # do nothing
-  end
+
 
   def attach_condition(condition)
     conditions.push(condition)
@@ -66,10 +65,9 @@ class Node
   end
 
 
-
   # @param [Node] b
   def trigger!
-    triggers.each do | n |
+    triggers.each do |n|
       if (n[0].is_a? Proc) && n[2]
         if n[0].call
           n[2]=false
@@ -96,11 +94,18 @@ class Node
     res
   end
 
-  def stage!; end
-  def trigger_stage!; end
+
   def commit!;
     clear_triggers
     self
+  end
+
+
+
+  def stage!;
+  end
+
+  def trigger_stage!;
   end
 
 end

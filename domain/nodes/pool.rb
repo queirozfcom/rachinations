@@ -3,18 +3,14 @@ require_relative '../../domain/nodes/node'
 require_relative '../../domain/resources/token'
 require_relative '../resource_bag'
 require_relative '../../domain/exceptions/no_elements_matching_condition_error'
-require 'active_support/all'
+
 
 class Pool < ResourcefulNode
 
-
-
   def initialize(hsh={})
 
-
-
-    #set nil to stuff that wasn't initialized
-    params=normalize(hsh)
+    check_options!(hsh)
+    params = set_defaults(hsh)
 
     #nothing set so it's Tokens
     if params[:initial_value] === 0 && params[:types].empty?
@@ -117,18 +113,13 @@ class Pool < ResourcefulNode
   end
 
 
-
-
   def commit!
-
     @resources.each_where { |r|
       if r.locked?
         r.unlock!
       end
     }
-
     super
-
   end
 
   def add_resource!(obj)
@@ -197,11 +188,6 @@ class Pool < ResourcefulNode
     "Pool '#{@name}':  #{@resources.to_s}"
   end
 
-  #this method is revealing too much.. it's exposing too much.
-  def each_type &blk
-    @types.each &blk
-  end
-
   def take_upto(no_resources, type=nil)
 
     no_resources.times do
@@ -222,32 +208,17 @@ class Pool < ResourcefulNode
     @types
   end
 
-  private
+  def options
+    [:conditions,:name,:activation,:mode,:types,:initial_value,:diagram]
+  end
 
-
-
-  def normalize(hsh)
-
-    accepted_options =  [:@conditions, :name, :activation, :mode, :types, :initial_value, :diagram]
-    #watch out for unknown options - might be typos!
-    hsh.each_pair do |key, value|
-
-      if accepted_options.exclude?(key)
-        raise ArgumentError.new "Unknown option: in parameter hash: #{key} "
-      end
-
-    end
-
-    #in case the user hasn't passed full parameters to the constructor
-    hsh = {
+  def defaults
+    {
         activation: :passive,
         mode: :pull,
         types: [],
         initial_value: 0
-    }.merge hsh
-
-    hsh
-
+    }
   end
 
 
