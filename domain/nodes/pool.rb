@@ -76,7 +76,7 @@ class Pool < ResourcefulNode
 
     # @types and @resources are set within the previous big loop
 
-    #calling parent constructor to setup another variables.
+    #calling parent constructor to setup other variables.
     super(hsh)
 
   end
@@ -125,7 +125,7 @@ class Pool < ResourcefulNode
   def add_resource!(obj)
 
     if supports? obj.class
-      @resources_added[obj.class]=@resources_added[obj.class]+1
+      @resources_added[obj.class] += 1
       ans=@resources.add!(obj)
       trigger!
       ans
@@ -136,37 +136,22 @@ class Pool < ResourcefulNode
 
   #return the object (it'll probably be added to another node)
   def remove_resource!(type=nil, run_hooks=true)
-    ans=nil
-    #just take any resource youe find
+
     if type.nil?
-      if @resources.count_where { |r| r.unlocked? } > 0
-        @resources_removed[type]=@resources_removed[type]+1
-        @resources.get_where { |r| r.unlocked? }
-      else
-        raise NoElementsOfGivenTypeError, "No resources found in node '#{name}'"
-      end
+      blk = Proc.new{|r| r.instance_of?(Token)}
     else
-      if supports? type
-        if @resources.count_where { |r| r.instance_of?(type) && r.unlocked? } > 0
-         @resources_removed[type]=@resources_removed[type]+1
-          @resources.get_where { |r|
-            r.instance_of?(type) && r.unlocked?
-          }
-        else
-          raise NoElementsOfGivenTypeError, "No resources of type #{type} found in node '#{name}'."
-        end
-      else
-        # TODO decide if I should raise an Error or not here
-        nil
-      end
+      blk = Proc.new{|r| r.instance_of?(type)}
     end
+
+    remove_resource_where! &blk
+
   end
 
   def remove_resource_where! &expression
 
     begin
       res = @resources.get_where(&expression).lock!
-      @resources_removed[res.class]= @resources_removed[res.class]+1
+      @resources_removed[res.class] += 1
     rescue NoElementsMatchingConditionError
       raise NoElementsFound.new
     end

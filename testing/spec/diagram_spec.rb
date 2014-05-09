@@ -306,7 +306,7 @@ describe Diagram do
 
     p = Diagram.new('one source one pool typed')
 
-    p.add_node!(Source, name: 'source', :types => [Green])
+    p.add_node!(Source, name: 'source', :type => Green)
     p.add_node!(Pool, name: 'pool1', :types => [Green, Red])
     p.add_edge!(Edge, name: 'connector1', from: 'source', to: 'pool1')
 
@@ -321,7 +321,7 @@ describe Diagram do
 
     p = Diagram.new 'balls'
 
-    p.add_node!(Source, name: 'source', :types => [Football])
+    p.add_node!(Source, name: 'source', :type => Football)
 
     p.add_node!(Pool, name: 'pool1')
 

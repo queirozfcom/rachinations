@@ -9,7 +9,6 @@ class Node
   attr_reader :name
 
 
-
   def attach_condition(condition)
     conditions.push(condition)
   end
@@ -95,17 +94,13 @@ class Node
   end
 
 
-  def commit!;
+  def commit!
     clear_triggers
     self
   end
 
+  def stage!; end
 
-
-  def stage!;
-  end
-
-  def trigger_stage!;
-  end
+  def trigger_stage!; end
 
 end

@@ -35,7 +35,7 @@ class Diagram
 
     nodes.push(node)
 
-    nil
+    self
   end
 
   def add_edge!(edge_klass, params)
@@ -56,7 +56,7 @@ class Diagram
 
     edges.push(edge)
 
-    nil
+    self
   end
 
   def run!(rounds=5)

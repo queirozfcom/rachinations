@@ -9,12 +9,10 @@ class ResourcefulNode < Node
 
   @is_start = true
 
-
   def initialize(hsh=nil)
     @is_start = true
     @resources_added=Hash.new(0)
     @resources_removed=Hash.new(0)
-    super(hsh)
   end
 
   def initialize_copy(orig)
@@ -97,7 +95,6 @@ class ResourcefulNode < Node
     @activation === :start
   end
 
-
   def resources_added(klass=nil)
     if klass.nil?
       total=0
@@ -132,8 +129,6 @@ class ResourcefulNode < Node
     super
   end
 
-
-
   def resource_count(type=nil) raise NotImplementedError, "Please update class #{self.class} to respond to: "; end
 
   def push_any; raise NotImplementedError,"Please update class #{self.class} to respond to: "; end
@@ -147,20 +142,6 @@ class ResourcefulNode < Node
   def remove_resource!; raise NotImplementedError, "Please update class #{self.class} to respond to: "; end
 
   def add_resource!; raise NotImplementedError, "Please update class #{self.class} to respond to: "; end
-
-  #   def normalize(hsh)
-  #
-  #   accepted_options =  [:@conditions, :name, :activation, :mode, :types, :initial_value, :diagram]
-  #
-  #   #watch out for unknown options - might be typos!
-  #   hsh.each_pair do |key, value|
-  #
-  #     if accepted_options.exclude?(key)
-  #       raise ArgumentError.new "Unknown option: in parameter hash: #{key} "
-  #     end
-  #
-  #   end
-  # end
 
 end
 
