@@ -5,7 +5,6 @@ describe Pool do
   it 'can be created with just a name attribute and have the expected default attributes' do
     obj = Pool.new name: 'some name'
 
-    expect(obj.types).to eq []
     expect(obj.passive?).to eq true
     expect(obj.pull?).to eq true
     expect(obj.resource_count).to eq 0
@@ -29,7 +28,10 @@ describe Pool do
 
   it 'supports simple integers as resources' do
 
-    obj = Pool.new name: 'baz', initial_value: 10
+    p=Pool.new name: 'baz', initial_value: 10
+
+    expect(p.resource_count).to eq 10
+
 
   end
 
@@ -37,12 +39,16 @@ describe Pool do
 
     #note that there is no check whether this class is suited to play the role of a Token...
 
-    foo = Class.new
-    Object.const_set(:Foo, foo)
+    expect{Pool.new name: 'qux', types: [Peach]}.not_to raise_error
 
+  end
 
-    obj = Pool.new name: 'qux', types: [Foo]
+  it "knows that having initial values for some types implies having those types even if the user didn't explicitly added them" do
 
+     p = Pool.new name:'foo',initial_values: {Peach =>6,Mango=>7}
+
+     expect(p.support?(Peach)).to eq true
+     expect(p.support?(Mango)).to eq true
 
   end
 
@@ -82,8 +88,8 @@ describe Pool do
   it 'knows how many resources were added' do
 
     p1 = Pool.new name: 'typed pool'
-    5.times {p1.add_resource! Token.new}
-    2.times {p1.remove_resource!}
+    5.times { p1.add_resource! Token.new }
+    2.times { p1.remove_resource! }
 
 
     expect(p1.resources_added).to eq 5
@@ -93,19 +99,19 @@ describe Pool do
   end
 
 
-  it "knows that Token and subclasses are not the same thing" do
+  it 'knows that Token and subclasses are not the same thing' do
 
     #i need to check the types very precisely
 
-    Object.const_set(:Subtype,Class.new(Token))
+    Object.const_set(:Subtype, Class.new(Token))
 
     p1 = Pool.new name: 'typed pool', initial_value: {Subtype => 10}
 
     #if nothing is given, just return everything
-    expect{p1.resource_count}.not_to raise_error
+    expect {p1.resource_count}.not_to raise_error
     expect(p1.resource_count).to eq 10
 
-    expect{p1.resource_count(Token)}.to raise_error UnsupportedTypeError
+    expect { p1.resource_count(Token) }.to raise_error UnsupportedTypeError
 
     p2 = Pool.new name: 'untyped pool'
 
@@ -119,10 +125,9 @@ describe Pool do
     expect(p2.resource_count(Token)).to eq 3
     expect(p2.resource_count(Subtype)).to eq 2
 
+  end
 
-end
-
-  it 'is enabled by default'    do
+  it 'is enabled by default' do
 
     p2 = Pool.new name: 'simpler yet'
 

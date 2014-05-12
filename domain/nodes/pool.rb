@@ -12,69 +12,21 @@ class Pool < ResourcefulNode
     check_options!(hsh)
     params = set_defaults(hsh)
 
-    #nothing set so it's Tokens
-    if params[:initial_value] === 0 && params[:types].empty?
-      @resources = ResourceBag.new
-      @types = []
-      # implicit declaration of types
-    elsif params[:types].empty? && params[:initial_value].is_a?(Hash)
-      @resources = ResourceBag.new
-      @types = []
+    @resources = get_initial_resources(params[:initial_value])
 
-      params[:initial_value].each do |klass, quantity|
-        @types.push klass
+    @types = get_types(params[:initial_value],params[:types])
 
-        quantity.times do
-          @resources.add!(klass.new)
-        end
-      end
-    elsif params[:types].is_a?(Array) && (not params[:types].empty?) && params[:initial_value] === 0
-      @resources = ResourceBag.new
-      @types = params[:types]
-
-      #both types and initial values were set!
-    elsif params[:types].is_a?(Array) && (not params[:types].empty?) && params[:initial_value].is_a?(Hash)
-      @resources = ResourceBag.new
-      @types = params[:types]
-
-      params[:types].each do |resource_klass|
-        #set custom initial value if provided
-        if params[:initial_value].has_key?(resource_klass)
-
-          quantity = params[:initial_value][resource_klass]
-
-          quantity.times do
-            @resources.add!(resource_klass.new)
-          end
-
-        end
-      end
-
-      #no types, just initial value for integer (or float in case of infinity for sources)
-    elsif params[:initial_value].is_a? Numeric
-      @resources = ResourceBag.new
-      @types = []
-      params[:initial_value].times do
-        @resources.add!(Token.new)
-      end
-
-    else
-      raise ArgumentError.new "You've tried to create a Pool passing the following parameters: #{params}"
-    end
-
-    #reference to the overlying diagram
+    #reference to the underlying diagram
     @diagram = params[:diagram]
 
     #this node's identifier
     @name = params[:name]
 
     #whether this node is passive or automatic (active)
-    @activation = params.fetch(:activation, :passive)
+    @activation = params.fetch(:activation)
 
     #pull or push
-    @mode = params.fetch(:mode, :pull)
-
-    # @types and @resources are set within the previous big loop
+    @mode = params.fetch(:mode)
 
     #calling parent constructor to setup other variables.
     super(hsh)
@@ -189,6 +141,41 @@ class Pool < ResourcefulNode
 
   end
 
+  def get_initial_resources(initial_value)
+    inv{!self.instance_variable_defined?(:@resources)}
+
+    bag = ResourceBag.new
+
+    if initial_value.is_a?(Fixnum)
+      initial_value.times{ bag.add!(Token.new)}
+    elsif initial_value.is_a?(Hash)
+      initial_value.each do |type,quantity|
+        quantity.times{bag.add!(type.new)}
+      end
+    end
+
+    return bag
+
+  end
+
+  def get_types(initial_value,given_types)
+    inv{!self.instance_variable_defined?(:@types)}
+
+    if initial_value.is_a?(Fixnum) && given_types.empty?
+      # nothing to do
+    elsif initial_value == 0 && !given_types.empty?
+      # nothing to do
+    elsif initial_value.is_a?(Hash)
+      initial_value.each_key { |type| given_types.push(type) }
+    else
+      raise ArgumentError.new
+    end
+
+    given_types.uniq
+
+  end
+
+
   def types
     @types
   end
@@ -206,5 +193,7 @@ class Pool < ResourcefulNode
     }
   end
 
-
+  def aliases
+    { :initial_values => :initial_value }
+  end
 end
