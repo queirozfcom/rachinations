@@ -4,9 +4,8 @@ describe Converter do
 
 it 'should be created with name as single argument' do
 
+  expect{Converter.new name:'foo'}.not_to raise_error
 
-
-  pending 'Converter not Working yet'
 end
 
 it 'should be created with all arguments' do

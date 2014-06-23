@@ -1,6 +1,6 @@
 require_relative '../../domain/nodes/node'
 
-class Converter < Pool
+class Converter < Node
 
 # VEJA O DIAGRAMA BEHAVIOR CONVERTER, inclusive com o equivalente dele
 
@@ -16,6 +16,10 @@ class Converter < Pool
 # O tipo do conversor define o tipo de saida padrao
 # porem o tipo do edge tem vantagem na definicao da saida
 # O exemplo com 3 saidas mostra isso
+
+  def options
+    [:name]
+  end
 
 
 
