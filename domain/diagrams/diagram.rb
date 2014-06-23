@@ -67,13 +67,18 @@ class Diagram
 
   end
 
+  # Runs the diagram until given block returns false
+  #
+  # @yieldparam i [Fixnum] The current round.
+  # @yieldreturn [Boolean] True if diagram should keep on running, false if it should stop.
+  # @return [Diagram] The diagram itself.
   def run_while!
 
     before_run
 
     i=1
 
-    #if condition block turned false, it's time to stop
+    #if given condition block  turned false, it's time to stop
     while yield i do
       before_round i
       run_round!
@@ -89,7 +94,7 @@ class Diagram
   end
 
   def to_s
-    nodes.reduce("") { |carry, n| carry+n.to_s }
+    nodes.reduce('') { |carry, n| carry+n.to_s }
   end
 
   def sanity_check?(round_no)

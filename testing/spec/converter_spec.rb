@@ -3,6 +3,9 @@ require_relative 'spec_helper'
 describe Converter do
 
 it 'should be created with name as single argument' do
+
+
+
   pending 'Converter not Working yet'
 end
 

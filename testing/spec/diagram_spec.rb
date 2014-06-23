@@ -271,15 +271,19 @@ describe Diagram do
 
   end
 
-  it "does not raise errors when active pushes or pulls are not possible" do
+  it 'does not raise errors when active pushes or pulls are not possible' do
 
-    pending "active pushes from an empty node should not cause errors and neither should active pulls from empty nodes"
+    d = Diagram.new 'no errors'
 
-  end
+    d.add_node! Pool, name: 'Poor fella', initial_value: 5
 
-  it "correctly carries typed tokens from suitable nodes via suitable edges" do
+    d.add_node! Pool, name: 'Hungry fella', activation: :automatic
 
-    pending 'should i subclass edge so as to place type-specific behaviour elsewhere?'
+    d.add_edge! Edge, name: 'edge1', from: 'Poor fella', to: 'Hungry fella'
+
+    expect{ d.run! 10 }.not_to raise_error
+
+    expect(d.get_node('Hungry fella').resource_count ).to eq 5
 
   end
 

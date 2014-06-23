@@ -2,3 +2,5 @@
 .idea
 coverage
 testing/coverage
+.yardoc/
+doc/

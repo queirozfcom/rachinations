@@ -95,6 +95,15 @@ class ResourcefulNode < Node
     @activation === :start
   end
 
+  # this should be at node?
+  def typed?
+    !untyped?
+  end
+
+  def untyped?
+    types.empty?
+  end
+
   def resources_added(klass=nil)
     if klass.nil?
       total=0

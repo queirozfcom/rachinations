@@ -6,7 +6,6 @@ class Edge
   attr_reader :from, :to, :name, :label, :types
 
 
-
   def initialize(hsh)
 
     @name = hsh.fetch(:name)

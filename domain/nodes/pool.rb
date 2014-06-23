@@ -66,12 +66,19 @@ class Pool < ResourcefulNode
 
 
   def commit!
+
+    unlock_resources!
+
+    super
+
+  end
+
+  def unlock_resources!
     @resources.each_where { |r|
       if r.locked?
         r.unlock!
       end
     }
-    super
   end
 
   def add_resource!(obj)
@@ -99,7 +106,7 @@ class Pool < ResourcefulNode
 
   end
 
-  def remove_resource_where! &expression
+  def remove_resource_where!(&expression)
 
     begin
       res = @resources.get_where(&expression).lock!
@@ -112,14 +119,7 @@ class Pool < ResourcefulNode
 
   end
 
-  # this should be at node?
-  def typed?
-    !untyped?
-  end
 
-  def untyped?
-    types.empty?
-  end
 
   def to_s
     "Pool '#{@name}':  #{@resources.to_s}"

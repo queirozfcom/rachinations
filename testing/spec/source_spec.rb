@@ -66,7 +66,7 @@ describe 'Source Instantiation' do
 
       expect(res).to be_a(Blue)
 
-      obj_ids.should_not include(res.object_id)
+      expect(obj_ids).not_to include(res.object_id)
 
       obj_ids.push(res.object_id)
 

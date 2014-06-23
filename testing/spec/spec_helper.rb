@@ -7,10 +7,10 @@ Coveralls.wear!
 
 require 'rspec'
 
-RSpec.configure do |config|
-  config.color_enabled = true
-  config.default_path = 'testing/spec'
-end
+# RSpec.configure do |config|
+#   config.color_enabled = true
+#   config.default_path = 'testing/spec'
+# end
 
 
 require_relative '../../domain/diagrams/diagram'

@@ -53,19 +53,21 @@ describe Pool do
   end
 
   it 'should perform a pull_any operation' do
-    pending
+
+    skip
+
   end
 
   it 'should perform a pull_all operation' do
-    pending
+    skip
   end
 
   it 'should perform a push_any operation' do
-    pending
+    skip
   end
 
   it 'should perform a push all operation' do
-    pending
+    skip
   end
 
 
@@ -74,7 +76,7 @@ describe Pool do
   end
 
   it 'can be executed on an individual basis, i.e. not via calling diagram.run! but a method on the pool itself' do
-    pending 'how do i test this without bringing the whole diagram in?'
+    skip 'how do i test this without bringing the whole diagram in?'
   end
 
   it "knows how many resources it's got" do

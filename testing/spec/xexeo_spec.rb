@@ -174,7 +174,7 @@ describe Diagram do
 
   it "runs whatIwish1" do
 
-    pending "needed features are missing"
+    skip "needed features are missing"
 
     # n=diagram 'test_diagram' do
     #   node 'source', Source
