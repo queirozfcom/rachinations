@@ -6,8 +6,7 @@ class Diagram
 
   include Invariant
 
-  attr_accessor :name
-  attr_accessor :max_iterations
+  attr_accessor :name, :max_iterations, :nodes, :edges
 
 
   def initialize(name)
@@ -109,38 +108,33 @@ class Diagram
 
   def run_round!
 
-    nodes.shuffle.each{ |node| node.stage! }
+    nodes.shuffle.each { |node| node.stage! }
 
     #only after all nodes have run do we update the actual resources and changes, to be used in the next round.
-    nodes.each{ |n| n.commit! }
+    nodes.each { |n| n.commit! }
 
   end
 
-  def nodes
-    @nodes
+
+  #template method
+  def before_round(node_no)
   end
 
-  def nodes=(what)
-    @nodes=what
+  #template method
+  def after_round(node_no)
   end
 
-  def edges
-    @edges
+  #template method
+  def before_run
   end
 
-  def edges=(what)
-    @edges=what
+  #template method
+  def after_run
   end
 
-  def before_round(node_no); end #template method
-
-  def after_round(node_no); end #template method
-
-  def before_run; end #template method
-
-  def after_run; end  #template method
-
-  def sanity_check_message;  end #template method
+  #template method
+  def sanity_check_message
+  end
 
   def resource_count(klass=nil)
     total=0
