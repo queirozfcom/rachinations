@@ -24,12 +24,10 @@ class Double
 end
 
 
-
 describe 'Passing of options to Nodes' do
 
   it 'runs ok on simple case' do
-    #no news is good news
-    Double.new bar: 'someval'
+    expect{Double.new bar: 'someval'}.not_to raise_error
   end
 
   it 'should raise errors if required options are not given' do
@@ -41,13 +39,11 @@ describe 'Passing of options to Nodes' do
   end
 
   it 'should correctly infer aliases for non-required options' do
-    #no news is good news
-    Double.new bar: 'bar', resistro: 'foo bar'
+    expect{Double.new bar: 'bar', resistro: 'foo bar'}.not_to raise_error
   end
 
   it 'should correctly infer aliases for required options' do
-    #no news is good news
-    Double.new boo: 'bar'
+    expect{Double.new boo: 'bar'}.not_to raise_error
   end
 
 end
