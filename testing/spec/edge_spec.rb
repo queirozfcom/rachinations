@@ -7,8 +7,9 @@ describe Edge do
     # i only want to test edge methods so I'll use a mock object and stub the method I need
     # to call, namely :name.
 
-    from = Object.stub(:name).and_return('node1')
-    to = Object.stub(:name).and_return('node2')
+    from = double(:name =>'node1')
+
+    to = double(:name => 'node2')
 
     edge = Edge.new name: 'edge1', from: from ,to: to
 
@@ -24,8 +25,8 @@ describe Edge do
 
   it 'can be created with types' do
 
-    from = Object.stub(:name).and_return('node1')
-    to = Object.stub(:name).and_return('node2')
+    from = double(:name => 'node1')
+    to = double(:name => 'node2')
 
     edge = Edge.new name:'edge1', from: from,to: to, types: [Blue, Black]
 
@@ -40,8 +41,8 @@ describe Edge do
 
   it 'can be assigned an integer label' do
 
-    from = Object.stub(:name).and_return('node1')
-    to = Object.stub(:name).and_return('node2')
+    from = double(:name=>'node1')
+    to = double(:name=>'node2')
 
     edge = Edge.new name:'edge1', from: from,to: to, types: [Blue, Red], label: 5
 
