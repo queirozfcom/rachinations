@@ -1,5 +1,6 @@
 require_relative '../../domain/nodes/node'
+require_relative '../../domain/nodes/resourceless_node'
 
-class Trader < Node
+class Trader < ResourcelessNode
 
 end

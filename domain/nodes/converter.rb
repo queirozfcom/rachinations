@@ -1,6 +1,7 @@
 require_relative '../../domain/nodes/node'
+require_relative '../../domain/nodes/resourceless_node'
 
-class Converter < Node
+class Converter < ResourcelessNode
 
 # VEJA O DIAGRAMA BEHAVIOR CONVERTER, inclusive com o equivalente dele
 
@@ -18,7 +19,7 @@ class Converter < Node
 # O exemplo com 3 saidas mostra isso
 
   def options
-    [:name]
+    [:name,:diagram]
   end
 
 

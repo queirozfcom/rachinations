@@ -60,14 +60,14 @@ class ResourcefulNode < Node
         edges
         .shuffle
         .select { |e| e.from?(self) }
-        .each {|e| e.carry! }
+        .each {|e| e.ping! }
 
       elsif pull?
 
         edges
         .shuffle
         .select {|e| e.to?(self) }
-        .each{|e| e.carry! }
+        .each{|e| e.ping! }
 
       end
 

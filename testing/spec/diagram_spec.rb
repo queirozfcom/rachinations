@@ -281,9 +281,9 @@ describe Diagram do
 
     d.add_edge! Edge, name: 'edge1', from: 'Poor fella', to: 'Hungry fella'
 
-    expect{ d.run! 10 }.not_to raise_error
+    expect { d.run! 10 }.not_to raise_error
 
-    expect(d.get_node('Hungry fella').resource_count ).to eq 5
+    expect(d.get_node('Hungry fella').resource_count).to eq 5
 
   end
 
@@ -302,11 +302,11 @@ describe Diagram do
     }
 
     # use curly brackets instead of parentheses here.
-    expect{ p.get_node('pool')}.to raise_error RuntimeError
+    expect { p.get_node('pool') }.to raise_error RuntimeError
 
   end
 
-  it "runs with typed nodes connected by typeless edges" do
+  it 'runs with typed nodes connected by typeless edges' do
 
     p = Diagram.new('one source one pool typed')
 
@@ -342,7 +342,7 @@ describe Diagram do
     p = Diagram.new 'fruits'
 
     #by declaring initial values, we're implicitly declaring types.
-    p.add_node! Pool, name: 'pool1', initial_value:  { Peach => 20,Mango => 99 }
+    p.add_node! Pool, name: 'pool1', initial_value: {Peach => 20, Mango => 99}
 
     p.add_node! Pool, name: 'pool2', activation: :automatic
 
@@ -380,7 +380,7 @@ describe Diagram do
     d.run!(10)
 
 
-    expect(d.get_node('deposit').resource_count).to eq  1
+    expect(d.get_node('deposit').resource_count).to eq 1
 
   end
 
@@ -433,7 +433,7 @@ describe Diagram do
         :to => 'deposit'
     }
 
-    d.get_node('source').attach_condition(lambda {d.get_node('deposit').resource_count < 3})
+    d.get_node('source').attach_condition(lambda { d.get_node('deposit').resource_count < 3 })
 
     d.run!(10)
 
@@ -461,7 +461,7 @@ describe Diagram do
         :to => 'deposit'
     }
 
-    d.get_node('deposit').attach_condition( lambda do
+    d.get_node('deposit').attach_condition(lambda do
       d.get_node('deposit').resource_count < 3
     end)
 

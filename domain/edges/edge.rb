@@ -22,12 +22,14 @@ class Edge
 
   end
 
-  def carry!
+  def ping!
 
     #if both are automatic and one is pushing while the other one is pulling,
     #the two events take place, albeit counter-intuitively.
 
     #can this be used lazily? this should be tested
+
+
 
     if from.enabled? and to.enabled?
 
@@ -52,6 +54,7 @@ class Edge
   def supports?(type)
     types.empty? || types.include?(type)
   end
+
   alias_method :support?, :supports?
 
   def untyped?

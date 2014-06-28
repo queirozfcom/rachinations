@@ -63,8 +63,6 @@ class Node
     end
   end
 
-
-
   def trigger!
     triggers.each do |n|
       if (n[0].is_a? Proc) && n[2]

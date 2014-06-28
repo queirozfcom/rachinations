@@ -36,6 +36,7 @@ class Diagram
     nodes.push(node)
 
     self
+
   end
 
   def add_edge!(edge_klass, params)
@@ -114,8 +115,6 @@ class Diagram
     nodes.each{ |n| n.commit! }
 
   end
-
-
 
   def nodes
     @nodes
