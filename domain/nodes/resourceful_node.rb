@@ -46,14 +46,6 @@ class ResourcefulNode < Node
   # this method only 'stages' changes; does not commit them (drawing from git terms)
   def stage!
 
-    if  automatic? || is_start?
-      trigger_stage!
-    end
-
-  end
-
-  def trigger_stage!
-
     if enabled?
       if push?
 
@@ -95,15 +87,6 @@ class ResourcefulNode < Node
     @activation === :start
   end
 
-  # this should be at node?
-  def typed?
-    !untyped?
-  end
-
-  def untyped?
-    types.empty?
-  end
-
   def resources_added(klass=nil)
     if klass.nil?
       total=0
@@ -124,18 +107,16 @@ class ResourcefulNode < Node
     end
   end
 
-  def is_start?
-    if @activation===:start
-      answer=@is_start
-      @is_start=false
-    else
-      answer=false
-    end
-    answer
-  end
-
   def commit!
     super
+  end
+
+  def unlock_resources!
+    @resources.each_where { |r|
+      if r.locked?
+        r.unlock!
+      end
+    }
   end
 
   def resource_count(type=nil) raise NotImplementedError, "Please update class #{self.class} to respond to: "; end

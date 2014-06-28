@@ -80,10 +80,18 @@ class Diagram
 
     #if given condition block  turned false, it's time to stop
     while yield i do
-      before_round i
-      run_round!
-      after_round i
+
       break unless sanity_check? i
+      before_round i
+
+      if i == 1
+        # some things are different for the first round, namely nodes with activation = start
+        run_first_round!
+      else
+        run_round!
+      end
+
+      after_round i
       i+=1
     end
 
@@ -98,7 +106,7 @@ class Diagram
   end
 
   def sanity_check?(round_no)
-    if round_no >= @max_iterations
+    if round_no > @max_iterations
       sanity_check_message
       false
     else
@@ -106,15 +114,26 @@ class Diagram
     end
   end
 
-  def run_round!
+  def run_first_round!
 
-    nodes.shuffle.each { |node| node.stage! }
+    nodes.select{|n| n.automatic? || n.start?}.shuffle.each{|n| n.stage!}
 
-    #only after all nodes have run do we update the actual resources and changes, to be used in the next round.
-    nodes.each { |n| n.commit! }
+    commit_nodes!
 
   end
 
+  def run_round!
+
+    nodes.select{|n| n.automatic? }.shuffle.each { |node| node.stage! }
+
+    commit_nodes!
+
+  end
+
+  def commit_nodes!
+    #only after all nodes have run do we update the actual resources and changes, to be used in the next round.
+  nodes.shuffle.each { |n| n.commit! }
+  end
 
   #template method
   def before_round(node_no)

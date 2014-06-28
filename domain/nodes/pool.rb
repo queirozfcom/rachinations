@@ -73,13 +73,7 @@ class Pool < ResourcefulNode
 
   end
 
-  def unlock_resources!
-    @resources.each_where { |r|
-      if r.locked?
-        r.unlock!
-      end
-    }
-  end
+
 
   def add_resource!(obj)
 

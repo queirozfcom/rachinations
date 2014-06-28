@@ -44,6 +44,14 @@ class Node
 
   end
 
+  def typed?
+    !untyped?
+  end
+
+  def untyped?
+    types.empty?
+  end
+
   def attach_trigger(trig)
     triggers.push(trig+[true])
   end
@@ -68,11 +76,11 @@ class Node
       if (n[0].is_a? Proc) && n[2]
         if n[0].call
           n[2]=false
-          n[1].trigger_stage!
+          n[1].stage!
         end
       elsif n[0] && n[2]
         n[2]=false
-        n[1].trigger_stage!
+        n[1].stage!
       end
     end
   end
@@ -97,8 +105,6 @@ class Node
     self
   end
 
-  def stage!; end
-
-  def trigger_stage!; end
+  def stage!; raise NotImplementedError, "Please update class #{self.class} to respond to: "; end
 
 end

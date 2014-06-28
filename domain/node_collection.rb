@@ -5,6 +5,7 @@ class NodeCollection
 
   def_delegators :@array, :[], :<<, :each, :push, :map, :select, :detect , :reduce, :shuffle, :sample
 
+
   def initialize(init_array=nil)
 
     if init_array.nil?
