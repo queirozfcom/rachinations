@@ -2,7 +2,7 @@ require_relative 'spec_helper'
 
 describe Pool do
 
-  it 'can be created with just a name attribute and have the expected default attributes' do
+  it 'is created with just a name attribute and has the expected default attributes' do
     obj = Pool.new name: 'some name'
 
     expect(obj.passive?).to eq true
@@ -35,7 +35,7 @@ describe Pool do
 
   end
 
-  it 'should support types during instantiation' do
+  it 'supports types during instantiation' do
 
     #note that there is no check whether this class is suited to play the role of a Token...
 
@@ -52,21 +52,19 @@ describe Pool do
 
   end
 
-  it 'should perform a pull_any operation' do
-
-    skip
-
-  end
-
-  it 'should perform a pull_all operation' do
+  it 'performs a pull_any operation' do
     skip
   end
 
-  it 'should perform a push_any operation' do
+  it 'performs a pull_all operation' do
     skip
   end
 
-  it 'should perform a push all operation' do
+  it 'performs a push_any operation' do
+    skip
+  end
+
+  it 'performs a push all operation' do
     skip
   end
 

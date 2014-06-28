@@ -219,32 +219,6 @@ describe Diagram do
 
   end
 
-  it 'aborts after 999 turns as a safeguard against infinite loops given as stopping condition' do
-
-    # you can create a subclass for diagram (I recommend the name UnsafeDiagram) in
-    # order to allow arbitrarily long execution loops
-
-    d=Diagram.new 'simple'
-
-    d.add_node! Pool, {
-        :name => 'deposit',
-        :initial_value => 0
-    }
-    d.add_node! Source, {
-        :name => 'source'
-    }
-    d.add_edge! Edge, {
-        :name => 'connector',
-        :from => 'source',
-        :to => 'deposit'
-    }
-
-    d.run_while! { true == true }
-
-    #not hanging on forever is the success condition.
-    expect(d.get_node('deposit').resource_count).to eq 999
-
-  end
 
   it 'aborts after specified turns as a safeguard against infinite loops given as stopping condition' do
 
@@ -287,7 +261,7 @@ describe Diagram do
 
   end
 
-  it "should raise an error in case users try to access a node that doesn't exist" do
+  it "raises an error in case users try to access a node that doesn't exist" do
 
     p = Diagram.new('get invalid node')
 
@@ -356,7 +330,7 @@ describe Diagram do
 
   end
 
-  it "should execute start nodes only once" do
+  it "executes start nodes only once" do
 
     d=Diagram.new 'simple'
 
@@ -369,7 +343,6 @@ describe Diagram do
         :name => 'deposit',
         :initial_value => 0
     }
-
 
     d.add_edge! Edge, {
         :name => 'connector',
@@ -384,7 +357,7 @@ describe Diagram do
 
   end
 
-  it 'must not run disabled nodes from the beginning' do
+  it 'does not run disabled nodes from the beginning' do
 
     d=Diagram.new 'simple'
 
@@ -414,6 +387,8 @@ describe Diagram do
   end
 
   it 'must not run disabled nodes at some point' do
+
+    #não entendi pra que serve esse teste
 
     d=Diagram.new 'simple'
 
@@ -472,7 +447,7 @@ describe Diagram do
 
   end
 
-  it 'should make triggers trig!' do
+  it 'makes triggers trig!' do
     d=Diagram.new 'simple'
 
     d.add_node! Source, {
@@ -500,7 +475,7 @@ describe Diagram do
 
   end
 
-  it 'should make triggers trig! more than once' do
+  it 'makes triggers trig! more than once' do
     d=Diagram.new 'simple'
 
     d.add_node! Source, {
@@ -549,7 +524,7 @@ describe Diagram do
   end
 
 
-  it 'should make triggers trig! more than once with instant_resource_count' do
+  it 'makes triggers trig! more than once with instant_resource_count' do
     d=Diagram.new 'simple'
 
     d.add_node! Source, {

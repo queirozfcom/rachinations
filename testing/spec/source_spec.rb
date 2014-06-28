@@ -2,7 +2,7 @@ require_relative 'spec_helper'
 
 describe 'Source Instantiation' do
 
-  it 'should have the correct defaults when nothing is provided' do
+  it 'has the correct defaults when nothing is provided' do
 
     s = Source.new name:'source'
 
@@ -12,14 +12,14 @@ describe 'Source Instantiation' do
 
   end
 
-  it "should support anything if it's untyped" do
+  it "supports anything if it's untyped" do
     s = Source.new name:'foo'
 
     expect(s.support?(Peach)).to eq true
 
   end
 
-  it "should support only the given type and not other types if it's been given a specific type" do
+  it "supports only the given type and no other types if it's been given a specific type" do
 
     s = Source.new name:'foo',type:Peach
 
@@ -29,15 +29,13 @@ describe 'Source Instantiation' do
   end
 
 
-  it 'should raise an error if user tries to give it an initial_value'do
+  it 'raises an error if user tries to give it an initial_value'do
     #sources have no initial value
-
     expect { Source.new name: 'mysource',initial_value:10 }.to raise_error BadOptions
-
   end
 
 
-  it 'should provide a typeless resource (Token) upon receiving receiving remove_resource!' do
+  it "provides a typeless resource (Token) if it it's untyped" do
 
     s = Source.new name: 'foo'
 
@@ -45,7 +43,7 @@ describe 'Source Instantiation' do
 
   end
 
-  it "should return a typed resource if it supports that type" do
+  it "provides a typed resource if it supports that type" do
 
     s = Source.new name:'foo', type: Green
 
@@ -53,14 +51,16 @@ describe 'Source Instantiation' do
 
   end
 
-  it "should keep giving out resources forever, and each resource is a different object" do
+  it "keeps giving out resources forever, and each resource is a different object" do
 
     s = Source.new name:'foo',type: Blue
 
     obj_ids = []
 
-    #i've tested this with 10000 loops as well.
-    1000.times do
+    #i've tested this with up to 10000 loops.
+    # but i keep this 100 just to make the whole
+    # test suite run faster.
+    100.times do
 
       res = s.remove_resource!(Blue)
 

@@ -55,7 +55,7 @@ describe NonDeterministicDiagram do
 
   include DSL
 
-  it 'should make a train run' do
+  it ' makes a train run' do
     n=non_deterministic_diagram 'test_diagram' do
       node 'p1', Pool, mode: :push, activation: :automatic, initial_value: 8
       node 'p2', Pool, mode: :push, activation: :automatic

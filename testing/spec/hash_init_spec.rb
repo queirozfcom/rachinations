@@ -30,19 +30,19 @@ describe 'Passing of options to Nodes' do
     expect{Double.new bar: 'someval'}.not_to raise_error
   end
 
-  it 'should raise errors if required options are not given' do
+  it 'raises errors if required options are not given' do
     expect{Double.new foo: 'foo'}.to raise_error BadOptions
   end
 
-  it 'should raise errors on invalid options' do
+  it 'raises errors on invalid options' do
     expect{Double.new bar: 'name', ajsdasdsad: :alkjdasdsad}.to raise_error BadOptions
   end
 
-  it 'should correctly infer aliases for non-required options' do
+  it 'correctly infers aliases for non-required options' do
     expect{Double.new bar: 'bar', resistro: 'foo bar'}.not_to raise_error
   end
 
-  it 'should correctly infer aliases for required options' do
+  it 'correctly infers aliases for required options' do
     expect{Double.new boo: 'bar'}.not_to raise_error
   end
 
