@@ -116,7 +116,7 @@ class Diagram
 
   def run_first_round!
 
-    nodes.select{|n| n.automatic? || n.start?}.shuffle.each{|n| n.stage!}
+    nodes.select { |n| n.automatic? || n.start? }.shuffle.each { |n| n.stage! }
 
     commit_nodes!
 
@@ -124,7 +124,7 @@ class Diagram
 
   def run_round!
 
-    nodes.select{|n| n.automatic? }.shuffle.each { |node| node.stage! }
+    nodes.select { |n| n.automatic? }.shuffle.each { |node| node.stage! }
 
     commit_nodes!
 
@@ -132,7 +132,7 @@ class Diagram
 
   def commit_nodes!
     #only after all nodes have run do we update the actual resources and changes, to be used in the next round.
-  nodes.shuffle.each { |n| n.commit! }
+    nodes.shuffle.each { |n| n.commit! }
   end
 
   #template method
