@@ -31,6 +31,14 @@ class Node
     end
   end
 
+  def incoming_edges
+    edges.select{|e| e.to == self}
+  end
+
+  def outgoing_edges
+    edges.select{|e| e.from == self}
+  end
+
   def attach_edge(edge)
     edges.push(edge)
   end
@@ -105,6 +113,6 @@ class Node
     self
   end
 
-  def stage!; raise NotImplementedError, "Please update class #{self.class} to respond to: "; end
+  def stage!; raise NotImplementedError, "Please update class #{self.class} to respond to :#{__callee__}" ; end
 
 end
