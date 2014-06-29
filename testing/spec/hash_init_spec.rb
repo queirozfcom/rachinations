@@ -26,6 +26,16 @@ end
 
 describe 'Passing of options to Nodes' do
 
+  it 'notifies the user when no parameters were given' do
+    expect{Double.new}.to raise_error BadOptions
+  end
+
+  it 'notifies the user when given parameter was not a hash' do
+    expect{Double.new Array.new}.to raise_error BadOptions
+    expect{Double.new Object.new}.to raise_error BadOptions
+    expect{Double.new String.new}.to raise_error BadOptions
+  end
+
   it 'runs ok on simple case' do
     expect{Double.new bar: 'someval'}.not_to raise_error
   end

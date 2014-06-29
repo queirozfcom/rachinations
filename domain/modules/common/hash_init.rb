@@ -19,7 +19,10 @@ module HashInit
 
   end
 
-  def initialize(hsh=nil)
+  def initialize(hsh={})
+
+    raise BadOptions.new 'This class requires a hash as parameter to its constructor.'  if !hsh.is_a?(Hash)
+
     check_options!(hsh)
     hsh=set_defaults(hsh)
   end
