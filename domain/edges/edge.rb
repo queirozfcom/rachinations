@@ -22,14 +22,17 @@ class Edge
 
   end
 
+  # Pinging an Edge means triggering it. It decides whether
+  # it should move resources (based on its type and those of
+  # the two nodes) and does the moving.
+  # @return [Boolean] true in case all required resources
+  #  were moved, false otherwise.
   def ping!
 
     #if both are automatic and one is pushing while the other one is pulling,
     #the two events take place, albeit counter-intuitively.
 
     #can this be used lazily? this should be tested
-
-
 
     if from.enabled? and to.enabled?
 
@@ -41,12 +44,15 @@ class Edge
         begin
           res = from.remove_resource_where! &condition
         rescue NoElementsFound
-           break
-         end
+           return false
+        end
 
         to.add_resource!(res)
 
       end
+      true
+    else
+      false
     end
 
   end
