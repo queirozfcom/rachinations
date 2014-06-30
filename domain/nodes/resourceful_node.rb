@@ -7,10 +7,7 @@ class ResourcefulNode < Node
 
   include Invariant
 
-  @is_start = true
-
   def initialize(hsh=nil)
-    @is_start = true
     @resources_added=Hash.new(0)
     @resources_removed=Hash.new(0)
   end
@@ -43,8 +40,12 @@ class ResourcefulNode < Node
 
   alias_method :support?, :supports?
 
-  # this method only 'stages' changes; does not commit them (drawing from git terms)
+  def trigger!
+    stage!
+  end
+
   def stage!
+    # this method only 'stages' changes; does not commit them (drawing from git terms)
 
     if enabled?
       if push?
@@ -52,19 +53,18 @@ class ResourcefulNode < Node
         edges
         .shuffle
         .select { |e| e.from?(self) }
-        .each {|e| e.ping! }
+        .each { |e| e.ping! }
 
       elsif pull?
 
         edges
         .shuffle
-        .select {|e| e.to?(self) }
-        .each{|e| e.ping! }
+        .select { |e| e.to?(self) }
+        .each { |e| e.ping! }
 
       end
 
     end
-
   end
 
   def pull?
@@ -119,19 +119,33 @@ class ResourcefulNode < Node
     }
   end
 
-  def resource_count(type=nil) raise NotImplementedError, "Please update class #{self.class} to respond to: "; end
+  def resource_count(type=nil)
+    raise NotImplementedError, "Please update class #{self.class} to respond to: ";
+  end
 
-  def push_any; raise NotImplementedError,"Please update class #{self.class} to respond to: "; end
+  def push_any;
+    raise NotImplementedError, "Please update class #{self.class} to respond to: ";
+  end
 
-  def push_all; raise NotImplementedError, "Please update class #{self.class} to respond to: "; end
+  def push_all;
+    raise NotImplementedError, "Please update class #{self.class} to respond to: ";
+  end
 
-  def pull_any; raise NotImplementedError, "Please update class #{self.class} to respond to: "; end
+  def pull_any;
+    raise NotImplementedError, "Please update class #{self.class} to respond to: ";
+  end
 
-  def pull_all; raise NotImplementedError, "Please update class #{self.class} to respond to: "; end
+  def pull_all;
+    raise NotImplementedError, "Please update class #{self.class} to respond to: ";
+  end
 
-  def remove_resource!; raise NotImplementedError, "Please update class #{self.class} to respond to: "; end
+  def remove_resource!;
+    raise NotImplementedError, "Please update class #{self.class} to respond to: ";
+  end
 
-  def add_resource!; raise NotImplementedError, "Please update class #{self.class} to respond to: "; end
+  def add_resource!;
+    raise NotImplementedError, "Please update class #{self.class} to respond to: ";
+  end
 
 end
 
