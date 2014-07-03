@@ -10,20 +10,20 @@
   <node symbol="Converter" x="110" y="198" color="Black" caption="" thickness="2" captionPos="0.25" activationMode="passive" pullMode="pull any" actions="1" resourceColor="Black"/>
   <node symbol="Pool" x="183" y="198" color="Black" caption="" thickness="2" captionPos="0.25" activationMode="passive" pullMode="pull any" actions="1" resourceColor="Black" startingResources="0" capacity="-1"/>
   <node symbol="Pool" x="181" y="304" color="Black" caption="" thickness="2" captionPos="0.25" activationMode="passive" pullMode="pull any" actions="1" resourceColor="Black" startingResources="0" capacity="-1"/>
-  <connection type="Resource Connection" start="45" end="13" label="" position="0.5" color="Black" thickness="2"/>
+  <connection type="Resource Connection" start="44" end="13" label="" position="0.5" color="Black" thickness="2"/>
   <connection type="Resource Connection" start="13" end="10" label="" position="0.5" color="Black" thickness="2"/>
   <node symbol="Converter" x="107" y="304" color="Black" caption="" thickness="2" captionPos="0.25" activationMode="automatic" pullMode="pull any" actions="1" resourceColor="Black"/>
   <node symbol="Pool" x="40" y="413" color="Black" caption="" thickness="2" captionPos="0.25" activationMode="passive" pullMode="push any" actions="1" resourceColor="Black" startingResources="5" capacity="-1"/>
   <connection type="Resource Connection" start="14" end="17" label="" position="0.5" color="Black" thickness="2"/>
-  <connection type="Resource Connection" start="17" end="50" label="" position="0.5" color="Black" thickness="2"/>
+  <connection type="Resource Connection" start="17" end="49" label="" position="0.5" color="Black" thickness="2"/>
   <node symbol="Converter" x="107" y="413" color="Black" caption="" thickness="2" captionPos="0.25" activationMode="passive" pullMode="pull any" actions="1" resourceColor="Black"/>
   <connection type="State Connection" start="19" end="17" label="*" position="0.5" color="Black" thickness="2"/>
   <node symbol="Pool" x="108" y="503" color="Black" caption="" thickness="2" captionPos="0.25" activationMode="interactive" pullMode="push any" actions="1" resourceColor="Black" startingResources="9" capacity="-1"/>
   <node symbol="Pool" x="489" y="38" color="Black" caption="" thickness="2" captionPos="0.25" activationMode="passive" pullMode="pull any" actions="1" resourceColor="Black" startingResources="0" capacity="-1"/>
   <connection type="Resource Connection" start="25" end="26" label="" position="0.5" color="Black" thickness="2"/>
   <connection type="Resource Connection" start="26" end="20" label="" position="0.5" color="Black" thickness="2"/>
-  <connection type="State Connection" start="47" end="26" label=">3" position="0.5" color="Black" thickness="2"/>
-  <connection type="Resource Connection" start="31" end="47" label="" position="0.5" color="Black" thickness="2"/>
+  <connection type="State Connection" start="46" end="26" label=">3" position="0.5" color="Black" thickness="2"/>
+  <connection type="Resource Connection" start="31" end="46" label="" position="0.5" color="Black" thickness="2"/>
   <node symbol="Pool" x="324" y="39" color="Black" caption="" thickness="2" captionPos="0.25" activationMode="passive" pullMode="push any" actions="1" resourceColor="Black" startingResources="5" capacity="-1"/>
   <node symbol="Converter" x="411" y="38" color="Black" caption="" thickness="2" captionPos="0.25" activationMode="automatic" pullMode="pull any" actions="1" resourceColor="Black"/>
   <connection type="Resource Connection" start="29" end="30" label="2" position="0.5" color="Black" thickness="2"/>
@@ -32,22 +32,32 @@
   <node symbol="Converter" x="414" y="211" color="Black" caption="" thickness="2" captionPos="0.25" activationMode="automatic" pullMode="pull any" actions="1" resourceColor="Black"/>
   <node symbol="Source" x="325" y="137" color="Black" caption="" thickness="2" captionPos="0.25" activationMode="automatic" pullMode="pull any" actions="1" resourceColor="Black"/>
   <node symbol="Pool" x="502" y="211" color="Black" caption="" thickness="2" captionPos="0.25" activationMode="passive" pullMode="pull any" actions="1" resourceColor="Black" startingResources="0" capacity="-1"/>
-  <connection type="Resource Connection" start="43" end="34" label="2" position="0.5" color="Black" thickness="2"/>
-  <node symbol="Converter" x="416" y="314" color="Black" caption="" thickness="2" captionPos="0.25" activationMode="automatic" pullMode="pull any" actions="1" resourceColor="Black"/>
-  <connection type="Resource Connection" start="42" end="43" label="" position="0.5" color="Black" thickness="2"/>
+  <connection type="Resource Connection" start="42" end="50" label="2" position="0.5" color="Black" thickness="2"/>
+  <connection type="Resource Connection" start="41" end="42" label="" position="0.5" color="Black" thickness="2"/>
   <node symbol="TextLabel" x="83" y="30" color="Black" caption="BUG: does not decrease"/>
   <node symbol="TextLabel" x="99" y="117" color="Black" caption="activated by a pull"/>
   <node symbol="TextLabel" x="102" y="234" color="Black" caption="activated by a push"/>
   <node symbol="TextLabel" x="105" y="337" color="Black" caption="activated by itself"/>
   <node symbol="TextLabel" x="201" y="491" color="Black" caption="activated by trigger"/>
   <node symbol="TextLabel" x="498" y="113" color="Black" caption="activated by activator"/>
-  <node symbol="Source" x="320" y="392" color="Black" caption="" thickness="2" captionPos="0.25" activationMode="automatic" pullMode="pull any" actions="1" resourceColor="Black"/>
-  <node symbol="Pool" x="319" y="312" color="Black" caption="" thickness="2" captionPos="0.25" activationMode="passive" pullMode="push any" actions="1" resourceColor="Black" startingResources="0" capacity="-1"/>
-  <node symbol="TextLabel" x="429" y="369" color="Black" caption="memory across turns"/>
+  <node symbol="Source" x="320" y="380" color="Black" caption="" thickness="2" captionPos="0.25" activationMode="automatic" pullMode="pull any" actions="1" resourceColor="Black"/>
+  <node symbol="Pool" x="319" y="300" color="Black" caption="" thickness="2" captionPos="0.25" activationMode="passive" pullMode="push any" actions="1" resourceColor="Black" startingResources="0" capacity="-1"/>
+  <node symbol="TextLabel" x="429" y="357" color="Black" caption="memory across turns"/>
   <node symbol="Pool" x="39" y="308" color="Black" caption="" thickness="2" captionPos="0.25" activationMode="passive" pullMode="push any" actions="1" resourceColor="Black" startingResources="5" capacity="-1"/>
   <node symbol="TextLabel" x="401" y="251" color="Black" caption="varying weights"/>
   <node symbol="Pool" x="412" y="139" color="Black" caption="" thickness="2" captionPos="0.25" activationMode="passive" pullMode="pull any" actions="1" resourceColor="Black" startingResources="0" capacity="-1"/>
-  <connection type="Resource Connection" start="34" end="49" label="1" position="0.5" color="Black" thickness="2"/>
-  <node symbol="Pool" x="501" y="315" color="Black" caption="" thickness="2" captionPos="0.25" activationMode="passive" pullMode="pull any" actions="1" resourceColor="Black" startingResources="0" capacity="-1"/>
+  <connection type="Resource Connection" start="50" end="48" label="1" position="0.5" color="Black" thickness="2"/>
+  <node symbol="Pool" x="501" y="303" color="Black" caption="" thickness="2" captionPos="0.25" activationMode="passive" pullMode="pull any" actions="1" resourceColor="Black" startingResources="0" capacity="-1"/>
   <node symbol="Pool" x="182" y="413" color="Black" caption="" thickness="2" captionPos="0.25" activationMode="passive" pullMode="pull any" actions="1" resourceColor="Black" startingResources="0" capacity="-1"/>
+  <node symbol="Converter" x="416" y="302" color="Black" caption="" thickness="2" captionPos="0.25" activationMode="automatic" pullMode="pull any" actions="1" resourceColor="Black"/>
+  <node symbol="Converter" x="408" y="464" color="Black" caption="" thickness="2" captionPos="0.25" activationMode="passive" pullMode="pull any" actions="1" resourceColor="Black"/>
+  <connection type="Resource Connection" start="60" end="51" label="" position="0.5" color="Black" thickness="2"/>
+  <connection type="Resource Connection" start="51" end="55" label="" position="0.5" color="Black" thickness="2"/>
+  <connection type="Resource Connection" start="51" end="56" label="" position="0.5" color="Black" thickness="2"/>
+  <node symbol="Pool" x="507" y="407" color="Black" caption="" thickness="2" captionPos="0.25" activationMode="passive" pullMode="pull any" actions="1" resourceColor="Black" startingResources="0" capacity="-1"/>
+  <node symbol="Pool" x="509" y="460" color="Black" caption="" thickness="2" captionPos="0.25" activationMode="passive" pullMode="pull any" actions="1" resourceColor="Black" startingResources="0" capacity="-1"/>
+  <node symbol="TextLabel" x="375" y="507" color="Black" caption="multiple targets"/>
+  <connection type="Resource Connection" start="51" end="59" label="" position="0.5" color="Black" thickness="2"/>
+  <node symbol="Pool" x="507" y="517" color="Black" caption="" thickness="2" captionPos="0.25" activationMode="passive" pullMode="pull any" actions="1" resourceColor="Black" startingResources="0" capacity="-1"/>
+  <node symbol="Source" x="319" y="464" color="Black" caption="" thickness="2" captionPos="0.25" activationMode="automatic" pullMode="pull any" actions="1" resourceColor="Black"/>
 </graph>
