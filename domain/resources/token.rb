@@ -18,6 +18,10 @@ class Token
     self.class
   end
 
+  def is_type?(type)
+    self.type.eql? type
+  end
+
   def unlock!
     if unlocked?
       raise RuntimeError, 'Tried to unlock an unlocked Token.'

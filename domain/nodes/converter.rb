@@ -18,14 +18,27 @@ class Converter < ResourcelessNode
 # porem o tipo do edge tem vantagem na definicao da saida
 # O exemplo com 3 saidas mostra isso
 
+
+  def initialize(hsh={})
+    @name=hsh.fetch(:name)
+  end
+
+  # Activates this Converter. It will try to pull from incoming nodes
+  #  and, if successful, will push into outgoing nodes.
+  def trigger!
+    if incoming_edges.shuffle.reduce(true){|acc,elem| acc && elem.ping! }
+      fire!
+    end
+  end
+
+  def fire!
+    outgoing_edges.shuffle.each{|e| e.ping!}
+  end
+
+  private
+
   def options
     [:name,:diagram]
   end
-
-
-
-
-
-
 
 end

@@ -90,7 +90,7 @@ class Source < ResourcefulNode
 
     @resources_removed[type] += 1
 
-    trigger!
+    fire_triggers!
 
     res
 

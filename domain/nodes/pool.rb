@@ -14,7 +14,7 @@ class Pool < ResourcefulNode
 
     @resources = get_initial_resources(params[:initial_value])
 
-    @types = get_types(params[:initial_value],params[:types])
+    @types = get_types(params[:initial_value], params[:types])
 
     #reference to the underlying diagram
     @diagram = params[:diagram]
@@ -34,10 +34,13 @@ class Pool < ResourcefulNode
   end
 
 
-  def resource_count(type=nil)
-    if type.nil?
+  def resource_count(type=nil,&block)
+
+    raise ArgumentError.new('Please provide either a type or a block, but not both.') if !type.nil? && block_given?
+
+    if type.nil? && !block_given?
       @resources.count_where { |r| r.unlocked? }
-    else
+    elsif type.is_a?(Class) && type <= Token
 
       if supports? type
         @resources.count_where { |r|
@@ -46,6 +49,15 @@ class Pool < ResourcefulNode
       else
         raise UnsupportedTypeError.new "Unsupported type: #{type.name}"
       end
+    elsif block_given?
+
+      # client doesn't need to know about locked vs unlocked resources
+      unlock_condition = Proc.new{|r| r.unlocked? }
+
+      @resources.count_where{ |r| unlock_condition.call(r) && block.call(r) }
+
+    else
+      raise ArgumentError.new("Wrong parameter types passed to #{__callee__}")
     end
   end
 
@@ -74,13 +86,12 @@ class Pool < ResourcefulNode
   end
 
 
-
   def add_resource!(obj)
 
     if supports? obj.class
       @resources_added[obj.class] += 1
       ans=@resources.add!(obj)
-      trigger!
+      fire_triggers!
       ans
     else
       #it's not an error - no action
@@ -88,12 +99,12 @@ class Pool < ResourcefulNode
   end
 
   #return the object (it'll probably be added to another node)
-  def remove_resource!(type=nil, run_hooks=true)
+  def remove_resource!(type=nil)
 
     if type.nil?
-      blk = Proc.new{|r| r.instance_of?(Token)}
+      blk = Proc.new { |r| r.instance_of?(Token) }
     else
-      blk = Proc.new{|r| r.instance_of?(type)}
+      blk = Proc.new { |r| r.instance_of?(type) }
     end
 
     remove_resource_where! &blk
@@ -108,12 +119,10 @@ class Pool < ResourcefulNode
     rescue NoElementsMatchingConditionError
       raise NoElementsFound.new
     end
-    trigger!
+    fire_triggers!
     res
 
   end
-
-
 
   def to_s
     "Pool '#{@name}':  #{@resources.to_s}"
@@ -136,15 +145,15 @@ class Pool < ResourcefulNode
   end
 
   def get_initial_resources(initial_value)
-    inv{!self.instance_variable_defined?(:@resources)}
+    inv { !self.instance_variable_defined?(:@resources) }
 
     bag = ResourceBag.new
 
     if initial_value.is_a?(Fixnum)
-      initial_value.times{ bag.add!(Token.new)}
+      initial_value.times { bag.add!(Token.new) }
     elsif initial_value.is_a?(Hash)
-      initial_value.each do |type,quantity|
-        quantity.times{bag.add!(type.new)}
+      initial_value.each do |type, quantity|
+        quantity.times { bag.add!(type.new) }
       end
     end
 
@@ -152,8 +161,8 @@ class Pool < ResourcefulNode
 
   end
 
-  def get_types(initial_value,given_types)
-    inv{!self.instance_variable_defined?(:@types)}
+  def get_types(initial_value, given_types)
+    inv { !self.instance_variable_defined?(:@types) }
 
     if initial_value.is_a?(Fixnum) && given_types.empty?
       # nothing to do
@@ -175,7 +184,7 @@ class Pool < ResourcefulNode
   end
 
   def options
-    [:conditions,:name,:activation,:mode,:types,:initial_value,:diagram]
+    [:conditions, :name, :activation, :mode, :types, :initial_value, :diagram]
   end
 
   def defaults
@@ -188,6 +197,6 @@ class Pool < ResourcefulNode
   end
 
   def aliases
-    { :initial_values => :initial_value }
+    {:initial_values => :initial_value}
   end
 end

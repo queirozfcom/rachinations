@@ -1,2 +1,2 @@
-class UnsupportedTypeError < ArgumentError
+class UnsupportedTypeError < Exception
 end
