@@ -8,7 +8,6 @@ class Diagram
 
   attr_accessor :name, :max_iterations, :nodes, :edges
 
-
   def initialize(name)
     @nodes = NodeCollection.new
     @edges = EdgeCollection.new
@@ -17,6 +16,7 @@ class Diagram
   end
 
   def get_node(name)
+
     nodes.each do |node|
       if node.name == name
         return node
@@ -78,10 +78,11 @@ class Diagram
 
     i=1
 
-    #if given condition block  turned false, it's time to stop
+    #if given condition block turned false, it's time to stop
     while yield i do
 
       break unless sanity_check? i
+
       before_round i
 
       if i == 1
@@ -116,7 +117,7 @@ class Diagram
 
   def run_first_round!
 
-    nodes.select { |n| n.automatic? || n.start? }.shuffle.each { |n| n.stage! }
+    enabled_nodes.select { |n| n.automatic? || n.start? }.shuffle.each { |n| n.trigger! }
 
     commit_nodes!
 
@@ -124,7 +125,7 @@ class Diagram
 
   def run_round!
 
-    nodes.select { |n| n.automatic? }.shuffle.each { |node| node.stage! }
+    enabled_nodes.select { |n| n.automatic? }.shuffle.each { |node| node.trigger! }
 
     commit_nodes!
 
@@ -135,25 +136,6 @@ class Diagram
     nodes.shuffle.each { |n| n.commit! }
   end
 
-  #template method
-  def before_round(node_no)
-  end
-
-  #template method
-  def after_round(node_no)
-  end
-
-  #template method
-  def before_run
-  end
-
-  #template method
-  def after_run
-  end
-
-  #template method
-  def sanity_check_message
-  end
 
   def resource_count(klass=nil)
     total=0
@@ -162,5 +144,24 @@ class Diagram
     end
     total
   end
+
+  def enabled_nodes
+    nodes.select{|n| n.enabled? }
+  end
+
+  #template method
+  def before_round(node_no) end
+
+  #template method
+  def after_round(node_no) end
+
+  #template method
+  def before_run; end
+
+  #template method
+  def after_run; end
+
+  #template method
+  def sanity_check_message; end
 
 end

@@ -6,7 +6,7 @@ class NonDeterministicDiagram < Diagram
   def run_round!
 
     node = nodes.sample
-    node.stage!
+    node.trigger!
 
     #only after all nodes have run do we update the actual resources and changes, to be used in the next round.
     #nodes.shuffle.each{ |n| n.commit! }

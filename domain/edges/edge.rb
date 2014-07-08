@@ -22,17 +22,12 @@ class Edge
 
   end
 
-  # Pinging an Edge means triggering it. It decides whether
-  # it should move resources (based on its type and those of
-  # the two nodes) and does the moving.
+  # Pinging an Edge means triggering it. It will try and move
+  # as many resources (based on its type and those of
+  # the two nodes) as it can..
   # @return [Boolean] true in case all required resources
   #  were moved, false otherwise.
   def ping!
-
-    #if both are automatic and one is pushing while the other one is pulling,
-    #the two events take place, albeit counter-intuitively.
-
-    #can this be used lazily? this should be tested
 
     if from.enabled? and to.enabled?
 
@@ -55,6 +50,37 @@ class Edge
       false
     end
 
+  end
+
+  # Simulates a ping!, but no resources get actually
+  # moved.
+  # @return [Boolean] true in case a ping! on this Edge
+  #  would return true. False otherwise.
+  def test_ping?
+    if from.enabled? and to.enabled?
+
+      strategy = ValidTypes.new(to.types, self.types)
+      condition = strategy.get_condition
+
+      from.count_re
+
+      label.times do
+
+
+
+        begin
+          res = from.  remove_resource_where! &condition
+        rescue NoElementsFound
+          return false
+        end
+
+        to.add_resource!(res)
+
+      end
+      true
+    else
+      false
+    end
   end
 
   def supports?(type)

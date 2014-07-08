@@ -43,13 +43,22 @@ class Node
     edges.push(edge)
   end
 
-  def unattach_edge(edge)
+  def attach_edge!(edge)
+    attach_edge(edge)
+    self
+  end
+
+  def detach_edge(edge)
     if edges.include?(edge)
       edges.pop(edge)
     else
       raise RuntimeError, "This #{self.class} does not include this #{edge.class}"
     end
+  end
 
+  def detach_edge!(edge)
+    detach_edge(edge)
+    self
   end
 
   def typed?
@@ -79,16 +88,16 @@ class Node
     end
   end
 
-  def trigger!
+  def fire_triggers!
     triggers.each do |n|
       if (n[0].is_a? Proc) && n[2]
         if n[0].call
           n[2]=false
-          n[1].stage!
+          n[1].trigger!
         end
       elsif n[0] && n[2]
         n[2]=false
-        n[1].stage!
+        n[1].trigger!
       end
     end
   end

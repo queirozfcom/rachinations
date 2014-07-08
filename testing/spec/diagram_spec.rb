@@ -377,7 +377,7 @@ describe Diagram do
         :to => 'deposit'
     }
 
-    d.get_node('source').attach_condition(false)
+    d.get_node('source').attach_condition(lambda{ false })
 
     d.run!(10)
 
@@ -571,5 +571,14 @@ describe Diagram do
     expect(d.get_node('d2').resource_count).to eq 3
 
   end
+
+end
+
+context 'simple converter behaviour' do
+  it 'requires the incoming edge to work' do
+
+  end
+
+
 
 end

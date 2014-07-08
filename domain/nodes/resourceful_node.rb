@@ -41,6 +41,10 @@ class ResourcefulNode < Node
   alias_method :support?, :supports?
 
   def trigger!
+    fire!
+  end
+
+  def fire!
     stage!
   end
 
