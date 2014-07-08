@@ -110,7 +110,6 @@ describe Pool do
     p1 = Pool.new name: 'typed pool', initial_value: {Subtype => 10}
 
     #if nothing is given, just return everything
-    expect {p1.resource_count}.not_to raise_error
     expect(p1.resource_count).to eq 10
 
     expect { p1.resource_count(Token) }.to raise_error UnsupportedTypeError
