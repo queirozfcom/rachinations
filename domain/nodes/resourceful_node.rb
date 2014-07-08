@@ -4,7 +4,6 @@ require_relative '../../domain/nodes/node'
 
 class ResourcefulNode < Node
 
-
   include Invariant
 
   def initialize(hsh=nil)
@@ -71,25 +70,8 @@ class ResourcefulNode < Node
     end
   end
 
-  def pull?
-    @mode === :pull
-  end
 
-  def push?
-    @mode === :push
-  end
 
-  def automatic?
-    @activation === :automatic
-  end
-
-  def passive?
-    @activation === :passive
-  end
-
-  def start?
-    @activation === :start
-  end
 
   def resources_added(klass=nil)
     if klass.nil?
