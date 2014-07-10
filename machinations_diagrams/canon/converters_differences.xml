@@ -1,0 +1,27 @@
+<graph version="v4.05" name="" author="" interval="1" timeMode="asynchronous" distributionMode="fixed speed" speed="100" actions="1" dice="D6" skill="" strategy="" multiplayer="" width="600" height="560" numberOfRuns="100" visibleRuns="25" colorCoding="0">
+  <connection type="Resource Connection" start="3" end="14" label="" position="0.5" color="Black" thickness="2"/>
+  <connection type="Resource Connection" start="14" end="11" label="" position="0.5" color="Red" thickness="2"/>
+  <connection type="Resource Connection" start="14" end="16" label="" position="0.5" color="Blue" thickness="2"/>
+  <node symbol="Source" x="35" y="91" color="Black" caption="" thickness="2" captionPos="0.25" activationMode="automatic" pullMode="pull any" actions="1" resourceColor="Black"/>
+  <connection type="Resource Connection" start="18" end="12" label="" position="0.5" color="Red" thickness="2"/>
+  <connection type="Resource Connection" start="12" end="6" label="" position="0.5" color="Red" thickness="2"/>
+  <node symbol="Pool" x="268" y="344" color="Red" caption="" thickness="2" captionPos="0.25" activationMode="passive" pullMode="pull any" actions="1" resourceColor="Black" startingResources="0" capacity="-1"/>
+  <node symbol="Source" x="25" y="314" color="Red" caption="" thickness="2" captionPos="0.25" activationMode="onstart" pullMode="pull any" actions="1" resourceColor="Red"/>
+  <connection type="Resource Connection" start="7" end="18" label="10" position="0.5" color="Red" thickness="2"/>
+  <connection type="Resource Connection" start="19" end="18" label="10" position="0.5" color="Blue" thickness="2"/>
+  <node symbol="Pool" x="214" y="28" color="Black" caption="" thickness="2" captionPos="0.25" activationMode="passive" pullMode="pull any" actions="1" resourceColor="Black" startingResources="0" capacity="-1"/>
+  <node symbol="Pool" x="213" y="153" color="Black" caption="" thickness="2" captionPos="0.25" activationMode="passive" pullMode="pull any" actions="1" resourceColor="Black" startingResources="0" capacity="-1"/>
+  <node symbol="Converter" x="189" y="343" color="Red" caption="" thickness="2" captionPos="0.25" activationMode="passive" pullMode="pull any" actions="1" resourceColor="Red"/>
+  <connection type="Resource Connection" start="14" end="10" label="" position="0.5" color="Green" thickness="2"/>
+  <node symbol="Converter" x="115" y="91" color="Black" caption="" thickness="2" captionPos="0.25" activationMode="passive" pullMode="pull any" actions="1" resourceColor="Green"/>
+  <node symbol="TextLabel" x="119" y="186" color="Black" caption="Untyped Converter, typed edges:  "/>
+  <node symbol="Pool" x="211" y="90" color="Red" caption="" thickness="2" captionPos="0.25" activationMode="passive" pullMode="pull any" actions="1" resourceColor="Red" startingResources="0" capacity="-1"/>
+  <node symbol="TextLabel" x="382" y="103" color="Black" caption="would NOT work because target Pool is Red"/>
+  <node symbol="Pool" x="106" y="342" color="Black" caption="" thickness="2" captionPos="0.25" activationMode="automatic" pullMode="push any" actions="1" resourceColor="Black" startingResources="0" capacity="-1"/>
+  <node symbol="Source" x="22" y="384" color="Blue" caption="" thickness="2" captionPos="0.25" activationMode="onstart" pullMode="pull any" actions="1" resourceColor="Blue"/>
+  <node symbol="TextLabel" x="146" y="418" color="Black" caption="In Rachinations, only Red resources would "/>
+  <node symbol="TextLabel" x="360" y="80" color="Black" caption="In Rachinations, the blue Edge"/>
+  <node symbol="TextLabel" x="89" y="458" color="Black" caption="would remain in the Pool."/>
+  <node symbol="TextLabel" x="132" y="437" color="Black" caption="be sent through, while Blue resources"/>
+  <node symbol="TextLabel" x="131" y="209" color="Black" caption="Converter gives you whatever you ask"/>
+</graph>
