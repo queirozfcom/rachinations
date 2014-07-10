@@ -22,112 +22,200 @@ describe Converter do
 
     c = Converter.new name: 'c'
 
-    c.attach_edge(double(:from => c))
+    c.attach_edge(double(:from => c, :to => double()))
 
-    c.attach_edge(double(:to => double()))
+    c.attach_edge(double(:from => double(), :to => c))
 
   end
 
-  it 'allows many edges in and one edge out, should wait for all need of entering edges to be fulfilled to create out' do
-    skip 'Converter not Working yet'
-  end
 
   describe '#trigger!' do
 
-    it 'pings incoming nodes' do
+    context 'simple tests' do
 
-      c = Converter.new name: 'c'
+      before(:each) do
 
-      edge_in = double(from: nil, to: c)
+        @c = Converter.new name: 'c'
+        @edge_in = double(from: double(), to: @c)
+        @edge_out = double(from: @c, to: double())
+        @c.attach_edge!(@edge_in).attach_edge!(@edge_out)
 
-      c.attach_edge(edge_in)
+      end
 
-      edge_out = double(from: c, to: nil)
+      it 'pings incoming nodes' do
 
-      c.attach_edge(edge_out)
+        expect(@edge_in).to receive(:test_ping?)
+        @edge_out.as_null_object
+        @c.trigger!
 
-      expect(edge_in).to receive(:ping!)
+      end
 
-      c.trigger!
+      it "pings outgoing edges if incoming edge's ping was successful " do
+
+        expect(@edge_in).to receive(:test_ping?).and_return(true)
+        expect(@edge_in).to receive(:ping!)
+        expect(@edge_out).to receive(:test_ping?).and_return(true)
+        expect(@edge_out).to receive(:ping!)
+
+        @c.trigger!
+      end
+
+      it "doesn't ping outgoing edges if incoming edge's ping! was not successful " do
+
+        expect(@edge_in).to receive(:test_ping?).and_return(false)
+        expect(@edge_in).not_to receive(:ping!)
+        expect(@edge_out).not_to receive(:ping!)
+
+        @c.trigger!
+
+      end
 
     end
 
-    it "pings outgoing edges iff incoming edge's ping! was successful " do
-      # if and only if
+    context 'when pull_any' do
 
-      c1 = Converter.new name: 'c1'
+      before(:each) do
 
-      edge_in = double(from: nil, to: c1)
+        @c = Converter.new name: 'c', mode: 'pull_any'
+        @edge_in = double(from: double(), to: @c)
+        @edge_in2 = double(from: double(), to: @c)
+        @edge_out = double(from: @c, to: double())
+        @edge_out2 = souble(from:@c, to: double())
+        @c.attach_edge!(@edge_in).attach_edge!(@edge_in2).attach_edge!(@edge_out).attach_edge!(@edge_out2)
 
-      edge_out = double(from: c1, to: nil)
+      end
 
-      c1.attach_edge!(edge_in).attach_edge!(edge_out)
+      it 'receives from each incoming edge across 2 turns and only then pushes to outgoing edge' do
 
-      expect(edge_in).to receive(:ping!).and_return(false)
-      expect(edge_out).not_to receive(:ping!)
+        expect(@edge_in).to receive_messages(:test_ping? => true, :ping! => true)
+        expect(@edge_in2).to receive(:test_ping?).and_return(false)
 
-      c1.trigger!
+        @c.trigger!
 
-      # now test the opposite
+        expect(@edge_in).to receive(:test_ping?).and_return(false)
+        expect(@edge_in2).to receive_messages(:test_ping? => true, :ping! => true)
 
-      c2 = Converter.new name: 'c2'
+        expect(@edge_out).to receive_messages(:test_ping? => true, :ping! => true)
+        expect(@edge_out2).to receive_messages(:test_ping? => true, :ping! => true)
 
-      edge_in = double(from: double(), to: c2)
+        @c.trigger!
 
-      edge_out = double(from: c2, to: double())
+      end
 
-      c2.attach_edge!(edge_in).attach_edge!(edge_out)
+    end
 
-      expect(edge_in).to receive(:ping!).and_return(true)
-      expect(edge_out).to receive(:ping!)
+    context 'when pull_all' do
 
-      c2.trigger!
+      before(:each) do
+        @c = Converter.new name: 'c', mode: 'pull_all'
+        @edge_in = double(from: double(), to: @c)
+        @edge_in2 = double(from: double(), to: @c)
+        @edge_out = double(from: @c, to: double())
+        @edge_out2 = double(from:@c, to: double())
+        @c.attach_edge!(@edge_in).attach_edge!(@edge_in2).attach_edge!(@edge_out).attach_edge!(@edge_out2)
+      end
 
+
+      it 'pings if all edges test_ping' do
+
+        expect(@edge_in).to receive_messages(:test_ping? => true,:ping! =>true)
+        expect(@edge_in2).to receive_messages(:test_ping? => true,:ping! =>true)
+        expect(@edge_out).to receive_messages(:test_ping? => true,:ping! =>true)
+        expect(@edge_out2).to receive_messages(:test_ping? => true,:ping! =>true)
+
+        @c.trigger!
+
+      end
+
+
+      it 'does not ping anything otherwise' do
+
+        # they are shuffled and we stop sending test_ping? to edges
+        # once one has returned false. Therefore we do not know which
+        # edges will receive the message so we have to allow all to.
+
+        allow(@edge_in).to receive_messages(:test_ping? => false)
+        allow(@edge_in2).to receive_messages(:test_ping? => false)
+        allow(@edge_out).to receive_messages(:test_ping? => false)
+        allow(@edge_out2).to receive_messages(:test_ping? => false)
+
+        # but none will get pinged
+        expect(@edge_in).not_to receive(:ping!)
+        expect(@edge_in2).not_to receive(:ping!)
+        expect(@edge_out).not_to receive(:ping!)
+        expect(@edge_out2).not_to receive(:ping!)
+
+        @c.trigger!
+
+      end
 
     end
 
   end
 
-  describe '#fire' do
+  describe '#put_resource!' do
 
-    it 'sends resources when there is only one outgoing node' do
+    before(:each) do
+      @c = Converter.new name: 'c'
+      @edge_in = double(from: double(), to: @c)
+      @edge_out = double(from: @c, to: double())
+      @c.attach_edge!(@edge_out).attach_edge!(@edge_in)
+    end
 
-      c = Converter.new name: 'c'
+    it 'does not ping incoming edges' do
 
-      edge_in = double(from: double(), to: c)
-      edge_out = double(from: c, to: double())
-
-      expect(edge_out).to receive(:ping!)
-
-      c.attach_edge!(edge_out).attach_edge!(edge_in)
-
-      c.fire!
+      expect(@edge_in).not_to receive(:test_ping?)
+      @edge_out.as_null_object
+      @c.put_resource!(@edge_in.freeze,double())
 
     end
 
-    it 'requires push_all by default' do
+    it 'pings as many outgoing nodes as there are when in all mode' do
 
-      c = Converter.new name: 'c'
+      edge_out2 = double(from: @c, to: double())
+      edge_out3 = double(from: @c, to: double())
+      edge_out4 = double(from: @c, to: double())
 
-      edge_in = double(from:double(),to:c)
+      @c.attach_edge!(edge_out2).attach_edge!(edge_out3).attach_edge!(edge_out4)
 
-      edge_out1 = double(from: c, to: double())
-      edge_out2 = double(from: c, to: double())
-      edge_out3 = double(from: c, to: double())
-      #
-      # expect(edge_in).to receive(:test_ping)
-      #
-      # c.attach_edge!(edge_in).attach_edge!(edge_out1).attach_edge!(edge_out2).attach_edge!(edge_out3)
+      expect(@edge_out).to receive_messages(:test_ping? => true, :ping! => true)
+      expect(edge_out2).to receive_messages(:test_ping? => true, :ping! => true)
+      expect(edge_out3).to receive_messages(:test_ping? => true, :ping! => true)
+      expect(edge_out4).to receive_messages(:test_ping? => true, :ping! => true)
 
-
+      @c.put_resource!(@edge_in.freeze,double())
 
     end
 
   end
 
-  it 'understands the ALL mode for its input, exit is always all' do
-    skip 'Converter not Working yet'
+  describe '#take_resource!' do
+
   end
 
+  describe '#in_conditions_met?' do
+
+    before(:each) do
+      @c = Converter.new name:'c',mode: 'pull_any'
+      @edge1 = double().freeze
+      @edge2 = double().freeze
+      @c.attach_edge!(@edge1).attach_edge!(@edge2)
+    end
+
+    context 'when pull_any' do
+
+      it 'is true when conditions are just enough' do
+        # i.e. the amount store is precisely the amount needed
+      end
+
+      it 'is also true when conditions have some slack' do
+        # i.e. if one edge's condition is overmet (more res than needed)
+        # and another edge's condition is met.
+
+      end
+
+    end
+
+  end
 
 end
