@@ -18,6 +18,7 @@ class Converter < ResourcelessNode
 # porem o tipo do edge tem vantagem na definicao da saida
 # O exemplo com 3 saidas mostra isso
 
+  attr_reader :resources_contributed
 
   def initialize(hsh={})
     check_options!(hsh)
@@ -52,9 +53,9 @@ class Converter < ResourcelessNode
         end
       end
 
-      if in_conditions_satisfied? && outgoing_edges.all?{|edge| edge.test_ping? }
+      if in_conditions_met? && outgoing_edges.all?{|edge| edge.test_ping? }
         push_all_out!
-        reset_resources!
+        pop_stored_resources!
       end
 
     end
@@ -91,8 +92,7 @@ class Converter < ResourcelessNode
   #  have all been met, false otherwise
   def in_conditions_met?
     incoming_edges
-    .all? { |edge| @resources_contributed.include?(edge) }
-    .all? { |edge| @resources_contributed.fetch(edge).count >= edge.label }
+    .all? { |edge| resources_contributed.keys.include?(edge) && resources_contributed.fetch(edge).length >= edge.label }
   end
 
   # This removes from the internal store just enough
@@ -119,7 +119,7 @@ class Converter < ResourcelessNode
   end
 
   def init_resources
-    edges.reduce(Hash.new) { |acc, edge| acc.store(edge, Set.new) }
+    edges.reduce(Hash.new) { |acc, edge| acc.store(edge.freeze, Array.new) }
   end
 
   def options

@@ -80,7 +80,7 @@ describe Converter do
         @edge_in = double(from: double(), to: @c)
         @edge_in2 = double(from: double(), to: @c)
         @edge_out = double(from: @c, to: double())
-        @edge_out2 = souble(from:@c, to: double())
+        @edge_out2 = double(from: @c, to: double())
         @c.attach_edge!(@edge_in).attach_edge!(@edge_in2).attach_edge!(@edge_out).attach_edge!(@edge_out2)
 
       end
@@ -111,17 +111,17 @@ describe Converter do
         @edge_in = double(from: double(), to: @c)
         @edge_in2 = double(from: double(), to: @c)
         @edge_out = double(from: @c, to: double())
-        @edge_out2 = double(from:@c, to: double())
+        @edge_out2 = double(from: @c, to: double())
         @c.attach_edge!(@edge_in).attach_edge!(@edge_in2).attach_edge!(@edge_out).attach_edge!(@edge_out2)
       end
 
 
       it 'pings if all edges test_ping' do
 
-        expect(@edge_in).to receive_messages(:test_ping? => true,:ping! =>true)
-        expect(@edge_in2).to receive_messages(:test_ping? => true,:ping! =>true)
-        expect(@edge_out).to receive_messages(:test_ping? => true,:ping! =>true)
-        expect(@edge_out2).to receive_messages(:test_ping? => true,:ping! =>true)
+        expect(@edge_in).to receive_messages(:test_ping? => true, :ping! => true)
+        expect(@edge_in2).to receive_messages(:test_ping? => true, :ping! => true)
+        expect(@edge_out).to receive_messages(:test_ping? => true, :ping! => true)
+        expect(@edge_out2).to receive_messages(:test_ping? => true, :ping! => true)
 
         @c.trigger!
 
@@ -166,7 +166,7 @@ describe Converter do
 
       expect(@edge_in).not_to receive(:test_ping?)
       @edge_out.as_null_object
-      @c.put_resource!(@edge_in.freeze,double())
+      @c.put_resource!(@edge_in.freeze, double())
 
     end
 
@@ -183,7 +183,7 @@ describe Converter do
       expect(edge_out3).to receive_messages(:test_ping? => true, :ping! => true)
       expect(edge_out4).to receive_messages(:test_ping? => true, :ping! => true)
 
-      @c.put_resource!(@edge_in.freeze,double())
+      @c.put_resource!(@edge_in.freeze, double())
 
     end
 
@@ -196,25 +196,35 @@ describe Converter do
   describe '#in_conditions_met?' do
 
     before(:each) do
-      @c = Converter.new name:'c',mode: 'pull_any'
-      @edge1 = double().freeze
-      @edge2 = double().freeze
+      @c = Converter.new name: 'c', mode: 'pull_any'
+      @edge1 = instance_double('Edge', label: 1, from: double(), to: @c)
+      @edge2 = instance_double('Edge', label: 1, from: double(), to: @c)
       @c.attach_edge!(@edge1).attach_edge!(@edge2)
     end
 
     context 'when pull_any' do
 
+
+      it 'is false when nothing has happened yet' do
+        expect(@c).to receive(:resources_contributed).and_return({@edge1 => [], @edge2 => []}).at_least(:once)
+        expect(@c.in_conditions_met?).to eq false
+      end
+
       it 'is true when conditions are just enough' do
-        # i.e. the amount store is precisely the amount needed
+        expect(@c).to receive(:resources_contributed).and_return( {@edge1 => [double()], @edge2 => [double()] }).at_least(:once)
+        expect(@c.in_conditions_met?).to eq true
+
       end
 
       it 'is also true when conditions have some slack' do
         # i.e. if one edge's condition is overmet (more res than needed)
         # and another edge's condition is met.
-
+        expect(@c).to receive(:resources_contributed).and_return( {@edge1 => [double(), double()], @edge2 => [double()]} ).at_least(:once)
+        expect(@c.in_conditions_met?).to eq true
       end
 
     end
+
 
   end
 
