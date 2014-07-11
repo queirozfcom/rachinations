@@ -116,6 +116,9 @@ class Node
     res
   end
 
+  def disabled?
+    !enabled?
+  end
 
   def commit!
     clear_triggers
