@@ -39,7 +39,7 @@ class Edge
         begin
           res = from.remove_resource_where! &condition
         rescue NoElementsFound
-           return false
+          return false
         end
 
         to.add_resource!(res)
@@ -56,31 +56,28 @@ class Edge
   # moved.
   # @return [Boolean] true in case a ping! on this Edge
   #  would return true. False otherwise.
-  def test_ping?
-    if from.enabled? and to.enabled?
+  # @param [Boolean] require_all whether to require that the maximum
+  #  number of Resources allowed (as per this Edge's label) be
+  #  able to pass in order to return true.
+  def test_ping?(require_all=false)
+    return false if from.disabled? || to.disabled?
 
-      strategy = ValidTypes.new(to.types, self.types)
-      condition = strategy.get_condition
+    strategy = ValidTypes.new(to.types, self.types)
+    condition = strategy.get_condition
 
-      from.count_re
+    available_resources = from.resource_count(&condition)
 
-      label.times do
-
-
-
-        begin
-          res = from.  remove_resource_where! &condition
-        rescue NoElementsFound
-          return false
-        end
-
-        to.add_resource!(res)
-
-      end
-      true
-    else
+    if available_resources == 0
       false
+    elsif available_resources >= label
+      true
+    elsif available_resources < label && require_all
+      false
+    else
+      # only some resources are able to pass
+      true
     end
+
   end
 
   def supports?(type)
