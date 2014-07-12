@@ -36,7 +36,7 @@ class Pool < ResourcefulNode
 
   def resource_count(type=nil,&block)
 
-    raise ArgumentError.new('Please provide either a type or a block, but not both.') if !type.nil? && block_given?
+    raise ArgumentError.new('Please provide either a type or a block, but not both.') if block_given? && !type.nil?
 
     if type.nil? && !block_given?
       @resources.count_where { |r| r.unlocked? }
