@@ -6,7 +6,7 @@ class Node
   include Invariant
   include HashInit
 
-  attr_reader :name
+  attr_reader :name,:types
 
 
   def attach_condition(condition)

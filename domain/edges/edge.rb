@@ -3,7 +3,7 @@ require_relative '../../domain/exceptions/no_elements_found'
 
 class Edge
 
-  attr_reader :from, :to, :name, :label, :types
+  attr_reader :from, :to, :name, :label, :types, :strategy
 
 
   def initialize(hsh)
@@ -54,15 +54,16 @@ class Edge
 
   # Simulates a ping!, but no resources get actually
   # moved.
-  # @return [Boolean] true in case a ping! on this Edge
-  #  would return true. False otherwise.
+  #
   # @param [Boolean] require_all whether to require that the maximum
   #  number of Resources allowed (as per this Edge's label) be
   #  able to pass in order to return true.
+  #
+  # @return [Boolean] true in case a ping! on this Edge
+  #  would return true. False otherwise.
   def test_ping?(require_all=false)
     return false if from.disabled? || to.disabled?
 
-    strategy = ValidTypes.new(to.types, self.types)
     condition = strategy.get_condition
 
     available_resources = from.resource_count(&condition)
@@ -101,6 +102,10 @@ class Edge
 
   def to?(obj)
     to.equal?(obj)
+  end
+
+  def strategy
+    ValidTypes.new(to.types, self.types)
   end
 
   private

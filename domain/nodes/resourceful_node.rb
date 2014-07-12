@@ -105,7 +105,7 @@ class ResourcefulNode < Node
     }
   end
 
-  def resource_count(type=nil)
+  def resource_count(type=nil,&blk)
     raise NotImplementedError, "Please update class #{self.class} to respond to: ";
   end
 
