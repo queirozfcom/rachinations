@@ -12,6 +12,7 @@ require 'rspec'
 #   config.default_path = 'testing/spec'
 # end
 
+require_relative '../../extras/fifo'
 
 require_relative '../../domain/diagrams/diagram'
 require_relative '../../domain/diagrams/verbose_diagram'
