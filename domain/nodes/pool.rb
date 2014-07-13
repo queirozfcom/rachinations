@@ -34,7 +34,7 @@ class Pool < ResourcefulNode
   end
 
 
-  def resource_count(type=nil,&block)
+  def resource_count(type=nil, &block)
 
     raise ArgumentError.new('Please provide either a type or a block, but not both.') if block_given? && !type.nil?
 
@@ -52,9 +52,9 @@ class Pool < ResourcefulNode
     elsif block_given?
 
       # client doesn't need to know about locked vs unlocked resources
-      unlock_condition = Proc.new{|r| r.unlocked? }
+      unlock_condition = Proc.new { |r| r.unlocked? }
 
-      @resources.count_where{ |r| unlock_condition.call(r) && block.call(r) }
+      @resources.count_where { |r| unlock_condition.call(r) && block.call(r) }
 
     else
       raise ArgumentError.new("Wrong parameter types passed to #{__callee__}")
@@ -99,22 +99,45 @@ class Pool < ResourcefulNode
   end
 
   #return the object (it'll probably be added to another node)
-  def remove_resource!(type=nil)
+  # def remove_resource!(type=nil)
+  #
+  #   if type.nil?
+  #     blk = Proc.new { |r| r.instance_of?(Token) }
+  #   else
+  #     blk = Proc.new { |r| r.instance_of?(type) }
+  #   end
+  #
+  #   remove_resource_where! &blk
+  #
+  # end
 
-    if type.nil?
-      blk = Proc.new { |r| r.instance_of?(Token) }
-    else
-      blk = Proc.new { |r| r.instance_of?(type) }
-    end
+  def remove_resource!(type=nil, &expression)
 
-    remove_resource_where! &blk
-
-  end
-
-  def remove_resource_where!(&expression)
+    raise ArgumentError.new('Please provide either a type or a block, but not both.') if block_given? && !type.nil?
 
     begin
-      res = @resources.get_where(&expression).lock!
+
+      if type.nil? && !block_given?
+        res = @resources.get_where { |r| r.unlocked? }
+      elsif type.is_a?(Class) && type <= Token
+
+        if supports? type
+          res = @resources.get_where { |r|
+            r.unlocked? && r.is_type?(type)
+          }
+        else
+          raise UnsupportedTypeError.new "Unsupported type: #{type.name}"
+        end
+      elsif block_given?
+
+        # client doesn't need to know about locked vs unlocked resources
+        unlock_condition = Proc.new { |r| r.unlocked? }
+
+        res=@resources.get_where { |r| unlock_condition.call(r) && expression.call(r) }
+      else
+        raise Exception.new('What?')
+      end
+      res.lock!
       @resources_removed[res.class] += 1
     rescue NoElementsMatchingConditionError
       raise NoElementsFound.new

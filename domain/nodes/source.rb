@@ -5,7 +5,7 @@ class Source < ResourcefulNode
   attr_reader :type
 
   def options
-    [ :type, :mode, :activation,:diagram,:conditions, name: :required]
+    [:type, :mode, :activation, :diagram, :conditions, name: :required]
   end
 
   def defaults
@@ -30,20 +30,6 @@ class Source < ResourcefulNode
 
   end
 
-  def supports?(a_type)
-    if type.eql?(Token)
-      untyped?
-    else
-      #untyped nodes support everything.
-      if untyped?
-        true
-      else
-        typed? && type.eql?(a_type)
-      end
-    end
-  end
-
-
   alias_method :support?, :supports?
 
   def typed?
@@ -54,46 +40,36 @@ class Source < ResourcefulNode
     !typed?
   end
 
-  # def types
-  #   [type]
-  # end
-
   def to_s
     "Source '#{@name}':  #{@resources.to_s}"
   end
 
-  def add_resource!; end
-
-  def remove_resource!(type=nil,run_hooks=true)
-
-     if type.nil?
-       res = Token.new.lock!
-     else
-       res = type.new.lock!
-     end
-
-     @resources_removed[type] += 1
-
-    return res
-
+  def add_resource!;
   end
 
-  def remove_resource_where!
+  def remove_resource!(type=nil)
 
-    # all i can give is my type!
-
-    if typed?
-      res = type.new.lock!
-    else
+    if type.nil? && untyped?
       res = Token.new.lock!
+      type_taken = nil
+    elsif !type.nil? && supports?(type)
+      res = type.new.lock!
+      type_taken = type
+    else
+      res = self.type.new.lock!
+      type_taken = self.type
     end
 
-    @resources_removed[type] += 1
+    @resources_removed[type_taken] += 1
 
     fire_triggers!
 
     res
 
+  end
+
+  def types
+    [type]
   end
 
   def resources_added

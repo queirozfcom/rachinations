@@ -37,7 +37,7 @@ class Edge
       label.times do
 
         begin
-          res = from.remove_resource_where! &condition
+          res = from.remove_resource! &condition
         rescue NoElementsFound
           return false
         end

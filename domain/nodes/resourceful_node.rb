@@ -70,14 +70,9 @@ class ResourcefulNode < Node
     end
   end
 
-
-
-
   def resources_added(klass=nil)
     if klass.nil?
-      total=0
-      @resources_added.each_value { |n| total=total+n }
-      total
+      @resources_added.values.reduce(0){|acc,elem| acc += elem}
     else
       @resources_added[klass]
     end
@@ -85,9 +80,7 @@ class ResourcefulNode < Node
 
   def resources_removed(klass=nil)
     if klass.nil?
-      total=0
-      @resources_removed.each_value { |n| total=total+n }
-      total
+      @resources_removed.values.reduce(0){ |acc,elem| acc += elem }
     else
       @resources_removed[klass]
     end
@@ -105,7 +98,7 @@ class ResourcefulNode < Node
     }
   end
 
-  def resource_count(type=nil,&blk)
+  def resource_count(type=nil)
     raise NotImplementedError, "Please update class #{self.class} to respond to: ";
   end
 
