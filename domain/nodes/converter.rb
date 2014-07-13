@@ -38,9 +38,9 @@ class Converter < ResourcelessNode
 
     if all?
 
-      if incoming_edges.all? { |edge| edge.test_ping? } && outgoing_edges.all? { |edge| edge.test_ping? }
-        pull_all_in!
-        push_all_out!
+      if incoming_edges.all? { |edge| edge.test_ping?(true) } && outgoing_edges.all? { |edge| edge.test_ping?(true) }
+        pull_all!
+        push_all!
       else
         # does not trigger
       end
@@ -53,11 +53,13 @@ class Converter < ResourcelessNode
         end
       end
 
-      if in_conditions_met? && outgoing_edges.all?{|edge| edge.test_ping? }
-        push_all_out!
+      if in_conditions_met? && outgoing_edges.all? { |edge| edge.test_ping?(true) }
+        push_all!
         pop_stored_resources!
       end
 
+    else
+      raise ArgumentError.new 'Unsupported mode.'
     end
 
   end
@@ -67,21 +69,24 @@ class Converter < ResourcelessNode
   #  used in case not all edge conditions have been met
   #  (only applicable when in pull_any mode).
   #
-  def put_resource!(edge,res)
-    inv{edge.frozen?}
+  def put_resource!(edge, res)
+    inv { edge.frozen? }
     if all?
-      if outgoing_edges.all? { |edge| edge.test_ping? }
-        push_all_out!
+      if inco.all? { |edge| edge.test_ping? }
+        push_all!
       end
     elsif any?
-
+      add_to_contributed_resources!(edge, res)
+      if in_conditions_met?
+        push_all!
+      end
     end
 
   end
 
   def take_resource!(type=nil, &blk)
     if incoming_edges.shuffle.reduce(true) { |acc, edge| acc && edge.test_ping? }
-      pull_all_in!
+      pull_all!
     end
   end
 
@@ -103,23 +108,23 @@ class Converter < ResourcelessNode
 
   private
 
-  def pull_all_in!
+  def pull_all!
     incoming_edges.shuffle.each { |e| e.ping! }
   end
 
-  def push_all_out!
+  def push_all!
     outgoing_edges.shuffle.each { |e| e.ping! }
   end
 
   # A Converter may receive its needed resources across turns
   # so there must be a way to keep count of which edges have already
   # 'given their contribution' to this Converter.
-  def store_resource(edge, resource)
-    @resources_contributed.fetch(edge).add(resource)
+  def add_to_contributed_resources!(edge, resource)
+    @resources_contributed.fetch(edge).put!(resource)
   end
 
   def init_resources
-    edges.reduce(Hash.new) { |acc, edge| acc.store(edge.freeze, Array.new) }
+    edges.reduce(Hash.new) { |acc, edge| acc.store(edge.freeze, Fifo.new) }
   end
 
   def options
@@ -128,8 +133,8 @@ class Converter < ResourcelessNode
 
   def defaults
     {
-        mode: 'pull_any',
-        activation: 'passive'
+        mode: :pull_any,
+        activation: :passive
     }
   end
 
