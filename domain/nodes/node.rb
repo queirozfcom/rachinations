@@ -128,11 +128,11 @@ class Node
   def stage!; raise NotImplementedError, "Please update class #{self.class} to respond to :#{__callee__}" ; end
 
   def pull?
-    @mode === :pull
+    @mode === :pull || @mode === :pull_any? || @mode === :pull_all
   end
 
   def push?
-    @mode === :push
+    @mode === :push || @mode === :push_any? || @mode === :push_all
   end
 
   def automatic?
@@ -148,7 +148,7 @@ class Node
   end
 
   def any?
-    @mode === :push_any || @mode === :push_all
+    @mode === :push_any || @mode === :pull_any
   end
 
   def all?
