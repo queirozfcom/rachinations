@@ -2,6 +2,7 @@ require_relative 'spec_helper'
 
 describe Converter do
 
+
   it 'is created with name as single argument' do
 
     expect { Converter.new name: 'foo' }.not_to raise_error
@@ -36,8 +37,8 @@ describe Converter do
       before(:each) do
 
         @c = Converter.new name: 'c'
-        @edge_in = instance_double(Edge, from: double(), to: @c)
-        @edge_out = instance_double(Edge, from: @c, to: double())
+        @edge_in = instance_double(Edge, from: double(), to: @c, freeze: nil)
+        @edge_out = instance_double(Edge, from: @c, to: double(), freeze: nil)
         @c.attach_edge!(@edge_in).attach_edge!(@edge_out)
 
       end
@@ -78,10 +79,10 @@ describe Converter do
       before(:each) do
 
         @c = Converter.new name: 'c', mode: :pull_any
-        @edge_in = instance_double(Edge, from: double(), to: @c)
-        @edge_in2 = instance_double(Edge, from: double(), to: @c)
-        @edge_out = instance_double(Edge, from: @c, to: double())
-        @edge_out2 = instance_double(Edge, from: @c, to: double())
+        @edge_in = instance_double(Edge, from: double(), to: @c,freeze: nil)
+        @edge_in2 = instance_double(Edge, from: double(), to: @c,freeze: nil)
+        @edge_out = instance_double(Edge, from: @c, to: double(),freeze: nil)
+        @edge_out2 = instance_double(Edge, from: @c, to: double(),freeze: nil)
         @c.attach_edge!(@edge_in).attach_edge!(@edge_in2).attach_edge!(@edge_out).attach_edge!(@edge_out2)
 
       end
@@ -128,10 +129,10 @@ describe Converter do
 
       before(:each) do
         @c = Converter.new name: 'c', mode: :pull_all
-        @edge_in = instance_double(Edge,from: double(), to: @c)
-        @edge_in2 = instance_double(Edge,from: double(), to: @c)
-        @edge_out = instance_double(Edge,from: @c, to: double())
-        @edge_out2 = instance_double(Edge,from: @c, to: double())
+        @edge_in = instance_double(Edge, from: double(), to: @c,freeze: nil)
+        @edge_in2 = instance_double(Edge, from: double(), to: @c,freeze: nil)
+        @edge_out = instance_double(Edge, from: @c, to: double(),freeze: nil)
+        @edge_out2 = instance_double(Edge, from: @c, to: double(),freeze: nil)
         @c.attach_edge!(@edge_in).attach_edge!(@edge_in2).attach_edge!(@edge_out).attach_edge!(@edge_out2)
       end
 
@@ -184,8 +185,8 @@ describe Converter do
 
     before(:each) do
       @c = Converter.new name: 'c'
-      @edge_in = double(from: double(), to: @c)
-      @edge_out = double(from: @c, to: double())
+      @edge_in = instance_double(Edge,from: double(), to: @c,freeze: nil)
+      @edge_out = instance_double(Edge,from: @c, to: double(),freeze: nil)
       @c.attach_edge!(@edge_out).attach_edge!(@edge_in)
     end
 
@@ -200,9 +201,9 @@ describe Converter do
     it 'pings as many outgoing nodes as there are when in all mode' do
 
       pending
-      edge_out2 = double(from: @c, to: double())
-      edge_out3 = double(from: @c, to: double())
-      edge_out4 = double(from: @c, to: double())
+      edge_out2 = instance_double(Edge,from: @c, to: double(),freeze: nil)
+      edge_out3 = instance_double(Edge,from: @c, to: double(),freeze: nil)
+      edge_out4 = instance_double(Edge,from: @c, to: double(),freeze: nil)
 
       @c.attach_edge!(edge_out2).attach_edge!(edge_out3).attach_edge!(edge_out4)
 
@@ -211,7 +212,7 @@ describe Converter do
       expect(edge_out3).to receive_messages(:test_ping? => true, :ping! => true)
       expect(edge_out4).to receive_messages(:test_ping? => true, :ping! => true)
 
-      @c.put_resource!(@edge_in.freeze, double())
+      @c.put_resource!(@edge_in, double())
     end
 
   end
@@ -224,8 +225,8 @@ describe Converter do
 
     before(:each) do
       @c = Converter.new name: 'c', mode: 'pull_any'
-      @edge1 = instance_double('Edge', label: 1, from: double(), to: @c)
-      @edge2 = instance_double('Edge', label: 1, from: double(), to: @c)
+      @edge1 = instance_double('Edge', label: 1, from: double(), to: @c,freeze: nil)
+      @edge2 = instance_double('Edge', label: 1, from: double(), to: @c,freeze: nil)
       @c.attach_edge!(@edge1).attach_edge!(@edge2)
     end
 

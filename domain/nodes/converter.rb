@@ -70,10 +70,10 @@ class Converter < ResourcelessNode
   #  used in case not all edge conditions have been met
   #  (only applicable when in pull_any mode).
   #
-  def put_resource!(res,edge)
-    inv { edge.frozen? }
+  def put_resource!(res,edge=nil)
+    inv { !edge.nil? && edge.frozen? }
     if all?
-      if inco.all? { |edge| edge.test_ping? }
+      if incoming_edges.all? { |edge| edge.test_ping? }
         push_all!
       end
     elsif any?
@@ -83,6 +83,17 @@ class Converter < ResourcelessNode
       end
     end
 
+  end
+
+  # An override for the original method. The reason for this is
+  # that, when an Edge is attached to a Converter after it's been
+  # created, a key for it (frozen) needs to be created.
+  #
+  # @param [Edge] edge
+  def attach_edge!(edge)
+    super
+    @resources_contributed.store(edge.freeze, Fifo.new)
+    self
   end
 
   def take_resource!(type=nil, &blk)
@@ -125,7 +136,7 @@ class Converter < ResourcelessNode
   end
 
   def init_resources
-    edges.reduce(Hash.new) { |acc, edge| acc.store(edge.freeze, Fifo.new) }
+    edges.reduce(Hash.new) { |hash, edge| hash.store(edge.freeze, Fifo.new) }
   end
 
   def options

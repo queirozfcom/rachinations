@@ -51,8 +51,8 @@ class Diagram
 
     edge = edge_klass.new(params)
 
-    from.attach_edge(edge)
-    to.attach_edge(edge)
+    from.attach_edge!(edge)
+    to.attach_edge!(edge)
 
     edges.push(edge)
 

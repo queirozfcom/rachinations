@@ -1,4 +1,9 @@
+require 'forwardable'
+
 class Fifo
+  extend Forwardable
+
+  def_delegators :@store, :length
 
   def initialize
     @store = Array.new

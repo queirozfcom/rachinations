@@ -13,7 +13,6 @@ describe 'Converter cannonical behavior' do
       @d.add_edge! Edge, name:'e2',from: 'c', to: 'p0'
     }
     it 'is triggered by itself' do
-      pending
       c = @d.get_node 'c'
       5.times{ c.trigger! }
 

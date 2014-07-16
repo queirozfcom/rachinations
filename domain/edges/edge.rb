@@ -95,7 +95,6 @@ class Edge
     not untyped?
   end
 
-
   def from?(obj)
     from.equal?(obj)
   end
