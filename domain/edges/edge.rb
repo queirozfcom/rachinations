@@ -105,7 +105,7 @@ class Edge
   end
 
   def strategy
-    ValidTypes.new(to.types, self.types)
+    ValidTypes.new(self.types,to.types)
   end
 
   private

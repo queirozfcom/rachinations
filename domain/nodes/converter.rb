@@ -25,6 +25,7 @@ class Converter < ResourcelessNode
     hsh = set_defaults(hsh)
     @name = hsh.fetch(:name)
     @mode = hsh.fetch(:mode)
+    @types = hsh.fetch(:types)
 
     # each edge may have contributed with some resources at any given time
     @resources_contributed = init_resources
@@ -128,13 +129,14 @@ class Converter < ResourcelessNode
   end
 
   def options
-    [:name, :diagram, :mode, :activation]
+    [{name: :required}, :diagram, :mode, :activation, :types]
   end
 
   def defaults
     {
         mode: :pull_any,
-        activation: :passive
+        activation: :passive,
+        types: []
     }
   end
 

@@ -191,14 +191,15 @@ describe Converter do
 
     it 'does not ping incoming edges' do
 
+      pending
       expect(@edge_in).not_to receive(:test_ping?)
       @edge_out.as_null_object
       @c.put_resource!(@edge_in.freeze, double())
-
     end
 
     it 'pings as many outgoing nodes as there are when in all mode' do
 
+      pending
       edge_out2 = double(from: @c, to: double())
       edge_out3 = double(from: @c, to: double())
       edge_out4 = double(from: @c, to: double())
@@ -211,7 +212,6 @@ describe Converter do
       expect(edge_out4).to receive_messages(:test_ping? => true, :ping! => true)
 
       @c.put_resource!(@edge_in.freeze, double())
-
     end
 
   end
