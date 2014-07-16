@@ -98,19 +98,6 @@ class Pool < ResourcefulNode
     end
   end
 
-  #return the object (it'll probably be added to another node)
-  # def remove_resource!(type=nil)
-  #
-  #   if type.nil?
-  #     blk = Proc.new { |r| r.instance_of?(Token) }
-  #   else
-  #     blk = Proc.new { |r| r.instance_of?(type) }
-  #   end
-  #
-  #   remove_resource_where! &blk
-  #
-  # end
-
   def remove_resource!(type=nil, &expression)
 
     raise ArgumentError.new('Please provide either a type or a block, but not both.') if block_given? && !type.nil?
