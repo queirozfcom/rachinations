@@ -89,7 +89,7 @@ describe Pool do
   it 'knows how many resources were added' do
 
     p1 = Pool.new name: 'typed pool'
-    5.times { p1.add_resource! Token.new }
+    5.times { p1.put_resource! Token.new }
     2.times { p1.remove_resource! }
 
 
@@ -115,12 +115,12 @@ describe Pool do
 
     p2 = Pool.new name: 'untyped pool'
 
-    p2.add_resource! Token.new
-    p2.add_resource! Token.new
-    p2.add_resource! Token.new
+    p2.put_resource! Token.new
+    p2.put_resource! Token.new
+    p2.put_resource! Token.new
 
-    p2.add_resource! Subtype.new
-    p2.add_resource! Subtype.new
+    p2.put_resource! Subtype.new
+    p2.put_resource! Subtype.new
 
     expect(p2.resource_count(Token)).to eq 3
     expect(p2.resource_count(Subtype)).to eq 2

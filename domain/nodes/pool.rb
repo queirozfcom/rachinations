@@ -86,7 +86,7 @@ class Pool < ResourcefulNode
   end
 
 
-  def add_resource!(obj)
+  def put_resource!(obj)
 
     if supports? obj.class
       @resources_added[obj.class] += 1

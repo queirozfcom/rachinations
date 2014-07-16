@@ -44,7 +44,7 @@ class Source < ResourcefulNode
     "Source '#{@name}':  #{@resources.to_s}"
   end
 
-  def add_resource!;
+  def put_resource!;
   end
 
   def remove_resource!(type=nil)

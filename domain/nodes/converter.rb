@@ -70,7 +70,7 @@ class Converter < ResourcelessNode
   #  used in case not all edge conditions have been met
   #  (only applicable when in pull_any mode).
   #
-  def put_resource!(edge, res)
+  def put_resource!(res,edge)
     inv { edge.frozen? }
     if all?
       if inco.all? { |edge| edge.test_ping? }

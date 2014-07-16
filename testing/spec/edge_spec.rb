@@ -109,7 +109,7 @@ describe '#ping!' do
 
     }
 
-    expect(node2).to receive(:add_resource!).exactly(3).times
+    expect(node2).to receive(:put_resource!).exactly(3).times
 
     e = Edge.new name: 'e', from: node1, to: node2, label: 5
 
@@ -124,7 +124,7 @@ describe '#ping!' do
     e = Edge.new name: 'foo', from: node1, to: node2, label: 10
 
     expect(node1).to receive(:remove_resource!).exactly(10).times.and_return(double())
-    expect(node2).to receive(:add_resource!).exactly(10).times
+    expect(node2).to receive(:put_resource!).exactly(10).times
 
     expect(e.ping!).to eq true
 

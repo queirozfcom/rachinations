@@ -42,7 +42,7 @@ class Edge
           return false
         end
 
-        to.add_resource!(res)
+        to.put_resource!(res,self.freeze)
 
       end
       true
