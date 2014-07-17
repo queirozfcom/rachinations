@@ -5,7 +5,7 @@ class ResourcelessNode < Node
 
   # only for now.
   def resource_count(&blk)
-    999
+    0
   end
 
 end
