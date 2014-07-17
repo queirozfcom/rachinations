@@ -90,7 +90,7 @@ describe Pool do
 
     p1 = Pool.new name: 'typed pool'
     5.times { p1.put_resource! Token.new }
-    2.times { p1.remove_resource! }
+    2.times { p1.take_resource! }
 
 
     expect(p1.resources_added).to eq 5
@@ -178,7 +178,7 @@ describe Pool do
 
   end
 
-  describe '#remove_resource!' do
+  describe '#take_resource!' do
     before(:each) do
       @p = Pool.new name: 'p', initial_value: {Mango => 15, Football => 20}
     end

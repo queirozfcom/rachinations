@@ -41,7 +41,7 @@ class ResourceBag
 
   end
 
-  def count_where
+  def count_where(&blk)
 
     raise ArgumentError, 'Please supply a block containing the condition.' unless block_given?
 

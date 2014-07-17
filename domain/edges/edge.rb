@@ -3,7 +3,7 @@ require_relative '../../domain/exceptions/no_elements_found'
 
 class Edge
 
-  attr_reader :from, :to, :name, :label, :types, :strategy
+  attr_reader :from, :to, :name, :label, :types
 
 
   def initialize(hsh)
@@ -37,7 +37,7 @@ class Edge
       label.times do
 
         begin
-          res = from.remove_resource! &condition
+          res = from.take_resource! &condition
         rescue NoElementsFound
           return false
         end

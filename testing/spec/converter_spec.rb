@@ -192,7 +192,6 @@ describe Converter do
 
     it 'does not ping incoming edges' do
 
-      pending
       expect(@edge_in).not_to receive(:test_ping?)
       @edge_out.as_null_object
       @c.put_resource!(@edge_in.freeze, double())
@@ -231,7 +230,6 @@ describe Converter do
     end
 
     context 'when pull_any' do
-
 
       it 'is false when nothing has happened yet' do
         expect(@c).to receive(:resources_contributed).and_return({@edge1 => [], @edge2 => []}).at_least(:once)

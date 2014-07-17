@@ -39,7 +39,7 @@ describe 'Source Instantiation' do
 
     s = Source.new name: 'foo'
 
-    expect(s.remove_resource!).to be_a(Token)
+    expect(s.take_resource!).to be_a(Token)
 
   end
 
@@ -47,7 +47,7 @@ describe 'Source Instantiation' do
 
     s = Source.new name:'foo', type: Green
 
-    expect(s.remove_resource!(Green)).to be_a(Green)
+    expect(s.take_resource!(Green)).to be_a(Green)
 
   end
 
@@ -62,7 +62,7 @@ describe 'Source Instantiation' do
     # test suite run faster.
     100.times do
 
-      res = s.remove_resource!(Blue)
+      res = s.take_resource!(Blue)
 
       expect(res).to be_a(Blue)
 

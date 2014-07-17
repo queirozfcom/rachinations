@@ -47,7 +47,7 @@ class Source < ResourcefulNode
   def put_resource!;
   end
 
-  def remove_resource!(type=nil)
+  def take_resource!(type=nil)
 
     if type.nil? && untyped?
       res = Token.new.lock!

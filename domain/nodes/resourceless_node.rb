@@ -3,4 +3,9 @@ require_relative '../../domain/nodes/node'
 
 class ResourcelessNode < Node
 
+  # only for now.
+  def resource_count(&blk)
+    999
+  end
+
 end

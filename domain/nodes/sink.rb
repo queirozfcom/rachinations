@@ -5,7 +5,7 @@ require_relative '../../domain/nodes/pool'
 class Sink < Pool
 
 
-  def remove_resource!(type=nil, &expression)
+  def take_resource!(type=nil, &expression)
     # do nothing
   end
 

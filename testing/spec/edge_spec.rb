@@ -68,7 +68,7 @@ describe '#ping!' do
     node1 = double(enabled?: true, types: [Peach])
     node2 = double(enabled?: true, types: [Mango])
 
-    allow(node1).to receive(:remove_resource!).and_raise NoElementsFound
+    allow(node1).to receive(:take_resource!).and_raise NoElementsFound
 
     e = Edge.new name: 'e', from: node1, to: node2
 
@@ -81,7 +81,7 @@ describe '#ping!' do
     node1 = double(enabled?: true, types: [Peach])
     node2 = double(enabled?: true, types: [Mango])
 
-    allow(node1).to receive(:remove_resource!).and_raise NoElementsFound
+    allow(node1).to receive(:take_resource!).and_raise NoElementsFound
 
     e = Edge.new name: 'e', from: node1, to: node2, types: [Football, Baseball]
 
@@ -97,7 +97,7 @@ describe '#ping!' do
 
     $count = 0
 
-    expect(node1).to receive(:remove_resource!).exactly(4).times {
+    expect(node1).to receive(:take_resource!).exactly(4).times {
 
       $count += 1
 
@@ -123,7 +123,7 @@ describe '#ping!' do
 
     e = Edge.new name: 'foo', from: node1, to: node2, label: 10
 
-    expect(node1).to receive(:remove_resource!).exactly(10).times.and_return(double())
+    expect(node1).to receive(:take_resource!).exactly(10).times.and_return(double())
     expect(node2).to receive(:put_resource!).exactly(10).times
 
     expect(e.ping!).to eq true

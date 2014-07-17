@@ -118,7 +118,7 @@ class ResourcefulNode < Node
     raise NotImplementedError, "Please update class #{self.class} to respond to: ";
   end
 
-  def remove_resource!;
+  def take_resource!;
     raise NotImplementedError, "Please update class #{self.class} to respond to: ";
   end
 

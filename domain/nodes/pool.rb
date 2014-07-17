@@ -98,7 +98,7 @@ class Pool < ResourcefulNode
     end
   end
 
-  def remove_resource!(type=nil, &expression)
+  def take_resource!(type=nil, &expression)
 
     raise ArgumentError.new('Please provide either a type or a block, but not both.') if block_given? && !type.nil?
 
@@ -143,7 +143,7 @@ class Pool < ResourcefulNode
     no_resources.times do
 
       begin
-        obj = remove_resource!(type).lock!
+        obj = take_resource!(type).lock!
       rescue NoElementsOfGivenTypeError
         return
       end
