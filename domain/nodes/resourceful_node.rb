@@ -40,15 +40,6 @@ class ResourcefulNode < Node
   alias_method :support?, :supports?
 
   def trigger!
-    fire!
-  end
-
-  def fire!
-    stage!
-  end
-
-  def stage!
-    # this method only 'stages' changes; does not commit them (drawing from git terms)
 
     if enabled?
       if push?
