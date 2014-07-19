@@ -73,11 +73,11 @@ class Converter < ResourcelessNode
   def put_resource!(res,edge=nil)
     inv { !edge.nil? && edge.frozen? }
     if all?
-      if incoming_edges.all? { |edge| edge.test_ping? }
+      if incoming_edges.all? { |e| e.test_ping? }
         push_all!
       end
     elsif any?
-      add_to_contributed_resources!(edge, res)
+      add_to_contributed_resources!(res,edge)
       if in_conditions_met?
         push_all!
       end
@@ -131,7 +131,7 @@ class Converter < ResourcelessNode
   # A Converter may receive its needed resources across turns
   # so there must be a way to keep count of which edges have already
   # 'given their contribution' to this Converter.
-  def add_to_contributed_resources!(edge, resource)
+  def add_to_contributed_resources!(resource,edge)
     @resources_contributed.fetch(edge).put!(resource)
   end
 
