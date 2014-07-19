@@ -90,6 +90,7 @@ describe Pool do
 
     p1 = Pool.new name: 'typed pool'
     5.times { p1.put_resource! Token.new }
+    p1.unlock_resources!
     2.times { p1.take_resource! }
 
 
@@ -99,33 +100,6 @@ describe Pool do
 
   end
 
-
-  it 'knows that Token and subclasses are not the same thing' do
-
-    #i need to check the types very precisely
-
-    Object.const_set(:Subtype, Class.new(Token))
-
-    p1 = Pool.new name: 'typed pool', initial_value: {Subtype => 10}
-
-    #if nothing is given, just return everything
-    expect(p1.resource_count).to eq 10
-
-    expect { p1.resource_count(Token) }.to raise_error UnsupportedTypeError
-
-    p2 = Pool.new name: 'untyped pool'
-
-    p2.put_resource! Token.new
-    p2.put_resource! Token.new
-    p2.put_resource! Token.new
-
-    p2.put_resource! Subtype.new
-    p2.put_resource! Subtype.new
-
-    expect(p2.resource_count(Token)).to eq 3
-    expect(p2.resource_count(Subtype)).to eq 2
-
-  end
 
   it 'is enabled by default' do
 
@@ -194,6 +168,20 @@ describe Pool do
       expect(@p.resource_count{|r| r.is_type?(Football)})
     end
 
+  end
+
+  describe '#put_resource!' do
+    before(:each) do
+      @p = Pool.new name: 'p'
+      @res = instance_double(Token,:lock! => nil, :unlocked? => true)
+    end
+    it 'blocks the resource upon receiving it'do
+
+      expect(@res).to receive(:lock!)
+
+      @p.put_resource!(@res)
+
+    end
   end
 
 end

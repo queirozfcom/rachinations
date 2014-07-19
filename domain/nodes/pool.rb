@@ -44,7 +44,7 @@ class Pool < ResourcefulNode
 
       if supports? type
         @resources.count_where { |r|
-          r.unlocked? && r.instance_of?(type)
+          r.unlocked? && r.is_type?(type)
         }
       else
         raise UnsupportedTypeError.new "Unsupported type: #{type.name}"
@@ -87,10 +87,11 @@ class Pool < ResourcefulNode
 
 
   def put_resource!(obj,edge=nil)
+    inv{obj.unlocked?}
 
     if supports? obj.class
       @resources_added[obj.class] += 1
-      ans=@resources.add!(obj)
+      ans=@resources.add!(obj.lock!)
       fire_triggers!
       ans
     else
@@ -124,7 +125,6 @@ class Pool < ResourcefulNode
       else
         raise Exception.new('What?')
       end
-      res.lock!
       @resources_removed[res.class] += 1
     rescue NoElementsMatchingConditionError
       raise NoElementsFound.new

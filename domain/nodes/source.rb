@@ -50,13 +50,13 @@ class Source < ResourcefulNode
   def take_resource!(type=nil)
 
     if type.nil? && untyped?
-      res = Token.new.lock!
+      res = Token.new
       type_taken = nil
     elsif !type.nil? && supports?(type)
-      res = type.new.lock!
+      res = type.new
       type_taken = type
     else
-      res = self.type.new.lock!
+      res = self.type.new
       type_taken = self.type
     end
 
