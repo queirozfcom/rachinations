@@ -98,33 +98,19 @@ class ResourcefulNode < Node
     }
   end
 
-  def resource_count(type=nil)
-    raise NotImplementedError, "Please update class #{self.class} to respond to: ";
-  end
+  def resource_count(type=nil) raise NotImplementedError, "Please update class #{self.class} to respond to: :#{__callee__}"; end
 
-  def push_any;
-    raise NotImplementedError, "Please update class #{self.class} to respond to: ";
-  end
+  def push_any; raise NotImplementedError, "Please update class #{self.class} to respond to: :#{__callee__}";  end
 
-  def push_all;
-    raise NotImplementedError, "Please update class #{self.class} to respond to: ";
-  end
+  def push_all; raise NotImplementedError, "Please update class #{self.class} to respond to: :#{__callee__}";  end
 
-  def pull_any;
-    raise NotImplementedError, "Please update class #{self.class} to respond to: ";
-  end
+  def pull_any; raise NotImplementedError, "Please update class #{self.class} to respond to: :#{__callee__}"; end
 
-  def pull_all;
-    raise NotImplementedError, "Please update class #{self.class} to respond to: ";
-  end
+  def pull_all; raise NotImplementedError, "Please update class #{self.class} to respond to: :#{__callee__}"; end
 
-  def take_resource!;
-    raise NotImplementedError, "Please update class #{self.class} to respond to: ";
-  end
+  def take_resource!; raise NotImplementedError, "Please update class #{self.class} to respond to: :#{__callee__}"; end
 
-  def put_resource!;
-    raise NotImplementedError, "Please update class #{self.class} to respond to: ";
-  end
+  def put_resource!; raise NotImplementedError, "Please update class #{self.class} to respond to: :#{__callee__}"; end
 
 end
 

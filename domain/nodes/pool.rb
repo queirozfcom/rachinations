@@ -138,21 +138,22 @@ class Pool < ResourcefulNode
     "Pool '#{@name}':  #{@resources.to_s}"
   end
 
-  def take_upto(no_resources, type=nil)
-
-    no_resources.times do
-
-      begin
-        obj = take_resource!(type).lock!
-      rescue NoElementsOfGivenTypeError
-        return
-      end
-
-      yield obj
-
-    end
-
-  end
+  # DEPRECATED 18 Jul 2014
+  # def take_upto(no_resources, type=nil)
+  #
+  #   no_resources.times do
+  #
+  #     begin
+  #       obj = take_resource!(type).lock!
+  #     rescue NoElementsOfGivenTypeError
+  #       return
+  #     end
+  #
+  #     yield obj
+  #
+  #   end
+  #
+  # end
 
   def get_initial_resources(initial_value)
     inv { !self.instance_variable_defined?(:@resources) }
