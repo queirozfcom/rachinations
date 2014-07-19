@@ -20,7 +20,7 @@ describe 'Converter cannonical behavior' do
       # @d.run! 5
 
       expect(@d.get_node('p9').resource_count).to eq 4
-      # expect(@d.get_node('p0').resource_count).to eq 5
+      expect(@d.get_node('p0').resource_count).to eq 5
 
     end
 

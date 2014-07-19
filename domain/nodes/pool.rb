@@ -94,7 +94,7 @@ class Pool < ResourcefulNode
       fire_triggers!
       ans
     else
-      #it's not an error - no action
+      raise UnsupportedTypeError.new
     end
   end
 
