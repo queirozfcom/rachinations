@@ -1,6 +1,6 @@
 require_relative '../spec_helper'
 
-describe 'Converter cannonical behavior' do
+describe 'Converter canonical behavior' do
 
   context "there's just one pool on each side" do
 
