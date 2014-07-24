@@ -1,2 +1,2 @@
-class NoElementsFound < Exception
+class NoElementsFound < StandardError
 end
