@@ -32,7 +32,6 @@ describe Pool do
 
     expect(p.resource_count).to eq 10
 
-
   end
 
   it 'supports types during instantiation' do
@@ -52,38 +51,8 @@ describe Pool do
 
   end
 
-
-  it 'performs a pull_any operation' do
-    skip
-  end
-
-  it 'performs a pull_all operation' do
-    skip
-  end
-
-  it 'performs a push_any operation' do
-    skip
-  end
-
-  it 'performs a push all operation' do
-    skip
-  end
-
-
   it 'can be set to automatic upon instantiation' do
     Pool.new name: 'bar', activation: :automatic
-  end
-
-  it 'can be executed on an individual basis, i.e. not via calling diagram.run! but a method on the pool itself' do
-    skip 'how do i test this without bringing the whole diagram in?'
-  end
-
-  it "knows how many resources it's got" do
-
-    p=Pool.new name: 'foo', initial_value: 82
-
-    expect(p.resource_count).to eq 82
-
   end
 
   it 'knows how many resources were added' do
@@ -153,35 +122,112 @@ describe Pool do
   end
 
   describe '#take_resource!' do
-    before(:each) do
-      @p = Pool.new name: 'p', initial_value: {Mango => 15, Football => 20}
-    end
-    it 'can be called with no parameters' do
-      expect(@p.resource_count).to eq 35
-    end
 
-    it 'can be called with a type as parameter' do
-      expect(@p.resource_count(Mango)).to eq 15
-    end
-
-    it 'can be called with a block' do
-      expect(@p.resource_count{|r| r.is_type?(Football)})
-    end
 
   end
 
   describe '#put_resource!' do
     before(:each) do
       @p = Pool.new name: 'p'
-      @res = instance_double(Token,:lock! => nil, :unlocked? => true)
+      @res = instance_double(Token, lock!: @res, :unlocked? => true)
     end
-    it 'blocks the resource upon receiving it'do
+    it 'blocks the resource upon receiving it' do
 
       expect(@res).to receive(:lock!)
 
       @p.put_resource!(@res)
 
     end
+
+    it 'adds the resource to the store' do
+      bag_dbl = instance_double(ResourceBag)
+      expect(@p).to receive(:resources).and_return(bag_dbl)
+      expect(bag_dbl).to receive(:add!)
+
+      @p.put_resource!(Token.new)
+    end
+
+    it 'fires triggers' do
+      expect(@p).to receive(:fire_triggers!)
+      @p.put_resource!(Token.new)
+    end
+
+  end
+
+  describe '#trigger!' do
+
+
+    context 'when :push_any' do
+
+      before(:each) do
+
+        @p = Pool.new name: 'p', mode: :push_any
+
+        @e = instance_double(Edge, from: @p, to: double(), label: 1)
+        allow(@e).to receive_messages([:push!])
+
+        @p.attach_edge!(@e)
+
+      end
+
+      it 'asks outgoing edges for blocks' do
+
+        expect(@e).to receive(:push_expression).and_return(proc { |r| true == true })
+
+        @p.trigger!
+
+      end
+
+      it 'removes resources from self if given a suitable block' do
+        expect(@e).to receive(:push_expression).and_return(proc { |r| true })
+
+        expect(@p).to receive(:remove_resource!)
+
+        @p.trigger!
+
+      end
+
+      it 'calls push! on edge if it succeeded in removing from self the needed resource for that edge' do
+
+        expect(@e).to receive(:push_expression).and_return( proc{ true==true } )
+
+        res = instance_double(Token)
+
+        expect(@p).to receive(:remove_resource!).and_return(res)
+
+        expect(@e).to receive(:push!).with(res)
+
+        @p.trigger!
+
+      end
+
+      it 'does not call push! on edge if it cannot provide the needed resource' do
+        expect(@e).to receive(:push_expression).and_return( proc{ true })
+
+        expect(@p).to receive(:remove_resource!).and_raise(StandardError)
+
+        expect(@e).not_to receive(:push!)
+
+        @p.trigger!
+
+      end
+
+    end
+
+    context 'when :pull_any' do
+
+
+    end
+
+    context 'when :push_all' do
+
+    end
+
+    context 'when :pull_all' do
+
+    end
+
+
   end
 
 end

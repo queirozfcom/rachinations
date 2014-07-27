@@ -2,131 +2,63 @@ require_relative 'spec_helper'
 
 describe Edge do
 
-  it 'can be created' do
+  describe '#initialize' do
 
-    # i only want to test edge methods so I'll use a mock object and stub the method I need
-    # to call, namely :name.
+    it 'can be created' do
 
-    from = double(:name => 'node1')
+      # i only want to test edge methods so I'll use a mock object and stub the method I need
+      # to call, namely :name.
 
-    to = double(:name => 'node2')
+      from = double(:name => 'node1')
 
-    edge = Edge.new name: 'edge1', from: from, to: to
+      to = double(:name => 'node2')
 
-  end
+      edge = Edge.new name: 'edge1', from: from, to: to
 
-  it "is created with the expected defaults in case attributes aren't provided" do
-    edge = Edge.new name: 'edge', from: Object.new, to: Object.new
+    end
 
-    expect(edge.label).to eq 1
-    expect(edge.types).to eq []
+    it "is created with the expected defaults in case attributes aren't provided" do
+      edge = Edge.new name: 'edge', from: Object.new, to: Object.new
 
-  end
+      expect(edge.label).to eq 1
+      expect(edge.types).to eq []
 
-  it 'can be created with types' do
+    end
 
-    from = double(:name => 'node1')
-    to = double(:name => 'node2')
+    it 'can be created with types' do
 
-    edge = Edge.new name: 'edge1', from: from, to: to, types: [Blue, Black]
+      from = double(:name => 'node1')
+      to = double(:name => 'node2')
 
+      edge = Edge.new name: 'edge1', from: from, to: to, types: [Blue, Black]
 
-    expect(edge.name).to eq('edge1')
-    expect(edge.from).to eq(from)
-    expect(edge.to).to eq(to)
-    expect(edge.support?(Blue)).to be true
-    expect(edge.support?(Black)).to be true
+      expect(edge.name).to eq('edge1')
+      expect(edge.from).to eq(from)
+      expect(edge.to).to eq(to)
+      expect(edge.support?(Blue)).to be true
+      expect(edge.support?(Black)).to be true
 
-  end
+    end
 
-  it 'can be assigned an integer label' do
+    it 'can be assigned an integer label' do
 
-    from = double(:name => 'node1')
-    to = double(:name => 'node2')
+      from = double(:name => 'node1')
+      to = double(:name => 'node2')
 
-    edge = Edge.new name: 'edge1', from: from, to: to, types: [Blue, Red], label: 5
+      edge = Edge.new name: 'edge1', from: from, to: to, types: [Blue, Red], label: 5
 
-    expect(edge.name).to eq 'edge1'
+      expect(edge.name).to eq 'edge1'
 
-    expect(edge.from).to eq from
-    expect(edge.to).to eq to
+      expect(edge.from).to eq from
+      expect(edge.to).to eq to
 
-    expect(edge.support?(Blue)).to be true
-    expect(edge.support?(Black)).not_to be true
-    expect(edge.support?(Red)).to be true
+      expect(edge.support?(Blue)).to be true
+      expect(edge.support?(Black)).not_to be true
+      expect(edge.support?(Red)).to be true
 
-    expect(edge.label).to be 5
+      expect(edge.label).to be 5
 
-  end
-
-end
-
-describe '#ping!' do
-
-  it "is false when node types don't match" do
-
-    node1 = double(enabled?: true, types: [Peach])
-    node2 = double(enabled?: true, types: [Mango])
-
-    allow(node1).to receive(:take_resource!).and_raise NoElementsFound
-
-    e = Edge.new name: 'e', from: node1, to: node2
-
-    expect(e.ping!).to eq false
-
-  end
-
-  it 'is false when edge is typed but no match was found given node types' do
-
-    node1 = double(enabled?: true, types: [Peach])
-    node2 = double(enabled?: true, types: [Mango])
-
-    allow(node1).to receive(:take_resource!).and_raise NoElementsFound
-
-    e = Edge.new name: 'e', from: node1, to: node2, types: [Football, Baseball]
-
-    expect(e.ping!).to eq false
-
-
-  end
-
-  it 'is false when fewer resources than required were moved' do
-
-    node1 = double(enabled?: true, types: [])
-    node2 = double(enabled?: true, types: [])
-
-    $count = 0
-
-    expect(node1).to receive(:take_resource!).exactly(4).times {
-
-      $count += 1
-
-      if $count == 4
-        raise NoElementsFound.new
-      else
-        double()
-      end
-
-    }
-
-    expect(node2).to receive(:put_resource!).exactly(3).times
-
-    e = Edge.new name: 'e', from: node1, to: node2, label: 5
-
-    expect(e.ping!).to eq false
-  end
-
-  it 'is true when all required resources were moved' do
-
-    node1 = double(enabled?: true, types: [])
-    node2 = double(enabled?: true, types: [])
-
-    e = Edge.new name: 'foo', from: node1, to: node2, label: 10
-
-    expect(node1).to receive(:take_resource!).exactly(10).times.and_return(double())
-    expect(node2).to receive(:put_resource!).exactly(10).times
-
-    expect(e.ping!).to eq true
+    end
 
   end
 
@@ -194,5 +126,131 @@ describe '#ping!' do
     end
 
   end
+
+  describe '#pull_expression' do
+
+    before(:each) do
+      @e = Edge.new name: 'e', from: double(), to: double()
+
+      @strat = instance_double(ValidTypes)
+      allow(@e).to receive(:strategy).and_return(@strat)
+    end
+
+    it 'forwards the call to a strategy' do
+      blk=proc { |r| true }
+      expect(@strat).to receive(:pull_condition).and_return(blk)
+      @e.pull_expression
+    end
+
+  end
+
+  describe '#push_expression' do
+    before(:each) do
+      @e = Edge.new name: 'e', from: double(), to: double()
+
+      @strat = instance_double(ValidTypes)
+      allow(@e).to receive(:strategy).and_return(@strat)
+    end
+
+    it 'forwards the call to a strategy' do
+      blk=proc { |r| true }
+      expect(@strat).to receive(:push_condition).and_return(blk)
+      received_blk = @e.push_expression
+      expect(received_blk).to be blk
+
+    end
+  end
+
+  describe '#pull!' do
+
+    context 'when edge has label 1' do
+
+      before(:each) do
+        @p1 = instance_double(Node, types: [], enabled?: true)
+        @p2 = instance_double(Node, types: [], enabled?: true)
+        @e = Edge.new name: 'e', from: @p1, to: @p2
+      end
+
+      it 'sends take_resource! with a block to to_node' do
+
+
+      end
+
+      it 'returns a resource in case it succeeded' do
+
+      end
+
+      it 'raises an exception if it cannot pull the one resource' do
+
+      end
+
+    end
+
+    context 'when edge has label greater than 1' do
+
+      it 'sends #get_block to self before pulling anything each time' do
+
+      end
+
+      it 'sends #take_resource! with a block from node as many times as it has' do
+        # as many times as the label tells it to
+
+      end
+
+      it 'raises no exception if at least one resource (but not all) got pulled' do
+        # because the semantics of a label is 'at most' that many resources
+        # if not all could be pulled, it's not an error.
+      end
+
+      it 'raises exception if no resources could be pulled' do
+
+      end
+
+    end
+
+    it 'does not send put_resource! to the caller' do
+      # it merely returns the resource
+
+    end
+
+
+  end
+
+  describe '#push!' do
+
+
+    context 'when edge has label 1' do
+
+      before(:each) do
+        @p1 = instance_double(Node, types: [], enabled?: true)
+        @p2 = instance_double(Node, types: [], enabled?: true)
+        @e = Edge.new name: 'e', from: @p1, to: @p2
+      end
+      it 'sends put_resource! to to_node' do
+        # passing the same parameter it was given by the caller
+        res = instance_double(Token,type:Token)
+        expect(@p2).to receive(:put_resource!).with(res)
+        @e.push!(res)
+
+      end
+
+      it 'raises an exception if the push was unsuccessful' do
+        # wrap the exception raised by to node or let it bubble up?
+      end
+
+
+    end
+
+    context 'when edge has label greater than 1' do
+
+      it 'raises error if no resources could be sent' do
+
+      end
+
+    end
+
+
+  end
+
 
 end

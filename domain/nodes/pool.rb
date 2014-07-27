@@ -33,17 +33,57 @@ class Pool < ResourcefulNode
 
   end
 
+  def trigger!
+
+    if enabled?
+      if push? && any?
+
+        outgoing_edges
+        .shuffle
+        .each do |edge|
+          begin
+            blk = edge.push_expression
+          rescue => ex
+            puts "Could not get a block for one Edge, but this is push_any so I'll go ahead."
+            next
+          end
+
+          edge.label.times do
+            begin
+              res = remove_resource!(&blk)
+            rescue => ex
+              puts "Failed to remove this resource. Let's try another Edge, perhaps?"
+              break
+            end
+
+            edge.push!(res)
+
+          end
+
+        end
+
+      elsif pull?
+
+        edges
+        .shuffle
+        .select { |e| e.to?(self) }
+        .each { |e| e.ping! }
+
+      end
+
+    end
+  end
 
   def resource_count(type=nil, &block)
 
     raise ArgumentError.new('Please provide either a type or a block, but not both.') if block_given? && !type.nil?
 
     if type.nil? && !block_given?
-      @resources.count_where { |r| r.unlocked? }
+      resources.count_where { |r| r.unlocked? }
     elsif type.is_a?(Class) && type <= Token
 
       if supports? type
-        @resources.count_where { |r|
+        resources.count_where { |r|
           r.unlocked? && r.is_type?(type)
         }
       else
@@ -54,7 +94,7 @@ class Pool < ResourcefulNode
       # client doesn't need to know about locked vs unlocked resources
       unlock_condition = Proc.new { |r| r.unlocked? }
 
-      @resources.count_where { |r| unlock_condition.call(r) && block.call(r) }
+      resources.count_where { |r| unlock_condition.call(r) && block.call(r) }
 
     else
       raise ArgumentError.new("Wrong parameter types passed to #{__callee__}")
@@ -86,50 +126,31 @@ class Pool < ResourcefulNode
   end
 
 
-  def put_resource!(obj,edge=nil)
-    inv{obj.unlocked?}
+  def put_resource!(obj, edge=nil)
+
+    inv { obj.unlocked? }
 
     if supports? obj.class
       @resources_added[obj.class] += 1
-      ans=@resources.add!(obj.lock!)
+      resources.add!(obj.lock!)
       fire_triggers!
-      ans
     else
       raise UnsupportedTypeError.new
     end
   end
 
-  def take_resource!(type=nil, &expression)
+  def take_resource!(&expression)
 
-    raise ArgumentError.new('Please provide either a type or a block, but not both.') if block_given? && !type.nil?
-
-    begin
-
-      if type.nil? && !block_given?
-        res = @resources.get_where { |r| r.unlocked? }
-      elsif type.is_a?(Class) && type <= Token
-
-        if supports? type
-          res = @resources.get_where { |r|
-            r.unlocked? && r.is_type?(type)
-          }
-        else
-          raise UnsupportedTypeError.new "Unsupported type: #{type.name}"
-        end
-      elsif block_given?
-
-        # client doesn't need to know about locked vs unlocked resources
-        unlock_condition = Proc.new { |r| r.unlocked? }
-
-        res=@resources.get_where { |r| unlock_condition.call(r) && expression.call(r) }
-      else
-        raise Exception.new('What?')
-      end
-      @resources_removed[res.class] += 1
-    rescue NoElementsMatchingConditionError
-      raise NoElementsFound.new
+    unless block_given?
+      expression = proc {|res| true}
     end
+
+    raise StandardError.new unless resources.count_where(&expression) > 0
+
+    res=remove_resource! &expression
+
     fire_triggers!
+
     res
 
   end
@@ -192,6 +213,22 @@ class Pool < ResourcefulNode
 
   def types
     @types
+  end
+
+  private
+
+  attr_reader :resources
+
+  def remove_resource!(&expression)
+
+    # client doesn't need to know about locked vs unlocked resources
+    unlocked_expression = Proc.new { |r| r.unlocked? }
+
+    res=resources.get_where { |r| unlocked_expression.call(r) && expression.call(r) }
+
+    @resources_removed[res.class] += 1
+
+    res
   end
 
   def options
