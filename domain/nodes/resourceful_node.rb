@@ -39,31 +39,10 @@ class ResourcefulNode < Node
 
   alias_method :support?, :supports?
 
-  def trigger!
-
-    if enabled?
-      if push?
-
-        edges
-        .shuffle
-        .select { |e| e.from?(self) }
-        .each { |e| e.ping! }
-
-      elsif pull?
-
-        edges
-        .shuffle
-        .select { |e| e.to?(self) }
-        .each { |e| e.ping! }
-
-      end
-
-    end
-  end
 
   def resources_added(klass=nil)
     if klass.nil?
-      @resources_added.values.reduce(0){|acc,elem| acc += elem}
+      @resources_added.values.reduce(0) { |acc, elem| acc += elem }
     else
       @resources_added[klass]
     end
@@ -71,7 +50,7 @@ class ResourcefulNode < Node
 
   def resources_removed(klass=nil)
     if klass.nil?
-      @resources_removed.values.reduce(0){ |acc,elem| acc += elem }
+      @resources_removed.values.reduce(0) { |acc, elem| acc += elem }
     else
       @resources_removed[klass]
     end
@@ -89,19 +68,29 @@ class ResourcefulNode < Node
     }
   end
 
-  def resource_count(type=nil) raise NotImplementedError, "Please update class #{self.class} to respond to: :#{__callee__}"; end
+  def trigger!
+    raise NotImplementedError, "Please update class #{self.class} to respond to: :#{__callee__}"
+  end
 
-  def push_any; raise NotImplementedError, "Please update class #{self.class} to respond to: :#{__callee__}";  end
+  def resource_count(type=nil)
+    raise NotImplementedError, "Please update class #{self.class} to respond to: :#{__callee__}"
+  end
 
-  def push_all; raise NotImplementedError, "Please update class #{self.class} to respond to: :#{__callee__}";  end
+  def push_any
+    raise NotImplementedError, "Please update class #{self.class} to respond to: :#{__callee__}"
+  end
 
-  def pull_any; raise NotImplementedError, "Please update class #{self.class} to respond to: :#{__callee__}"; end
+  def push_all
+    raise NotImplementedError, "Please update class #{self.class} to respond to: :#{__callee__}"
+  end
 
-  def pull_all; raise NotImplementedError, "Please update class #{self.class} to respond to: :#{__callee__}"; end
+  def pull_any
+    raise NotImplementedError, "Please update class #{self.class} to respond to: :#{__callee__}"
+  end
 
-  def take_resource!; raise NotImplementedError, "Please update class #{self.class} to respond to: :#{__callee__}"; end
-
-  def put_resource!; raise NotImplementedError, "Please update class #{self.class} to respond to: :#{__callee__}"; end
+  def pull_all
+    raise NotImplementedError, "Please update class #{self.class} to respond to: :#{__callee__}"
+  end
 
 end
 

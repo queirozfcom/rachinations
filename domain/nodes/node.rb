@@ -125,14 +125,12 @@ class Node
     self
   end
 
-  def stage!; raise NotImplementedError, "Please update class #{self.class} to respond to :#{__callee__}" ; end
-
   def pull?
-    @mode === :pull || @mode === :pull_any? || @mode === :pull_all
+    @mode === :pull || @mode === :pull_any || @mode === :pull_all
   end
 
   def push?
-    @mode === :push || @mode === :push_any? || @mode === :push_all
+    @mode === :push || @mode === :push_any || @mode === :push_all
   end
 
   def automatic?
@@ -153,6 +151,26 @@ class Node
 
   def all?
     @mode === :push_all || @mode === :pull_all
+  end
+
+  # Tries to take any resource that, when yielded to expression, returns true.
+  # In other words, tries to take any resource which matches the expression
+  # block given as parameter.
+  #
+  # @raise [StandardError] in case no resources in this node match given
+  #  expression block.
+  # @param expression [Proc] the expression
+  def take_resource!(&expression)
+    raise NotImplementedError, "Please update class #{self.class} to respond to: :#{__callee__}"
+  end
+
+  # Places a single resource into this Node. Each subclass may then
+  # decide what to do with it; examples are to store the resource and/or to
+  # fire triggers.
+  #
+  # @raise [StandardError] in case this node won't take the resource
+  def put_resource!(res)
+    raise NotImplementedError, "Please update class #{self.class} to respond to: :#{__callee__}"
   end
 
 end
