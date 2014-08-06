@@ -2,19 +2,6 @@ require_relative '../../domain/nodes/pool'
 
 class Source < ResourcefulNode
 
-  attr_reader :type
-
-  def options
-    [:type, :mode, :activation, :diagram, :conditions, name: :required]
-  end
-
-  def defaults
-    {
-        type: nil,
-        mode: :push,
-        activation: :automatic
-    }
-  end
 
   def initialize(hsh={})
 
@@ -69,7 +56,49 @@ class Source < ResourcefulNode
   end
 
   def types
-    [type]
+    [@type]
+  end
+
+  def trigger!
+    if enabled?
+      if push? && any?
+
+        outgoing_edges
+        .shuffle
+        .each do |edge|
+          begin
+            blk = edge.push_expression
+          rescue => ex
+            puts "Could not get a block for one Edge, but this is push_any so I'll go ahead."
+            next
+          end
+
+          edge.label.times do
+            begin
+              res = remove_resource!(&blk)
+            rescue => ex
+              puts "Failed to remove this resource. Let's try another Edge, perhaps?"
+              break
+            end
+
+            edge.push!(res)
+
+          end
+
+        end
+
+      elsif pull?
+
+        raise StandardError('pull needs work still...')
+
+        edges
+        .shuffle
+        .select { |e| e.to?(self) }
+        .each { |e| e.ping! }
+
+      end
+
+    end
   end
 
   def resources_added
@@ -77,10 +106,55 @@ class Source < ResourcefulNode
   end
 
   def resources_removed(type=nil)
-    @resources_removed[type]
+
+    if type.nil?
+      @resources_removed[Token]
+    else
+      @resources_removed[type]
+    end
+
   end
 
   def resource_count(type=nil)
     return 0
   end
+
+  private
+
+  def remove_resource!(&expression)
+
+    #we'll need to change this if source starts accepting
+    # more than a single type
+    inv{types.size === 1}
+
+    if type.nil?
+      res = Token.new
+    else
+      res = type.new
+    end
+
+    if(expression.call(res))
+      @resources_removed[res.type] += 1
+      res
+    else
+      raise StandardError.new("This Source cannot provide a resource matching given expression.")
+    end
+
+
+  end
+
+  attr_reader :type
+
+  def options
+    [:type, :mode, :activation, :diagram, :conditions, name: :required]
+  end
+
+  def defaults
+    {
+        type: nil,
+        mode: :push_any,
+        activation: :automatic
+    }
+  end
+
 end
