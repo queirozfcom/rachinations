@@ -3,7 +3,7 @@ require_relative 'strategy'
 class ValidTypes < Strategy
 
   # @note from_node_types are only included in the constructor's argument
-  #  list for completeness, because they aren't used anywhere.
+  #  list for completeness, but they aren't used anywhere.
   def initialize(from_node_types,edge_types, to_node_types)
     @edge_types = edge_types
     @to_node_types = to_node_types
