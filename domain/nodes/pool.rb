@@ -64,6 +64,8 @@ class Pool < ResourcefulNode
 
       elsif pull?
 
+        raise StandardError.new('pull needs work still...')
+
         edges
         .shuffle
         .select { |e| e.to?(self) }

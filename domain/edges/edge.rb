@@ -145,7 +145,7 @@ class Edge
   #  that satisfy this condition block.
   # @return a resource that satisfies the given block.
   def pull!(&blk)
-
+    raise StandardError.new('didnt do pull! yet')
   end
 
   private
