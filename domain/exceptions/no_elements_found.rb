@@ -1,2 +1,2 @@
-class NoElementsFound < StandardError
+class NoElementsFound < RuntimeError
 end

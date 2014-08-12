@@ -121,7 +121,7 @@ class Pool < ResourcefulNode
       expression = proc { |res| true }
     end
 
-    raise StandardError.new unless resources.count_where(&expression) > 0
+    raise RuntimeError.new unless resources.count_where(&expression) > 0
 
     res=remove_resource! &expression
 
@@ -251,7 +251,7 @@ class Pool < ResourcefulNode
       edge.label.times do
         begin
           res = edge.pull!(&blk)
-        rescue StandardError => ex
+        rescue RuntimeError => ex
           puts ex.inspect
           puts "Let's try another Edge, perhaps?"
           break

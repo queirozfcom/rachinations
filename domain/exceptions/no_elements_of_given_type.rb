@@ -1,3 +1,3 @@
-class NoElementsOfGivenTypeError < StandardError
+class NoElementsOfGivenTypeError < RuntimeError
 
 end
