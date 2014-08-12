@@ -38,38 +38,11 @@ class Pool < ResourcefulNode
     if enabled?
       if push? && any?
 
-        outgoing_edges
-        .shuffle
-        .each do |edge|
-          begin
-            blk = edge.push_expression
-          rescue => ex
-            puts "Could not get a block for one Edge, but this is push_any so I'll go ahead."
-            next
-          end
+        push_any!
 
-          edge.label.times do
-            begin
-              res = remove_resource!(&blk)
-            rescue => ex
-              puts "Failed to remove this resource. Let's try another Edge, perhaps?"
-              break
-            end
+      elsif pull? && any?
 
-            edge.push!(res)
-
-          end
-
-        end
-
-      elsif pull?
-
-        raise StandardError.new('pull needs work still...')
-
-        edges
-        .shuffle
-        .select { |e| e.to?(self) }
-        .each { |e| e.ping! }
+        pull_any!
 
       end
 
@@ -144,7 +117,8 @@ class Pool < ResourcefulNode
   def take_resource!(&expression)
 
     unless block_given?
-      expression = proc {|res| true}
+      # if no conditions given, then anything goes.
+      expression = proc { |res| true }
     end
 
     raise StandardError.new unless resources.count_where(&expression) > 0
@@ -160,23 +134,6 @@ class Pool < ResourcefulNode
   def to_s
     "Pool '#{@name}':  #{@resources.to_s}"
   end
-
-  # DEPRECATED 18 Jul 2014
-  # def take_upto(no_resources, type=nil)
-  #
-  #   no_resources.times do
-  #
-  #     begin
-  #       obj = take_resource!(type).lock!
-  #     rescue NoElementsOfGivenTypeError
-  #       return
-  #     end
-  #
-  #     yield obj
-  #
-  #   end
-  #
-  # end
 
   def get_initial_resources(initial_value)
     inv { !self.instance_variable_defined?(:@resources) }
@@ -233,6 +190,10 @@ class Pool < ResourcefulNode
     res
   end
 
+  def add_resource!(res)
+    resources.add!(res)
+  end
+
   def options
     [:conditions, :name, :activation, :mode, :types, :initial_value, :diagram]
   end
@@ -249,4 +210,58 @@ class Pool < ResourcefulNode
   def aliases
     {:initial_values => :initial_value}
   end
+
+  def push_any!
+    outgoing_edges
+    .shuffle
+    .each do |edge|
+      begin
+        blk = edge.push_expression
+      rescue => ex
+        puts "Could not get a block for one Edge, but this is push_any so I'll go ahead."
+        next #other edges might still be able to serve me.
+      end
+
+      edge.label.times do
+        begin
+          res = remove_resource!(&blk)
+        rescue => ex
+          puts "Failed to remove this resource. Let's try another Edge, perhaps?"
+          break
+        end
+
+        edge.push!(res)
+
+      end
+
+    end
+  end
+
+  def pull_any!
+    incoming_edges
+    .shuffle
+    .each do |edge|
+      begin
+        blk = edge.pull_expression
+      rescue => ex
+        puts "Could not get a block for one Edge, but this is pull_any so I'll go ahead."
+        next #other edges might still be able to serve me.
+      end
+
+      edge.label.times do
+        begin
+          res = edge.pull!(&blk)
+        rescue StandardError => ex
+          puts ex.inspect
+          puts "Let's try another Edge, perhaps?"
+          break
+        end
+
+        add_resource!(res.lock!)
+
+      end
+
+    end
+  end
+
 end

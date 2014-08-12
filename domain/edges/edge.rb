@@ -131,8 +131,8 @@ class Edge
     begin
       to.put_resource!(res)
     rescue => e
-      # just to make it clear
-      raise e
+      # just to make it clear that it bubbles
+      raise StandardError.new('Push failed')
     end
   end
 
@@ -145,7 +145,15 @@ class Edge
   #  that satisfy this condition block.
   # @return a resource that satisfies the given block.
   def pull!(&blk)
-    raise StandardError.new('didnt do pull! yet')
+    begin
+      res=from.take_resource!(&blk)
+    rescue => e
+      # just to make it clear that it bubbles
+      raise StandardError.new("Pull failed")
+    else
+      res
+    end
+
   end
 
   private
