@@ -92,17 +92,17 @@ class Edge
   # Takes a resource and puts it into the node at the other
   # end of this Edge.
   #
-  # @raise [StandardError] in case the receiving node or this Edge
+  # @raise [RuntimeError] in case the receiving node or this Edge
   #  won't accept the resource sent.
   # @param res the resource to send.
   def push!(res)
-    raise StandardError.new "This Edge does not support type: #{res.type}" unless supports?(res.type)
+    raise RuntimeError.new "This Edge does not support type: #{res.type}" unless supports?(res.type)
 
     begin
       to.put_resource!(res)
     rescue => e
       # just to make it clear that it bubbles
-      raise StandardError.new('Push failed')
+      raise RuntimeError.new('Push failed')
     end
   end
 
@@ -111,7 +111,7 @@ class Edge
   #
   # @param [Proc] blk  block that will define what resource the other node
   #  should send.
-  # @raise [StandardError] in case the other node could provide no resources
+  # @raise [RuntimeError] in case the other node could provide no resources
   #  that satisfy this condition block.
   # @return a resource that satisfies the given block.
   def pull!(&blk)
@@ -119,7 +119,7 @@ class Edge
       res=from.take_resource!(&blk)
     rescue => e
       # just to make it clear that it bubbles
-      raise StandardError.new("Pull failed")
+      raise RuntimeError.new("Pull failed")
     else
       res
     end

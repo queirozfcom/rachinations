@@ -157,7 +157,7 @@ class Node
   # In other words, tries to take any resource which matches the expression
   # block given as parameter.
   #
-  # @raise [StandardError] in case no resources in this node match given
+  # @raise [RuntimeError] in case no resources in this node match given
   #  expression block.
   # @param expression [Proc] the expression
   def take_resource!(&expression)
@@ -168,7 +168,7 @@ class Node
   # decide what to do with it; examples are to store the resource and/or to
   # fire triggers.
   #
-  # @raise [StandardError] in case this node won't take the resource
+  # @raise [RuntimeError] in case this node won't take the resource
   def put_resource!(res)
     raise NotImplementedError, "Please update class #{self.class} to respond to: :#{__callee__}"
   end

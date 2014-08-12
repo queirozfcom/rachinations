@@ -204,7 +204,7 @@ describe Pool do
       it 'does not call push! on edge if it cannot provide the needed resource' do
         expect(@e).to receive(:push_expression).and_return( proc{ true })
 
-        expect(@p).to receive(:remove_resource!).and_raise(StandardError)
+        expect(@p).to receive(:remove_resource!).and_raise(RuntimeError)
 
         expect(@e).not_to receive(:push!)
 

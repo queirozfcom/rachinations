@@ -1,2 +1,2 @@
-class UnsupportedTypeError < StandardError
+class UnsupportedTypeError < RuntimeError
 end

@@ -89,7 +89,7 @@ class Source < ResourcefulNode
 
       elsif pull?
 
-        raise StandardError('pull needs work still...')
+        raise RuntimeError('pull needs work still...')
 
         edges
         .shuffle
@@ -137,7 +137,7 @@ class Source < ResourcefulNode
       @resources_removed[res.type] += 1
       res
     else
-      raise StandardError.new("This Source cannot provide a resource matching given expression.")
+      raise RuntimeError.new("This Source cannot provide a resource matching given expression.")
     end
 
 

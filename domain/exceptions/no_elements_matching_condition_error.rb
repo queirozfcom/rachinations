@@ -1,2 +1,2 @@
-class NoElementsMatchingConditionError < StandardError
+class NoElementsMatchingConditionError < RuntimedError
 end
