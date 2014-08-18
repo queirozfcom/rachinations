@@ -37,8 +37,8 @@ describe Converter do
       before(:each) do
 
         @c = Converter.new name: 'c'
-        @edge_in = instance_double(Edge, from: double(), to: @c, freeze: nil)
-        @edge_out = instance_double(Edge, from: @c, to: double(), freeze: nil)
+        @edge_in = instance_double(Edge, from: double(), to: @c, freeze: nil,label:1)
+        @edge_out = instance_double(Edge, from: @c, to: double(), freeze: nil,label:1)
         @c.attach_edge!(@edge_in).attach_edge!(@edge_out)
 
       end
@@ -185,16 +185,17 @@ describe Converter do
 
     before(:each) do
       @c = Converter.new name: 'c'
-      @edge_in = instance_double(Edge,from: double(), to: @c,freeze: nil)
-      @edge_out = instance_double(Edge,from: @c, to: double(),freeze: nil)
-      @c.attach_edge!(@edge_out).attach_edge!(@edge_in)
+      @edge_in = instance_double(Edge,from: double(), to: @c,freeze: nil,frozen?:true,label:1)
+      @edge_out = instance_double(Edge,from: @c, to: double(),freeze: nil, frozen?: true,label:1)
+      @c.attach_edge!(@edge_out)
+      @c.attach_edge!(@edge_in)
     end
 
     it 'does not ping incoming edges' do
 
       expect(@edge_in).not_to receive(:test_ping?)
-      @edge_out.as_null_object
-      @c.put_resource!(@edge_in.freeze, double())
+      # @edge_out.as_null_object
+      @c.put_resource!(double(),@edge_in)
     end
 
     it 'pings as many outgoing nodes as there are when in all mode' do
@@ -251,6 +252,29 @@ describe Converter do
 
     end
 
+
+  end
+
+  describe '#attach_edge'do
+
+    before(:each)do
+      @c = Converter.new name:'c'
+      @e = Edge.new name:'e', from:double(),to:@c
+
+    end
+
+    it 'adds attached edge to resources_contributed hash' do
+
+      hsh = Hash.new
+
+      expect(@c).to receive(:resources_contributed).and_return(hsh)
+
+      expect(hsh).to receive(:store)
+
+      @c.attach_edge!(@e)
+
+
+    end
 
   end
 

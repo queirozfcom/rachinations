@@ -64,7 +64,7 @@ describe Edge do
 
   describe '#test_ping?' do
     before(:each) do
-      @strategy=double(:get_condition => proc {})
+      @strategy=double(:condition => proc {})
       @to = instance_double(ResourcefulNode, :disabled? => false, :types => double())
     end
 

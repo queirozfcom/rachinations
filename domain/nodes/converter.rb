@@ -18,8 +18,6 @@ class Converter < ResourcelessNode
 # porem o tipo do edge tem vantagem na definicao da saida
 # O exemplo com 3 saidas mostra isso
 
-  attr_reader :resources_contributed
-
   def initialize(hsh={})
     check_options!(hsh)
     hsh = set_defaults(hsh)
@@ -92,7 +90,10 @@ class Converter < ResourcelessNode
   # @param [Edge] edge
   def attach_edge!(edge)
     super
-    @resources_contributed.store(edge.freeze, Fifo.new)
+
+    resources_contributed.store(edge,Fifo.new)
+
+
     self
   end
 
@@ -120,6 +121,8 @@ class Converter < ResourcelessNode
 
   private
 
+  attr_accessor :resources_contributed
+
   def pull_all!
     incoming_edges.shuffle.each { |e| e.ping! }
   end
@@ -132,11 +135,11 @@ class Converter < ResourcelessNode
   # so there must be a way to keep count of which edges have already
   # 'given their contribution' to this Converter.
   def add_to_contributed_resources!(resource,edge)
-    @resources_contributed.fetch(edge).put!(resource)
+    resources_contributed.fetch(edge).put!(resource)
   end
 
   def init_resources
-    edges.reduce(Hash.new) { |hash, edge| hash.store(edge.freeze, Fifo.new) }
+    edges.reduce(Hash.new) { |hash, edge| hash.store(edge.object_id, Fifo.new) }
   end
 
   def options

@@ -191,7 +191,9 @@ class Pool < ResourcefulNode
   end
 
   def add_resource!(res)
-    resources.add!(res)
+
+    resources.add!(res) and @resources_added[res.type]+=1
+
   end
 
   def options
@@ -201,7 +203,7 @@ class Pool < ResourcefulNode
   def defaults
     {
         activation: :passive,
-        mode: :pull,
+        mode: :pull_any,
         types: [],
         initial_value: 0
     }
@@ -243,7 +245,7 @@ class Pool < ResourcefulNode
     .each do |edge|
       begin
         blk = edge.pull_expression
-      rescue => ex
+      rescue RuntimeError => ex
         puts "Could not get a block for one Edge, but this is pull_any so I'll go ahead."
         next #other edges might still be able to serve me.
       end
@@ -252,7 +254,6 @@ class Pool < ResourcefulNode
         begin
           res = edge.pull!(&blk)
         rescue RuntimeError => ex
-          puts ex.inspect
           puts "Let's try another Edge, perhaps?"
           break
         end

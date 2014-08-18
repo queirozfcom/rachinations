@@ -74,12 +74,13 @@ class Node
   end
 
   def triggers
-    if @triggers.is_a? Array
-      @triggers
-    else
-      @triggers = Array.new
-      @triggers
-    end
+    @triggers ||= Array.new
+    # if @triggers.is_a? Array
+    #   @triggers
+    # else
+    #   @triggers = Array.new
+    #   @triggers
+    # end
   end
 
   def clear_triggers

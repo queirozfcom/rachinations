@@ -34,7 +34,7 @@ class Edge
   def test_ping?(require_all=false)
     return false if from.disabled? || to.disabled?
 
-    condition = strategy.get_condition
+    condition = strategy.condition
 
     available_resources = from.resource_count(&condition)
 
@@ -56,6 +56,14 @@ class Edge
   end
 
   alias_method :support?, :supports?
+
+  def enabled?
+    true
+  end
+
+  def disabled?
+    not enabled?
+  end
 
   def untyped?
     types.empty?
@@ -129,7 +137,7 @@ class Edge
   private
 
   def strategy
-    ValidTypes.new(from.types, self.types, to.types)
+    ValidTypes.new(from, self, to)
   end
 
   def defaults

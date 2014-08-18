@@ -46,7 +46,7 @@ describe NonDeterministicDiagram do
         to: 'g1',
     }
 
-  generator.run!(100) #should be enough
+    generator.run!(100) #should be enough
 
     # don´t know what to test...
     expect(generator.get_node('g3').resource_count).to eq 5
@@ -56,19 +56,58 @@ describe NonDeterministicDiagram do
   include DSL
 
   it ' makes a train run' do
-    n=non_deterministic_diagram 'test_diagram' do
-      node 'p1', Pool, mode: :push, activation: :automatic, initial_value: 8
-      node 'p2', Pool, mode: :push, activation: :automatic
-      node 'p3', Pool, mode: :push, activation: :automatic
-      node 'p4', Pool, mode: :push, activation: :automatic
-      edge 'e1', Edge, 'p1', 'p2'
-      edge 'e2', Edge, 'p2', 'p3'
-      edge 'e4', Edge, 'p3', 'p4'
-    end
 
-    n.run!(200)
 
-    expect(n.get_node('p4').resource_count).to eq 8
+    d = NonDeterministicDiagram.new 'dia'
+
+    d.add_node! Pool, {
+        name: 'p1',
+        mode: :push_any,
+        activation: :automatic,
+        initial_value: 8
+    }
+
+    d.add_node! Pool, {
+        name: 'p2',
+        mode: :push_any,
+        activation: :automatic
+    }
+
+    d.add_node! Pool, {
+        name: 'p3',
+        mode: :push_any,
+        activation: :automatic
+    }
+
+    d.add_node! Pool, {
+        name: 'p4',
+        mode: :push_any,
+        activation: :automatic
+    }
+
+    d.add_edge! Edge, {
+        name: 'e1',
+        from: 'p1',
+        to: 'p2'
+    }
+    d.add_edge! Edge, {
+        name: 'e2',
+        from: 'p2',
+        to: 'p3'
+    }
+    d.add_edge! Edge, {
+        name: 'e3',
+        from: 'p3',
+        to: 'p4'
+    }
+
+
+    d.run!(200)
+
+    expect(d.get_node('p1').resource_count).to eq 0
+    expect(d.get_node('p2').resource_count).to eq 0
+    expect(d.get_node('p3').resource_count).to eq 0
+    expect(d.get_node('p4').resource_count).to eq 8
 
   end
 

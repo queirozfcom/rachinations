@@ -17,7 +17,6 @@ describe 'Converter canonical behavior' do
       p0 = @d.get_node('p0')
       p9 = @d.get_node('p9')
       5.times{ c.trigger! }
-      # @d.run! 5
 
       expect(@d.get_node('p9').resource_count).to eq 4
       expect(@d.get_node('p0').resource_count).to eq 5

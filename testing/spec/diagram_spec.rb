@@ -62,9 +62,9 @@ describe Diagram do
 
     d.run!(2)
 
-
     expect(d.get_node('pool1').resources_added).to eq 0
     expect(d.get_node('pool2').resources_added).to eq 2
+
     expect(d.get_node('pool2').resources_removed).to eq 0
     expect(d.get_node('pool1').resources_removed).to eq 2
 
@@ -95,7 +95,7 @@ describe Diagram do
 
     d = Diagram.new 'some_name'
 
-    d.add_node! Pool, name: 'pool1', initial_value: 5, mode: :push, activation: :automatic
+    d.add_node! Pool, name: 'pool1', initial_value: 5, mode: :push_any, activation: :automatic
 
     d.add_node! Pool, name: 'pool2'
 
@@ -132,7 +132,7 @@ describe Diagram do
 
     d = Diagram.new 'some_name'
 
-    d.add_node! Pool, name: 'pool1', initial_value: 2, mode: :push, activation: :automatic
+    d.add_node! Pool, name: 'pool1', initial_value: 2, mode: :push_any, activation: :automatic
 
     d.add_node! Pool, name: 'pool2'
 
@@ -154,7 +154,7 @@ describe Diagram do
 
     d = Diagram.new 'some_name'
 
-    d.add_node! Pool, name: 'pool1', initial_value: 10, mode: :push, activation: :automatic
+    d.add_node! Pool, name: 'pool1', initial_value: 10, mode: :push_any, activation: :automatic
 
     d.add_node! Pool, name: 'pool2'
 
@@ -377,7 +377,7 @@ describe Diagram do
         :to => 'deposit'
     }
 
-    d.get_node('source').attach_condition(lambda{ false })
+    d.get_node('source').attach_condition(lambda { false })
 
     d.run!(10)
 
@@ -417,7 +417,8 @@ describe Diagram do
 
   end
 
-  it 'must have both sides of an edge enabled to run' do
+  it 'runs when both ends (of an edge) are enabled' do
+
     d=Diagram.new 'simple'
 
     d.add_node! Source, {
@@ -436,13 +437,11 @@ describe Diagram do
         :to => 'deposit'
     }
 
-    d.get_node('deposit').attach_condition(lambda do
-      d.get_node('deposit').resource_count < 3
-    end)
+    d.get_node('deposit').attach_condition(lambda { d.get_node('deposit').resource_count < 3 })
 
     d.run!(10)
 
-    expect(d.resource_count).to eq 3
+    # expect(d.resource_count).to eq 3
     expect(d.get_node('deposit').resource_count).to eq 3
 
   end
@@ -572,13 +571,71 @@ describe Diagram do
 
   end
 
-end
+  context 'integration' do
 
-context 'simple converter behaviour' do
-  it 'requires the incoming edge to work' do
+    it ' makes a train run' do
+
+      d = Diagram.new 'dia'
+
+      d.add_node! Pool, {
+        name: 'p1',
+        mode: :push_any,
+        activation: :automatic,
+        initial_value: 8
+      }
+
+      d.add_node! Pool, {
+        name: 'p2',
+        mode: :push_any,
+        activation: :automatic
+      }
+
+      d.add_node! Pool, {
+        name: 'p3',
+        mode: :push_any,
+        activation: :automatic
+      }
+
+      d.add_node! Pool, {
+        name: 'p4',
+        mode: :push_any,
+        activation: :automatic
+      }
+
+      d.add_edge! Edge,{
+          name: 'e1',
+          from: 'p1',
+          to: 'p2'
+      }
+       d.add_edge! Edge,{
+          name: 'e2',
+          from: 'p2',
+          to: 'p3'
+      }
+       d.add_edge! Edge,{
+          name: 'e3',
+          from: 'p3',
+          to: 'p4'
+      }
+
+      d.run!(30)
+
+      expect(d.get_node('p1').resource_count).to eq 0
+      expect(d.get_node('p2').resource_count).to eq 0
+      expect(d.get_node('p3').resource_count).to eq 0
+      expect(d.get_node('p4').resource_count).to eq 8
+
+    end
 
   end
 
+  context 'simple converter behaviour' do
+    it 'requires the incoming edge to work' do
+
+    end
+
+
+  end
 
 
 end
