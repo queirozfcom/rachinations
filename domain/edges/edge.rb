@@ -51,6 +51,11 @@ class Edge
 
   end
 
+  # the code is the code but sometimes it helps to specify what action
+  # we are talking about so as to make code more understandable
+  alias_method :test_pull?, :test_ping?
+  alias_method :test_push?, :test_ping?
+
   def supports?(type)
     types.empty? || types.include?(type)
   end
