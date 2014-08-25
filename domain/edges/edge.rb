@@ -45,7 +45,7 @@ class Edge
     elsif available_resources < label && require_all
       false
     else
-      # only some resources are able to pass
+      # only some resources are able to pass but it's not require_all
       true
     end
 
@@ -112,10 +112,10 @@ class Edge
     raise RuntimeError.new "This Edge does not support type: #{res.type}" unless supports?(res.type)
 
     begin
-      to.put_resource!(res)
+      to.put_resource!(res,self)
     rescue => e
       # just to make it clear that it bubbles
-      raise RuntimeError.new('Push failed')
+      raise RuntimeError.new e.message+" => "+'Push failed'
     end
   end
 
@@ -137,6 +137,10 @@ class Edge
       res
     end
 
+  end
+
+  def to_s
+    "Edge '#{@name}', from '#{from.name}' to '#{to.name}'"
   end
 
   private

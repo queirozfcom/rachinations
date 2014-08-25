@@ -14,12 +14,7 @@ class Node
   end
 
   def conditions
-    if @conditions.is_a? Array
-      @conditions
-    else
-      @conditions = Array.new
-      @conditions
-    end
+    @conditions ||= Array.new
   end
 
   def edges
@@ -52,7 +47,7 @@ class Node
     if edges.include?(edge)
       edges.pop(edge)
     else
-      raise RuntimeError, "This #{self.class} does not include this #{edge.class}"
+      raise RuntimeError "This #{self.class} does not include this #{edge.class}"
     end
   end
 
@@ -75,12 +70,6 @@ class Node
 
   def triggers
     @triggers ||= Array.new
-    # if @triggers.is_a? Array
-    #   @triggers
-    # else
-    #   @triggers = Array.new
-    #   @triggers
-    # end
   end
 
   def clear_triggers

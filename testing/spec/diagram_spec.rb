@@ -90,7 +90,6 @@ describe Diagram do
 
   end
 
-
   it "runs for two turns with two pools using PUSH and there's the correct amount of resources at the end" do
 
     d = Diagram.new 'some_name'
@@ -218,7 +217,6 @@ describe Diagram do
     expect(d.get_node('deposit').resource_count).to eq 10
 
   end
-
 
   it 'aborts after specified turns as a safeguard against infinite loops given as stopping condition' do
 
@@ -522,7 +520,6 @@ describe Diagram do
 
   end
 
-
   it 'makes triggers trig! more than once with instant_resource_count' do
     d=Diagram.new 'simple'
 
@@ -630,7 +627,40 @@ describe Diagram do
   end
 
   context 'simple converter behaviour' do
-    it 'requires the incoming edge to work' do
+    it 'runs an untyped converter connected to two pools' do
+
+      d=Diagram.new 'simple'
+
+      d.add_node! Pool, {
+          :name => 'from',
+          :initial_value => 5
+      }
+
+      d.add_node! Pool, {
+          :name => 'to',
+          :initial_value => 0
+      }
+
+      d.add_node! Converter,{
+          :name => 'c',
+          :activation => :automatic
+      }
+
+      d.add_edge! Edge, {
+          :name => 'c1',
+          :from => 'from',
+          :to => 'c'
+      }
+
+      d.add_edge! Edge, {
+          :name => 'c2',
+          :from => 'c',
+          :to => 'to'
+      }
+
+      d.run!(4)
+
+      expect(d.get_node('to').resource_count).to eq 4
 
     end
 

@@ -69,7 +69,7 @@ class Pool < ResourcefulNode
       # client doesn't need to know about locked vs unlocked resources
       unlock_condition = Proc.new { |r| r.unlocked? }
 
-      resources.count_where { |r| unlock_condition.call(r) && block.call(r) }
+      resources.count_where { |r| unlock_condition.match?(r) && block.match?(r) }
 
     else
       raise ArgumentError.new("Wrong parameter types passed to #{__callee__}")
@@ -118,7 +118,7 @@ class Pool < ResourcefulNode
 
     unless block_given?
       # if no conditions given, then anything goes.
-      expression = proc { |res| true }
+      expression = Proc.new{ |res| true }
     end
 
     raise RuntimeError.new unless resources.count_where(&expression) > 0
@@ -135,6 +135,7 @@ class Pool < ResourcefulNode
     "Pool '#{@name}':  #{@resources.to_s}"
   end
 
+  # TODO this smells. where is this used? can i do without it?
   def get_initial_resources(initial_value)
     inv { !self.instance_variable_defined?(:@resources) }
 
@@ -152,6 +153,7 @@ class Pool < ResourcefulNode
 
   end
 
+  # TODO document this or else refactor it out
   def get_types(initial_value, given_types)
     inv { !self.instance_variable_defined?(:@types) }
 
@@ -214,9 +216,8 @@ class Pool < ResourcefulNode
   end
 
   def push_any!
-    outgoing_edges
-    .shuffle
-    .each do |edge|
+
+    outgoing_edges.shuffle.each do |edge|
       begin
         blk = edge.push_expression
       rescue => ex
@@ -240,9 +241,7 @@ class Pool < ResourcefulNode
   end
 
   def pull_any!
-    incoming_edges
-    .shuffle
-    .each do |edge|
+    incoming_edges.shuffle.each do |edge|
       begin
         blk = edge.pull_expression
       rescue RuntimeError => ex
