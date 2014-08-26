@@ -115,7 +115,7 @@ class Edge
       to.put_resource!(res,self)
     rescue => e
       # just to make it clear that it bubbles
-      raise RuntimeError.new e.message+" => "+'Push failed'
+      raise RuntimeError.new(e.message+" => "+'Push failed')
     end
   end
 

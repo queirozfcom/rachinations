@@ -54,9 +54,7 @@ describe Converter do
 
       it "doesn't ping outgoing edges if incoming edge cannot pull" do
 
-
-        expect(@edge_in).to receive(:test_pull?).and_return(false)
-        expect(@edge_in).not_to receive(:pull!)
+        expect(@edge_in).to receive(:pull_expression).and_raise(RuntimeError)
         expect(@edge_out).not_to receive(:push!)
 
         @c.trigger!
@@ -70,24 +68,19 @@ describe Converter do
       before(:each) do
 
         @c = Converter.new name: 'c', mode: :pull_any
-        @edge_in = instance_double(Edge, from: double(), to: @c, freeze: nil)
-        @edge_in2 = instance_double(Edge, from: double(), to: @c, freeze: nil)
-        @edge_out = instance_double(Edge, from: @c, to: double(), freeze: nil)
-        @edge_out2 = instance_double(Edge, from: @c, to: double(), freeze: nil)
-        @c.attach_edge!(@edge_in).attach_edge!(@edge_in2).attach_edge!(@edge_out).attach_edge!(@edge_out2)
+        @edge_in = instance_double(Edge, from: double(), to: @c,label:1)
+        @edge_out = instance_double(Edge, from: @c, to: double(),label:1)
+        @c.attach_edge!(@edge_in).attach_edge!(@edge_out)
 
       end
 
       it 'does not push when resource contributions are not met' do
 
-        expect(@edge_in).to receive(:test_pull?).and_return(true)
-        expect(@edge_in2).to receive(:test_ping?).and_return(false)
+        expect(@edge_in).to receive(:pull_expression).and_return(proc{true})
 
         expect(@edge_in).to receive(:pull!)
-        expect(@edge_in2).not_to receive(:pull!)
 
-        expect(@edge_out).not_to receive(:test_ping?)
-        expect(@edge_out2).not_to receive(:test_ping?)
+        expect(@edge_out).not_to receive(:push_expression)
 
         expect(@c).to receive(:in_conditions_met?).and_return(false)
 
@@ -97,19 +90,16 @@ describe Converter do
       end
 
       it 'does cause a push when resource contribution is met, even if across turns' do
-        # now the other one. and this makes conditions be met, so outgoing edges get pinged.
-        expect(@edge_in).to receive(:test_ping?).with(no_args).and_return(false)
-        expect(@edge_in2).to receive(:test_ping?).with(no_args).and_return(true)
+        expect(@edge_in).to receive(:pull_expression).and_raise(RuntimeError)
 
-        expect(@edge_in).not_to receive(:ping!)
-        expect(@edge_in2).to receive(:ping!)
+        expect(@edge_in).not_to receive(:pull!)
 
         expect(@c).to receive(:in_conditions_met?).and_return(true)
 
-        expect(@edge_out).to receive(:test_ping?).with(true).and_return(true)
-        expect(@edge_out).to receive(:ping!)
-        expect(@edge_out2).to receive(:test_ping?).with(true).and_return(true)
-        expect(@edge_out2).to receive(:ping!)
+
+        expect(@edge_out).to receive(:test_push?).and_return(true)
+        expect(@edge_out).to receive(:push_expression).and_return(proc{true})
+        expect(@edge_out).to receive(:push!)
 
         @c.trigger!
       end
@@ -120,11 +110,10 @@ describe Converter do
 
       before(:each) do
         @c = Converter.new name: 'c', mode: :pull_all
-        @edge_in = instance_double(Edge, from: double(), to: @c, freeze: nil)
-        @edge_in2 = instance_double(Edge, from: double(), to: @c, freeze: nil)
-        @edge_out = instance_double(Edge, from: @c, to: double(), freeze: nil)
-        @edge_out2 = instance_double(Edge, from: @c, to: double(), freeze: nil)
-        @c.attach_edge!(@edge_in).attach_edge!(@edge_in2).attach_edge!(@edge_out).attach_edge!(@edge_out2)
+        @edge_in = instance_double(Edge, from: double(), to: @c, label:1,pull_expression: proc{true})
+        @edge_in2 = instance_double(Edge, from: double(), to: @c, label: 1,pull_expression: proc{true})
+        @edge_out = instance_double(Edge, from: @c, to: double(), label: 1,push_expression: proc{true})
+        @c.attach_edge!(@edge_in).attach_edge!(@edge_in2).attach_edge!(@edge_out)
       end
 
 
@@ -139,8 +128,6 @@ describe Converter do
         expect(@edge_out).to receive(:test_push?).with(true).and_return(true)
         expect(@edge_out).to receive(:push!)
 
-        expect(@edge_out2).to receive(:test_push?).with(true).and_return(true)
-        expect(@edge_out2).to receive(:push!)
 
         @c.trigger!
 
@@ -156,13 +143,12 @@ describe Converter do
         allow(@edge_in).to receive_messages(:test_pull? => false)
         allow(@edge_in2).to receive_messages(:test_pull? => false)
         allow(@edge_out).to receive_messages(:test_push? => false)
-        allow(@edge_out2).to receive_messages(:test_push? => false)
 
         # but none outgoing will get pinged
         expect(@edge_in).not_to receive(:pull!)
         expect(@edge_in2).not_to receive(:pull!)
         expect(@edge_out).not_to receive(:push!)
-        expect(@edge_out2).not_to receive(:push!)
+
 
         @c.trigger!
 
@@ -180,8 +166,8 @@ describe Converter do
 
     before(:each) do
       @c = Converter.new name: 'c'
-      @edge_in = instance_double(Edge, from: double(), to: @c, freeze: nil, frozen?: true, label: 1)
-      @edge_out = instance_double(Edge, from: @c, to: double(), freeze: nil, frozen?: true, label: 1)
+      @edge_in = instance_double(Edge, from: double(), to: @c, label: 1)
+      @edge_out = instance_double(Edge, from: @c, to: double(), label: 1)
       @c.attach_edge!(@edge_out)
       @c.attach_edge!(@edge_in)
     end
@@ -189,28 +175,11 @@ describe Converter do
     it 'does not ping incoming edges' do
 
       expect(@edge_in).not_to receive(:test_pull?)
+      expect(@edge_out).to receive(:push_expression).and_return(proc{true})
       @edge_out.as_null_object
       @c.put_resource!(double(), @edge_in)
     end
 
-    it 'pings as many outgoing nodes as there are' do
-
-      #because converters are always push_all
-
-      pending
-      edge_out2 = instance_double(Edge, from: @c, to: double(), freeze: nil)
-      edge_out3 = instance_double(Edge, from: @c, to: double(), freeze: nil)
-      edge_out4 = instance_double(Edge, from: @c, to: double(), freeze: nil)
-
-      @c.attach_edge!(edge_out2).attach_edge!(edge_out3).attach_edge!(edge_out4)
-
-      expect(@edge_out).to receive_messages(:test_ping? => true, :ping! => true)
-      expect(edge_out2).to receive_messages(:test_ping? => true, :ping! => true)
-      expect(edge_out3).to receive_messages(:test_ping? => true, :ping! => true)
-      expect(edge_out4).to receive_messages(:test_ping? => true, :ping! => true)
-
-      @c.put_resource!(@edge_in, double())
-    end
 
   end
 
@@ -221,41 +190,7 @@ describe Converter do
       # TODO
     end
 
-    it
-
-
-    context 'when '
-
-  end
-
-  describe '#in_conditions_met?' do
-
-    before(:each) do
-      @c = Converter.new name: 'c', mode: 'pull_any'
-      @edge1 = instance_double('Edge', label: 1, from: double(), to: @c, freeze: nil)
-      @edge2 = instance_double('Edge', label: 1, from: double(), to: @c, freeze: nil)
-      @c.attach_edge!(@edge1).attach_edge!(@edge2)
-    end
-
-    context 'when pull_any' do
-
-      it 'is false when nothing has happened yet' do
-        expect(@c).to receive(:resources_contributed).and_return({@edge1 => [], @edge2 => []}).at_least(:once)
-        expect(@c.in_conditions_met?).to eq false
-      end
-
-      it 'is true when conditions are just enough' do
-        expect(@c).to receive(:resources_contributed).and_return({@edge1 => [double()], @edge2 => [double()]}).at_least(:once)
-        expect(@c.in_conditions_met?).to eq true
-
-      end
-
-      it 'is also true when conditions have some slack' do
-        # i.e. if one edge's condition is overmet (more res than needed)
-        # and another edge's condition is met.
-        expect(@c).to receive(:resources_contributed).and_return({@edge1 => [double(), double()], @edge2 => [double()]}).at_least(:once)
-        expect(@c.in_conditions_met?).to eq true
-      end
+    it 'something'  do
 
     end
 

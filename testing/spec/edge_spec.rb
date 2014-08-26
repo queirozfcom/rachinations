@@ -222,14 +222,14 @@ describe Edge do
     context 'when edge has label 1' do
 
       before(:each) do
-        @p1 = instance_double(Node, types: [], enabled?: true)
-        @p2 = instance_double(Node, types: [], enabled?: true)
+        @p1 = instance_double(Node,name:'n', types: [], enabled?: true)
+        @p2 = instance_double(Node,name:'n2', types: [], enabled?: true)
         @e = Edge.new name: 'e', from: @p1, to: @p2
       end
       it 'sends put_resource! to to_node' do
         # passing the same parameter it was given by the caller
         res = instance_double(Token,type:Token)
-        expect(@p2).to receive(:put_resource!).with(res)
+        expect(@p2).to receive(:put_resource!)
         @e.push!(res)
 
       end

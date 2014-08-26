@@ -159,7 +159,7 @@ class Node
   # fire triggers.
   #
   # @raise [RuntimeError] in case this node won't take the resource
-  def put_resource!(res)
+  def put_resource!(res,edge=nil)
     raise NotImplementedError, "Please update class #{self.class} to respond to: :#{__callee__}"
   end
 
