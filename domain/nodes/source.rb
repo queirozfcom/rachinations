@@ -68,12 +68,7 @@ class Source < ResourcefulNode
 
       elsif pull?
 
-        raise RuntimeError('pull needs work still...')
-
-        edges
-        .shuffle
-        .select { |e| e.to?(self) }
-        .each { |e| e.ping! }
+        raise NotImplementedError('A pulling Source?')
 
       end
 
