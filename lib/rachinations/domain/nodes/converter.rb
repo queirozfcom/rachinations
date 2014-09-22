@@ -141,7 +141,7 @@ class Converter < ResourcefulNode
       begin
         blk = edge.pull_expression
       rescue RuntimeError => ex
-        puts "Could not get a block for one Edge, but this is pull_any so I'll go ahead."
+        # Could not get a block for one Edge, but this is pull_any so I'll go ahead.
         next #other edges might still be able to serve me.
       end
 
@@ -149,7 +149,7 @@ class Converter < ResourcefulNode
         begin
           res = edge.pull!(&blk)
         rescue RuntimeError => ex
-          puts "Let's try another Edge, perhaps?"
+          # Let's try another Edge, perhaps?
           break
         end
 

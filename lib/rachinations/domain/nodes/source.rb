@@ -65,7 +65,6 @@ class Source < ResourcefulNode
 
         push_any!
 
-
       elsif pull?
 
         raise NotImplementedError('A pulling Source?')
@@ -128,7 +127,7 @@ class Source < ResourcefulNode
       begin
         blk = edge.push_expression
       rescue => ex
-        puts "Could not get a block for one Edge, but this is push_any so I'll go ahead."
+        # Could not get a block for one Edge, but this is push_any so I'll go ahead.
         next
       end
 
@@ -136,7 +135,7 @@ class Source < ResourcefulNode
         begin
           res = remove_resource!(&blk)
         rescue => ex
-          puts "Failed to remove this resource. Let's try another Edge, perhaps?"
+          # Failed to remove this resource. Let's try another Edge, perhaps?
           break
         end
 

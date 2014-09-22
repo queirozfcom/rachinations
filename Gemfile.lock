@@ -1,3 +1,10 @@
+PATH
+  remote: .
+  specs:
+    rachinations (0.0.1)
+      activesupport (= 3.0.0)
+      i18n
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -76,11 +83,11 @@ PLATFORMS
   x86-mingw32
 
 DEPENDENCIES
-  activesupport (= 3.0.0)
+  bundler (~> 1.5)
   coveralls
   cucumber
-  i18n
   minitest
   minitest-reporters
+  rachinations!
   rake
-  rspec
+  rspec (~> 3.0)

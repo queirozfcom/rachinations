@@ -1,5 +1,3 @@
-require_relative 'diagram'
-
 
 class NonDeterministicDiagram < Diagram
 

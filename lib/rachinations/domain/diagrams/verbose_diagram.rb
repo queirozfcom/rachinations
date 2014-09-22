@@ -1,4 +1,4 @@
-require_relative '../modules/diagrams/verbose'
+require 'rachinations/domain/modules/diagrams/verbose'
 
 class VerboseDiagram < Diagram
 

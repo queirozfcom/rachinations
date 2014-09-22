@@ -221,7 +221,7 @@ class Pool < ResourcefulNode
       begin
         blk = edge.push_expression
       rescue => ex
-        puts "Could not get a block for one Edge, but this is push_any so I'll go ahead."
+        # Could not get a block for one Edge, but this is push_any so I'll go ahead.
         next #other edges might still be able to serve me.
       end
 
@@ -229,7 +229,7 @@ class Pool < ResourcefulNode
         begin
           res = remove_resource!(&blk)
         rescue => ex
-          puts "Failed to remove this resource. Let's try another Edge, perhaps?"
+           # Failed to remove this resource. Let's try another Edge, perhaps?
           break
         end
 
@@ -245,7 +245,7 @@ class Pool < ResourcefulNode
       begin
         blk = edge.pull_expression
       rescue RuntimeError => ex
-        puts "Could not get a block for one Edge, but this is pull_any so I'll go ahead."
+        # Could not get a block for one Edge, but this is pull_any so I'll go ahead.
         next #other edges might still be able to serve me.
       end
 
@@ -253,7 +253,7 @@ class Pool < ResourcefulNode
         begin
           res = edge.pull!(&blk)
         rescue RuntimeError => ex
-          puts "Let's try another Edge, perhaps?"
+          # Let's try another Edge, perhaps?
           break
         end
 

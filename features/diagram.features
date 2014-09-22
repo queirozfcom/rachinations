@@ -1,8 +1,0 @@
-Feature: Diagram
-
-  Scenario Outline: Create a new diagram
-    Given I am at the start of the program
-    And I create an empty diagram named "empty"
-    Then I should be able to ask the name and receive "empty"
-
-
