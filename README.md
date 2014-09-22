@@ -3,6 +3,7 @@ rachinations
 [![Build Status](https://travis-ci.org/queirozfcom/rachinations.svg?branch=master)](https://travis-ci.org/queirozfcom/rachinations?branch=master)
 [![Code Climate](https://codeclimate.com/github/queirozfcom/rachinations.png)](https://codeclimate.com/github/queirozfcom/rachinations)
 [![Coverage Status](https://coveralls.io/repos/queirozfcom/rachinations/badge.png?branch=master)](https://coveralls.io/r/queirozfcom/rachinations?branch=master)
+[![Gem Version](https://badge.fury.io/rb/rachinations.svg)](http://badge.fury.io/rb/rachinations)
 
 ### Introduction
 

@@ -4,3 +4,5 @@ coverage
 testing/coverage
 .yardoc/
 doc/
+pkg
+*.gem
