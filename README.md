@@ -17,7 +17,11 @@ This is a port of Dr. J. Dormans' Machinations framework into Ruby.
 
 ### DSL Usage
 - Simplest possible usage:
-  - Install the `rachinations` gem and use it like this:
+  - Install the `rachinations` gem
+  
+    ```
+    $ gem install rachinations
+    ```
   - Require it into your code and staring designing diagrams:
   
     ```ruby
