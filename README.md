@@ -20,17 +20,17 @@ This is a port of Dr. J. Dormans' Machinations framework into Ruby.
   - Install the `rachinations` gem and use it like this:
   - Require it into your code and staring designing diagrams:
   
-  ```ruby
-  require 'rachinations'
+    ```ruby
+    require 'rachinations'
 
-  n=diagram 'my diagram' do
-    node 's1',Source
-    node 'p1', Pool
-    edge 'e1', Edge, 's1','p1'
-  end
-
-  n.run!(5)
+    n=diagram 'my diagram' do
+      node 's1',Source
+      node 'p1', Pool
+      edge 'e1', Edge, 's1','p1'
+    end
   
-  p n.get_node("p1").resource_count
-  #prints 5
-  ```
+    n.run!(5)
+    
+    p n.get_node("p1").resource_count
+    #prints 5
+    ```
