@@ -15,8 +15,9 @@ This is a port of Dr. J. Dormans' Machinations framework into Ruby.
 - Tests
 - A simple DSL (Domain-specific language) whose objective is to enable anyone to write Machinations diagrams, run them, obtain metrics, compose subdiagrams and so on.
 
-### Usage
+### DSL Usage
 - Simplest possible usage:
+  - Install the `rachinations` gem and use it like this:
   
   ```ruby
   require 'rachinations'
