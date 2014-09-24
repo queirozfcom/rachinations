@@ -16,4 +16,19 @@ This is a port of Dr. J. Dormans' Machinations framework into Ruby.
 - A simple DSL (Domain-specific language) whose objective is to enable anyone to write Machinations diagrams, run them, obtain metrics, compose subdiagrams and so on.
 
 ### Usage
-- TODO
+- Simplest possible usage:
+  
+  ```ruby
+  require 'rachinations'
+
+  n=diagram 'my diagram' do
+    node 's1',Source
+    node 'p1', Pool
+    edge 'e1', Edge, 's1','p1'
+  end
+
+  n.run!(5)
+  
+  p n.get_node("p1").resource_count
+  #prints 5
+  ```
