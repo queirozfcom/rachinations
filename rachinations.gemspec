@@ -30,6 +30,6 @@ design and also test tentative game designs and/or prototypes}
   spec.add_development_dependency "coveralls"
 
   spec.add_dependency "activesupport","3.0.0"
-  spec.add_dependency "i18n"
+  spec.add_dependency "i18n","0.6.11"
 
 end
