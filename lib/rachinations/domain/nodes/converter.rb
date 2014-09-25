@@ -52,7 +52,7 @@ class Converter < ResourcefulNode
       if in_conditions_met?
         if outgoing_edges.all? { |edge| edge.test_push?(true) }
           push_all!
-          pop_stored_resources!
+          clear_stored_resources!
         end # converters are always push_all
       end # conditions weren't met this turn
 
@@ -127,8 +127,11 @@ class Converter < ResourcefulNode
 
   # This removes from the internal store just enough
   # resources to accomplish one push_all (only applicable when in pull_any mode)
-  def pop_stored_resources!
-    #TODO
+  def clear_stored_resources!
+    incoming_edges
+    .each do |edge|
+      edge.label.times{remove_from_contributed_resources!(edge)}
+    end
   end
 
 
@@ -255,6 +258,13 @@ class Converter < ResourcefulNode
   # 'given their contribution' to this Converter.
   def add_to_contributed_resources!(resource, edge)
     resources_contributed.fetch(edge).put!(resource)
+  end
+
+  # Once a Converter has 'converted', we must alter its state so that
+  # contributions across turns don't cause more conversions than they
+  # should.
+  def remove_from_contributed_resources!(edge)
+    resources_contributed.fetch(edge).take!
   end
 
   def init_resources
