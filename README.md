@@ -7,7 +7,7 @@ rachinations
 
 ### Introduction
 
-This is a port of Dr. J. Dormans' Machinations framework into Ruby.
+This is a port of Dr. J. Dormans' [Machinations framework](http://www.jorisdormans.nl/machinations/) into Ruby.
 
 ### Contents
 
@@ -22,7 +22,7 @@ This is a port of Dr. J. Dormans' Machinations framework into Ruby.
     ```
     $ gem install rachinations
     ```
-  - Require it into your code and staring designing diagrams:
+  - Require it into your code and start designing diagrams:
   
     ```ruby
     require 'rachinations'
