@@ -9,6 +9,8 @@ rachinations
 
 This is a port of Dr. J. Dormans' [Machinations framework](http://www.jorisdormans.nl/machinations/) into Ruby.
 
+It provides a Ruby-based DSL to enable game designers to create and also test tentative game designs and/or prototypes.
+
 ### Contents
 
 - Classes to model the domain
@@ -17,7 +19,7 @@ This is a port of Dr. J. Dormans' [Machinations framework](http://www.jorisdorma
 
 ### DSL Usage
 - Simplest possible usage:
-  - Install the `rachinations` gem
+  - Install the `rachinations` [gem](http://rubygems.org/gems/rachinations)
   
     ```
     $ gem install rachinations
