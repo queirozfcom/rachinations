@@ -1,6 +1,10 @@
 require 'set'
 require_relative '../../domain/resources/token'
 require_relative '../../domain/nodes/node'
+require_relative '../../domain/modules/common/refiners/proc_convenience_methods'
+
+
+using ProcConvenienceMethods
 
 class ResourcefulNode < Node
 

@@ -3,21 +3,8 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'rachinations/version'
 
 
-# A few extra methods
-# to make code read more intuitively.
-class Proc
 
-  alias_method :accepts?, :call
-  alias_method :accept?, :call
-
-  alias_method :match?, :call
-  alias_method :matches?, :call
-
-  alias_method :match_resource?, :call
-  alias_method :matches_resource?, :call
-
-end
-
+require 'rachinations/domain/modules/common/refiners/proc_convenience_methods'
 require 'rachinations/extras/fifo'
 
 require 'rachinations/domain/diagrams/diagram'

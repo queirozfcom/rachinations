@@ -3,7 +3,10 @@ require_relative '../../domain/nodes/node'
 require_relative '../../domain/resources/token'
 require_relative '../resource_bag'
 require_relative '../../domain/exceptions/no_elements_matching_condition_error'
+require_relative '../../domain/modules/common/refiners/proc_convenience_methods'
 
+
+using ProcConvenienceMethods
 
 class Pool < ResourcefulNode
 

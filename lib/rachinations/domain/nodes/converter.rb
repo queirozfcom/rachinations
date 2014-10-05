@@ -1,5 +1,8 @@
 require_relative '../../domain/nodes/node'
 require_relative '../../domain/nodes/resourceless_node'
+require_relative '../../domain/modules/common/refiners/proc_convenience_methods'
+
+using ProcConvenienceMethods
 
 class Converter < ResourcefulNode
 
