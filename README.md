@@ -7,7 +7,9 @@ rachinations
 
 ### Introduction
 
-This is a port of Dr. J. Dormans' Machinations framework into Ruby.
+This is a port of Dr. J. Dormans' [Machinations framework](http://www.jorisdormans.nl/machinations/) into Ruby.
+
+It provides a Ruby-based DSL to enable game designers to create and also test tentative game designs and/or prototypes.
 
 ### Contents
 
@@ -17,12 +19,12 @@ This is a port of Dr. J. Dormans' Machinations framework into Ruby.
 
 ### DSL Usage
 - Simplest possible usage:
-  - Install the `rachinations` gem
+  - Install the `rachinations` [gem](http://rubygems.org/gems/rachinations)
   
     ```
     $ gem install rachinations
     ```
-  - Require it into your code and staring designing diagrams:
+  - Require it into your code and start designing diagrams:
   
     ```ruby
     require 'rachinations'
