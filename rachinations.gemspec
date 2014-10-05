@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
   spec.summary       = %q{Ruby port for Dr. J. Dormans' Machinations Game Mechanics Diagrams.}
   spec.description   = %q{This project provides a Ruby-based DSL to enable game designers to
 design and also test tentative game designs and/or prototypes}
-  spec.homepage      = ""
+  spec.homepage      = "https://github.com/queirozfcom/rachinations"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files -z`.split("\x0")
@@ -22,12 +22,11 @@ design and also test tentative game designs and/or prototypes}
   spec.required_ruby_version = '~> 2.1'
 
   spec.add_development_dependency "bundler", "~> 1.5"
-  spec.add_development_dependency "rake"
+  spec.add_development_dependency "rake", "~> 10.3"
   spec.add_development_dependency "rspec","~> 3.0"
-  spec.add_development_dependency "minitest"
-  spec.add_development_dependency "minitest-reporters"
-  spec.add_development_dependency "cucumber"
-  spec.add_development_dependency "coveralls"
+  spec.add_development_dependency "minitest", "~> 5.4"
+  spec.add_development_dependency "minitest-reporters", "~> 1.0"
+  spec.add_development_dependency "coveralls", "0.7.0"
 
   spec.add_dependency "activesupport","3.0.0"
   spec.add_dependency "i18n","0.6.11"
