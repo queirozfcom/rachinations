@@ -28,7 +28,7 @@ class Source < ResourcefulNode
   end
 
   def to_s
-    "Source '#{@name}':  #{@resources.to_s}"
+    "Source '#{@name}':  \n"
   end
 
   def put_resource!;

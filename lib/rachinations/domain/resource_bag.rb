@@ -19,27 +19,18 @@ class ResourceBag
     @store.push(obj)
   end
 
-  #retrieve
-  def get(klass)
-
-    if count(klass) === 0
-      raise NoElementsOfGivenTypeError, "No elements of class #{klass} found."
-    end
-
-    obj = store.select { |el| el.is_a?(klass) }.sample
-
-    remove_element!(obj)
-    obj
-
-  end
-
-  def count(klass)
-
-    inv { klass.is_a?(Class) }
-
-    store.select { |el| el.is_a?(klass) }.length
-
-  end
+  # Returns how many resources of given type there are
+  #  Note that this method includes locked resources in the count.
+  #
+  # @param [Class] resource type
+  # @return []Int] quantity of resources (including locked)
+  # def count(klass)
+  #
+  #   inv { klass.is_a?(Class) }
+  #
+  #   store.select { |el| el.is_a?(klass) }.length
+  #
+  # end
 
   def count_where(&blk)
 
@@ -73,6 +64,36 @@ class ResourceBag
 
   end
 
+  private
+
+  def to_s
+    out = ''
+
+    classes = store.map { |el| el.class }.uniq
+
+    classes.each do |klass|
+
+      name = if klass.name.nil?
+               'Anonymous Token'
+             else
+               klass.name
+             end
+
+      unlocked = count_where{|r| (r.is_type? klass) && (r.unlocked?) }
+      locked = count_where{|r| (r.is_type? klass) && (r.locked?) }
+
+      out += "\n #{name} -> #{unlocked} (#{locked}) \n\n"
+    end
+
+    if classes.empty?
+      "\n    Empty\n\n"
+    else
+      out
+    end
+
+
+  end
+
   # created so that I don't have to call count everytime just to see whether there's at least one element matching said condition
   def theres_at_least_one_where
 
@@ -87,34 +108,6 @@ class ResourceBag
     false
 
   end
-
-  def to_s
-    out = ''
-
-    classes = store.map { |el| el.class }.uniq
-
-    classes.each do |klass|
-
-      name = if klass.name.nil?
-               'Anonymous Klass'
-             else
-               klass.name
-             end
-
-      out += "\n"+'    '+ name + ' -> '+ count(klass).to_s+"\n\n"
-    end
-
-    if classes.empty?
-      "\n    Empty\n\n"
-    else
-      out
-    end
-
-
-  end
-
-  private
-
 
   def store
     @store

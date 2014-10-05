@@ -102,6 +102,17 @@ class Diagram
 
   end
 
+
+  def resource_count(klass=nil)
+    total=0
+    @nodes.each do |n|
+      total+=n.resource_count(klass)
+    end
+    total
+  end
+
+  private
+
   def to_s
     nodes.reduce('') { |carry, n| carry+n.to_s }
   end
@@ -134,15 +145,6 @@ class Diagram
   def commit_nodes!
     #only after all nodes have run do we update the actual resources and changes, to be used in the next round.
     nodes.shuffle.each { |n| n.commit! }
-  end
-
-
-  def resource_count(klass=nil)
-    total=0
-    @nodes.each do |n|
-      total+=n.resource_count(klass)
-    end
-    total
   end
 
   def enabled_nodes
