@@ -8,7 +8,7 @@ class Edge
 
   def initialize(hsh)
 
-    @name = hsh.fetch(:name)
+    @name = hsh.fetch(:name,'anonymous')
 
     @from = hsh.fetch(:from)
 
@@ -107,7 +107,7 @@ class Edge
   #
   # @raise [RuntimeError] in case the receiving node or this Edge
   #  won't accept the resource sent.
-  # @param res the resource to send.
+  # @param res [Token] the resource to send.
   def push!(res)
     raise RuntimeError.new "This Edge does not support type: #{res.type}" unless supports?(res.type)
 

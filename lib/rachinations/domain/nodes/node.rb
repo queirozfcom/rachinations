@@ -6,8 +6,34 @@ class Node
   include Invariant
   include HashInit
 
-  attr_reader :name,:types
+  attr_reader :name, :types
 
+  # Tries to figure out this Node's types based upon what's passed as
+  # parameters. If types were given then just set those as this Node
+  # types. If initial_values were given then try to work out the types
+  # from those.
+  #
+  # @param initial_value [Hash,Fixnum] initial values for this  node
+  # @param given_types [Array] provided types
+  # @return [Array] the computed types for this node
+  def get_types(initial_value: 0, given_types: [])
+    inv { !self.instance_variable_defined?(:@types) }
+
+    actual_types = given_types
+
+    if initial_value.is_a?(Fixnum) && given_types.empty?
+      # nothing to do
+    elsif initial_value == 0 && !given_types.empty?
+      # nothing to do
+    elsif initial_value.is_a?(Hash)
+      initial_value.each_key { |type| actual_types.push(type) }
+    else
+      raise ArgumentError.new
+    end
+
+    actual_types.uniq
+
+  end
 
   def attach_condition(condition)
     conditions.push(condition)
@@ -27,11 +53,11 @@ class Node
   end
 
   def incoming_edges
-    edges.select{|e| e.to == self}
+    edges.select { |e| e.to == self }
   end
 
   def outgoing_edges
-    edges.select{|e| e.from == self}
+    edges.select { |e| e.from == self }
   end
 
   def attach_edge(edge)
@@ -159,7 +185,7 @@ class Node
   # fire triggers.
   #
   # @raise [RuntimeError] in case this node won't take the resource
-  def put_resource!(res,edge=nil)
+  def put_resource!(res, edge=nil)
     raise NotImplementedError, "Please update class #{self.class} to respond to: :#{__callee__}"
   end
 

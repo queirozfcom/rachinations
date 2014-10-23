@@ -17,7 +17,8 @@ class Pool < ResourcefulNode
 
     @resources = get_initial_resources(params[:initial_value])
 
-    @types = get_types(params[:initial_value], params[:types])
+    @types = get_types(initial_value: params[:initial_value],
+                       given_types: params[:types])
 
     #reference to the underlying diagram
     @diagram = params[:diagram]
@@ -121,7 +122,7 @@ class Pool < ResourcefulNode
 
     unless block_given?
       # if no conditions given, then anything goes.
-      expression = Proc.new{ |res| true }
+      expression = Proc.new { |res| true }
     end
 
     raise RuntimeError.new unless resources.count_where(&expression) > 0
@@ -155,25 +156,6 @@ class Pool < ResourcefulNode
     return bag
 
   end
-
-  # TODO document this or else refactor it out
-  def get_types(initial_value, given_types)
-    inv { !self.instance_variable_defined?(:@types) }
-
-    if initial_value.is_a?(Fixnum) && given_types.empty?
-      # nothing to do
-    elsif initial_value == 0 && !given_types.empty?
-      # nothing to do
-    elsif initial_value.is_a?(Hash)
-      initial_value.each_key { |type| given_types.push(type) }
-    else
-      raise ArgumentError.new
-    end
-
-    given_types.uniq
-
-  end
-
 
   def types
     @types
@@ -232,7 +214,7 @@ class Pool < ResourcefulNode
         begin
           res = remove_resource!(&blk)
         rescue => ex
-           # Failed to remove this resource. Let's try another Edge, perhaps?
+          # Failed to remove this resource. Let's try another Edge, perhaps?
           break
         end
 

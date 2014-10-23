@@ -52,7 +52,7 @@ describe Diagram do
 
   it "runs for 2 turns with two pools using PULL and add  the correct amount" do
 
-    d = Diagram.new 'some_name'
+    d = Diagram.new
 
     d.add_node! Pool, name: 'pool1', initial_value: 5
 
@@ -64,7 +64,6 @@ describe Diagram do
 
     expect(d.get_node('pool1').resources_added).to eq 0
     expect(d.get_node('pool2').resources_added).to eq 2
-
     expect(d.get_node('pool2').resources_removed).to eq 0
     expect(d.get_node('pool1').resources_removed).to eq 2
 

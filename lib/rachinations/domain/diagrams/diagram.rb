@@ -8,12 +8,13 @@ class Diagram
 
   attr_accessor :name, :max_iterations, :nodes, :edges
 
-  def initialize(name)
+  def initialize(name='Anonymous diagram')
     @nodes = NodeCollection.new
     @edges = EdgeCollection.new
     @name = name
     @max_iterations = 999
   end
+
 
   def get_node(name)
 
@@ -25,6 +26,7 @@ class Diagram
 
     raise RuntimeError, "Node with name='#{name}' not found."
   end
+
 
   def add_node!(node_klass, params)
 
