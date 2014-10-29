@@ -108,7 +108,7 @@ class Diagram
   def resource_count(klass=nil)
     total=0
     @nodes.each do |n|
-      total+=n.resource_count(klass)
+      total+=n.resource_count(type: klass)
     end
     total
   end

@@ -5,7 +5,6 @@ require_relative '../resource_bag'
 require_relative '../../domain/exceptions/no_elements_matching_condition_error'
 require_relative '../../domain/modules/common/refiners/proc_convenience_methods'
 
-
 using ProcConvenienceMethods
 
 class Pool < ResourcefulNode
@@ -53,11 +52,11 @@ class Pool < ResourcefulNode
     end
   end
 
-  def resource_count(type=nil, &block)
+  def resource_count(type: nil, expr:nil)
 
-    raise ArgumentError.new('Please provide either a type or a block, but not both.') if block_given? && !type.nil?
+    raise ArgumentError.new('Please provide either a type or a block, but not both.') if !expr.nil? && !type.nil?
 
-    if type.nil? && !block_given?
+    if type.nil? && expr.nil?
       resources.count_where { |r| r.unlocked? }
     elsif type.is_a?(Class) && type <= Token
 
@@ -68,12 +67,12 @@ class Pool < ResourcefulNode
       else
         raise UnsupportedTypeError.new "Unsupported type: #{type.name}"
       end
-    elsif block_given?
+    elsif !expr.nil?
 
       # client doesn't need to know about locked vs unlocked resources
-      unlock_condition = Proc.new { |r| r.unlocked? }
+      unlock_condition = proc { |r| r.unlocked? }
 
-      resources.count_where { |r| unlock_condition.match?(r) && block.match?(r) }
+      resources.count_where { |r| unlock_condition.match?(r) && expr.match?(r) }
 
     else
       raise ArgumentError.new("Wrong parameter types passed to #{__callee__}")

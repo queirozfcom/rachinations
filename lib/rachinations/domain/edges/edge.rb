@@ -1,24 +1,33 @@
 require_relative '../strategies/valid_types'
 require_relative '../../domain/exceptions/no_elements_found'
+require_relative '../../../../lib/rachinations/domain/modules/common/hash_init'
+require_relative '../../../../lib/rachinations/domain/modules/common/refiners/number_modifiers'
 
 class Edge
+  include HashInit
+  using NumberModifiers
 
-  attr_reader :from, :to, :name, :label, :types
+
+  attr_reader :from, :to, :name, :label, :types, :likelihood
 
 
   def initialize(hsh)
 
-    @name = hsh.fetch(:name,'anonymous')
+    check_options!(hsh)
 
-    @from = hsh.fetch(:from)
+    params = set_defaults(hsh)
 
-    @to = hsh.fetch(:to)
+    @name = params.fetch(:name, 'anonymous')
 
-    #setting default values if needed.
-    hsh = defaults.merge hsh
+    @from = params.fetch(:from)
 
-    @label = hsh.fetch(:label)
-    @types = hsh.fetch(:types)
+    @to = params.fetch(:to)
+
+    @label = params.fetch(:label)
+
+    @types = params.fetch(:types)
+
+    @likelihood = params.fetch(:likelihood)
 
   end
 
@@ -36,7 +45,7 @@ class Edge
 
     condition = strategy.condition
 
-    available_resources = from.resource_count(&condition)
+    available_resources = from.resource_count(expr: condition)
 
     if available_resources == 0
       false
@@ -45,16 +54,18 @@ class Edge
     elsif available_resources < label && require_all
       false
     else
-      # only some resources are able to pass but it's not require_all
+      # only some resources are able to pass but it's not require_all,
+      # so the ping takes place
       true
     end
 
   end
 
-  # the code is the code but sometimes it helps to specify what action
+  # the code is the same but sometimes it helps to specify what action
   # we are talking about so as to make code more understandable
   alias_method :test_pull?, :test_ping?
   alias_method :test_push?, :test_ping?
+
 
   def supports?(type)
     types.empty? || types.include?(type)
@@ -111,8 +122,10 @@ class Edge
   def push!(res)
     raise RuntimeError.new "This Edge does not support type: #{res.type}" unless supports?(res.type)
 
+    return unless Random.new.rand(1..100) <= likelihood #this is a way to add chance to pushes
+
     begin
-      to.put_resource!(res,self)
+      to.put_resource!(res, self)
     rescue => e
       # just to make it clear that it bubbles
       raise RuntimeError.new(e.message+" => "+'Push failed')
@@ -126,8 +139,12 @@ class Edge
   #  should send.
   # @raise [RuntimeError] in case the other node could provide no resources
   #  that satisfy this condition block.
-  # @return a resource that satisfies the given block.
+  # @return [Token,nil] a Resource that satisfies the given block or nil,
+  #  if the pull was not performed for some reason (e.g. it's a probabilistic)
+  #  edge and this
   def pull!(&blk)
+    return unless Random.new.rand(1..100) <= likelihood #this is a way to add chance to pulls
+
     begin
       res=from.take_resource!(&blk)
     rescue => e
@@ -152,8 +169,13 @@ class Edge
   def defaults
     {
         :label => 1,
-        :types => []
+        :types => [],
+        :likelihood => 100.percent
     }
+  end
+
+  def options
+    [:name,:label,:types,:likelihood,:from,:to,:diagram]
   end
 
 end

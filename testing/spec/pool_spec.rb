@@ -91,31 +91,31 @@ describe Pool do
     end
 
     it 'raises an error when it is asked about an unsupported type and it is typed' do
-      expect { @typed.resource_count(Mango) }.to raise_error UnsupportedTypeError
+      expect { @typed.resource_count(type:Mango) }.to raise_error UnsupportedTypeError
     end
 
     it 'just returns zero if it is untyped and it is asked about a type' do
-      expect(@untyped.resource_count(Mango)).to eq 0
+      expect(@untyped.resource_count(type:Mango)).to eq 0
     end
 
     it 'otherwise works with one type param' do
-      expect(@typed.resource_count(Peach)).to eq 10
+      expect(@typed.resource_count(type:Peach)).to eq 10
     end
 
     it 'accepts a single block' do
-      expect(@typed.resource_count { |r| r.is_type? Peach }).to eq 10
-      expect(@untyped.resource_count { true }).to eq 10
+      expect(@typed.resource_count(expr: proc{|r| r.is_type? Peach } ) ).to eq 10
+      expect(@untyped.resource_count( expr: proc{true})).to eq 10
 
       # if user sent a block. he prolly knows what he's doing so no errors.
-      expect(@typed.resource_count { |r| r.is_type? Football }).to eq 0
+      expect(@typed.resource_count(expr: proc{|r| r.is_type? Football })).to eq 0
     end
 
     it 'errors if given both a type and a block' do
-      expect { @typed.resource_count(Peach) { |r| r.is_type? Mango } }.to raise_error ArgumentError
+      expect { @typed.resource_count(type:Peach,expr: proc{ |r| r.is_type? Mango } )}.to raise_error ArgumentError
     end
 
     it 'also errors if some other nonsense is passed' do
-      expect { @typed.resource_count(Hash.new) }.to raise_error ArgumentError
+      expect { @typed.resource_count(Object.new) }.to raise_error ArgumentError
       expect { @untyped.resource_count('Foo') }.to raise_error ArgumentError
     end
 

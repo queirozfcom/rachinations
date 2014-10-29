@@ -1,9 +1,10 @@
 require_relative 'spec_helper'
 
+
 describe Edge do
 
   describe '#initialize' do
-
+    using NumberModifiers
     it 'can be created' do
 
       # i only want to test edge methods so I'll use a mock object and stub the method I need
@@ -22,6 +23,8 @@ describe Edge do
 
       expect(edge.label).to eq 1
       expect(edge.types).to eq []
+      expect(edge.likelihood).to eq 100.percent
+
 
     end
 
@@ -57,6 +60,16 @@ describe Edge do
       expect(edge.support?(Red)).to be true
 
       expect(edge.label).to be 5
+
+    end
+
+
+    it 'can be assigned a percent label' do
+
+      from = double(:name => 'node1')
+      to = double(:name => 'node2')
+
+      edge = Edge.new name: 'edge1', from: from, to: to, types: [Blue, Red], likelihood: 50.percent
 
     end
 
@@ -222,13 +235,13 @@ describe Edge do
     context 'when edge has label 1' do
 
       before(:each) do
-        @p1 = instance_double(Node,name:'n', types: [], enabled?: true)
-        @p2 = instance_double(Node,name:'n2', types: [], enabled?: true)
+        @p1 = instance_double(Node, name: 'n', types: [], enabled?: true)
+        @p2 = instance_double(Node, name: 'n2', types: [], enabled?: true)
         @e = Edge.new name: 'e', from: @p1, to: @p2
       end
       it 'sends put_resource! to to_node' do
         # passing the same parameter it was given by the caller
-        res = instance_double(Token,type:Token)
+        res = instance_double(Token, type: Token)
         expect(@p2).to receive(:put_resource!)
         @e.push!(res)
 
@@ -241,14 +254,16 @@ describe Edge do
 
     end
 
-    context 'when edge has label greater than 1' do
 
-      it 'raises error if no resources could be sent' do
+  end
 
-      end
+  context 'general tests' do
 
-    end
 
+
+  end
+
+  context 'specific features' do
 
   end
 

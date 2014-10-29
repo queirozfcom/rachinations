@@ -33,7 +33,7 @@ module HashInit
     hsh.each_pair do |key, value|
 
       if !options.include_option?(key) && aliases_for(key).none?{|ali| options.include_option?(ali) }
-        raise BadOptions.new "Unknown option in parameter hash: :#{key} "
+        raise BadOptions.new "Class #{self.class}: unknown option in constructor: :#{key} (using HashInit)"
       end
 
     end
