@@ -19,8 +19,13 @@ class Gate < ResourcelessNode
 
   def put_resource!(res,edge)
 
+    # only works for 1 outgoing edge... will think about this later on
+    inv{outgoing_edges.size == 1}
+
     #just pass it on for now
-    outgoing_edges.sample_edge{|e| e.push!(res)}
+    outgoing_edges.each{|e|
+      e.push!(res) if Random.rand < e.label
+    }
 
   end
 

@@ -10,7 +10,7 @@ module NumberModifiers
       # i would like to add an instance variable to this number
       # so that i can know whether the user has explicitly called #percent
       # but Fixnums are frozen by default so they can't change state.
-      self
+      to_f/100
     end
 
   end

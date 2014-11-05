@@ -27,6 +27,15 @@ class Diagram
     raise RuntimeError, "Node with name='#{name}' not found."
   end
 
+  def get_edge(name)
+    edges.each do |edge|
+      if edge.name == name
+        return edge
+      end
+    end
+
+    raise RuntimeError, "Edge with name='#{name}' not found."
+  end
 
   def add_node!(node_klass, params)
 
@@ -150,22 +159,27 @@ class Diagram
   end
 
   def enabled_nodes
-    nodes.select{|n| n.enabled? }
+    nodes.select { |n| n.enabled? }
   end
 
   #template method
-  def before_round(node_no) end
+  def before_round(node_no)
+  end
 
   #template method
-  def after_round(node_no) end
+  def after_round(node_no)
+  end
 
   #template method
-  def before_run; end
+  def before_run;
+  end
 
   #template method
-  def after_run; end
+  def after_run;
+  end
 
   #template method
-  def sanity_check_message; end
+  def sanity_check_message;
+  end
 
 end
