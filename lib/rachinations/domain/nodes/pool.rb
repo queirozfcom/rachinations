@@ -52,7 +52,7 @@ class Pool < ResourcefulNode
     end
   end
 
-  def resource_count(type: nil, expr:nil)
+  def resource_count(type: nil, expr: nil)
 
     raise ArgumentError.new('Please provide either a type or a block, but not both.') if !expr.nil? && !type.nil?
 
@@ -182,23 +182,6 @@ class Pool < ResourcefulNode
 
   end
 
-  def options
-    [:conditions, :name, :activation, :mode, :types, :initial_value, :diagram]
-  end
-
-  def defaults
-    {
-        activation: :passive,
-        mode: :pull_any,
-        types: [],
-        initial_value: 0
-    }
-  end
-
-  def aliases
-    {:initial_values => :initial_value}
-  end
-
   def push_any!
 
     outgoing_edges.shuffle.each do |edge|
@@ -246,6 +229,25 @@ class Pool < ResourcefulNode
       end
 
     end
+  end
+
+  def options
+    [:conditions, :name, :activation, :mode, :types, :initial_value, :diagram]
+  end
+
+  def defaults
+    {
+        activation: :passive,
+        mode: :pull_any,
+        types: [],
+        initial_value: 0
+    }
+  end
+
+  def aliases
+    {
+        :initial_values => :initial_value
+    }
   end
 
 end

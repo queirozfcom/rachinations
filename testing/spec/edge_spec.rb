@@ -23,7 +23,6 @@ describe Edge do
 
       expect(edge.label).to eq 1
       expect(edge.types).to eq []
-      expect(edge.likelihood).to eq 100.percent
 
 
     end
@@ -69,7 +68,7 @@ describe Edge do
       from = double(:name => 'node1')
       to = double(:name => 'node2')
 
-      edge = Edge.new name: 'edge1', from: from, to: to, types: [Blue, Red], likelihood: 50.percent
+      edge = Edge.new name: 'edge1', from: from, to: to, types: [Blue, Red], label: 50.percent
 
     end
 

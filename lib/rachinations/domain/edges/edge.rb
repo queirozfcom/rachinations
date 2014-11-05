@@ -8,7 +8,7 @@ class Edge
   using NumberModifiers
 
 
-  attr_reader :from, :to, :name, :label, :types, :likelihood
+  attr_reader :from, :to, :name, :label, :types
 
 
   def initialize(hsh)
@@ -26,8 +26,6 @@ class Edge
     @label = params.fetch(:label)
 
     @types = params.fetch(:types)
-
-    @likelihood = params.fetch(:likelihood)
 
   end
 
@@ -122,8 +120,6 @@ class Edge
   def push!(res)
     raise RuntimeError.new "This Edge does not support type: #{res.type}" unless supports?(res.type)
 
-    return unless Random.new.rand(1..100) <= likelihood #this is a way to add chance to pushes
-
     begin
       to.put_resource!(res, self)
     rescue => e
@@ -140,10 +136,8 @@ class Edge
   # @raise [RuntimeError] in case the other node could provide no resources
   #  that satisfy this condition block.
   # @return [Token,nil] a Resource that satisfies the given block or nil,
-  #  if the pull was not performed for some reason (e.g. it's a probabilistic)
-  #  edge and this
+  #  if the pull was not performed for some reason (e.g. it's probabilistic)
   def pull!(&blk)
-    return unless Random.new.rand(1..100) <= likelihood #this is a way to add chance to pulls
 
     begin
       res=from.take_resource!(&blk)
@@ -169,13 +163,12 @@ class Edge
   def defaults
     {
         :label => 1,
-        :types => [],
-        :likelihood => 100.percent
+        :types => []
     }
   end
 
   def options
-    [:name,:label,:types,:likelihood,:from,:to,:diagram]
+    [:name,:label,:types,:from,:to,:diagram]
   end
 
 end

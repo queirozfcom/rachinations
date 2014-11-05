@@ -450,8 +450,6 @@ describe Diagram do
 
     describe 'diagrams with probabilistic edges' do
 
-
-
       it 'accepts random edges with percentages' do
         d = Diagram.new
 
@@ -459,7 +457,7 @@ describe Diagram do
         d.add_node! Gate, name: 'g'
         d.add_node! Pool, name: 'p'
         d.add_edge! Edge, from: 's', to: 'g'
-        d.add_edge! Edge, from: 'g', to: 'p', likelihood: 50.percent
+        d.add_edge! Edge, from: 'g', to: 'p', label: 50.percent
 
         d.run!(20)
         expect(d.get_node('p').resource_count).to (be > 1).and(be < 20)
