@@ -9,7 +9,7 @@ describe Diagram do
     n=diagram 'test_diagram' do
       node 'source', Source
       node 'pool1', Pool
-      edge 'edge1', Edge, 'source', 'pool1'
+      edge from: 'source', to: 'pool1'
     end
 
     d = Diagram.new('one source one pool')
@@ -117,9 +117,9 @@ describe Diagram do
       node 'p2', Pool, mode: :push, activation: :automatic
       node 'p3', Pool, mode: :push, activation: :automatic
       node 'p4', Pool, mode: :push, activation: :automatic
-      edge 'e1', Edge, 'p1', 'p2'
-      edge 'e2', Edge, 'p2', 'p3'
-      edge 'e3', Edge, 'p3', 'p4'
+      edge from: 'p1', to: 'p2'
+      edge from: 'p2', to: 'p3'
+      edge from: 'p3', to: 'p4'
     end
 
     n.run!(5)
@@ -133,14 +133,14 @@ describe Diagram do
       node 'p2', Pool, mode: :push, activation: :automatic
       node 'p3', Pool, mode: :push, activation: :automatic
       node 'p4', Pool, mode: :push, activation: :automatic
-      edge 'e1', Edge, 'p1', 'p2'
-      edge 'e2', Edge, 'p2', 'p1'
-      edge 'e3', Edge, 'p1', 'p3'
-      edge 'e4', Edge, 'p3', 'p1'
-      edge 'e5', Edge, 'p4', 'p2'
-      edge 'e6', Edge, 'p2', 'p4'
-      edge 'e7', Edge, 'p4', 'p3'
-      edge 'e8', Edge, 'p3', 'p4'
+      edge from: 'p1',to: 'p2'
+      edge from: 'p2',to: 'p1'
+      edge from: 'p1',to: 'p3'
+      edge from: 'p3',to: 'p1'
+      edge from: 'p4',to: 'p2'
+      edge from: 'p2',to: 'p4'
+      edge from: 'p4',to: 'p3'
+      edge from: 'p3',to: 'p4'
     end
 
     d = Diagram.new('bonitinho')
@@ -154,14 +154,14 @@ describe Diagram do
       node 'p2', Pool, mode: :push, activation: :automatic
       node 'p3', Pool, mode: :push, activation: :automatic
       node 'p4', Pool, mode: :push, activation: :automatic
-      edge 'e1', Edge, 'p1', 'p2'
-      edge 'e2', Edge, 'p2', 'p1'
-      edge 'e3', Edge, 'p1', 'p3'
-      edge 'e4', Edge, 'p3', 'p1'
-      edge 'e5', Edge, 'p4', 'p2'
-      edge 'e6', Edge, 'p2', 'p4'
-      edge 'e7', Edge, 'p4', 'p3'
-      edge 'e8', Edge, 'p3', 'p4'
+      edge from: 'p1',to: 'p2'
+      edge from: 'p2',to: 'p1'
+      edge from: 'p1',to: 'p3'
+      edge from: 'p3',to: 'p1'
+      edge from: 'p4',to: 'p2'
+      edge from: 'p2',to: 'p4'
+      edge from: 'p4',to: 'p3'
+      edge from: 'p3',to: 'p4'
     end
 
     d = Diagram.new('bonitinho')

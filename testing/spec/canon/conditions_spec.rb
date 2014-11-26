@@ -15,14 +15,13 @@ describe 'Nodes that can be given conditions' do
         :initial_value => 0
     }
 
-
     d.add_edge! Edge, {
         :name => 'connector',
         :from => 'source',
         :to => 'deposit'
     }
 
-    d.get_node('source').attach_condition(lambda { false })
+    d.get_node('source').attach_condition{ false }
 
     d.run!(10)
 
@@ -53,7 +52,7 @@ describe 'Nodes that can be given conditions' do
         :to => 'deposit'
     }
 
-    d.get_node('source').attach_condition(lambda { d.get_node('deposit').resource_count < 3 })
+    d.get_node('source').attach_condition { d.get_node('deposit').resource_count < 3 }
 
     d.run!(10)
 
@@ -82,7 +81,7 @@ describe 'Nodes that can be given conditions' do
         :to => 'deposit'
     }
 
-    d.get_node('deposit').attach_condition(lambda { d.get_node('deposit').resource_count < 3 })
+    d.get_node('deposit').attach_condition { d.get_node('deposit').resource_count < 3 }
 
     d.run!(10)
 

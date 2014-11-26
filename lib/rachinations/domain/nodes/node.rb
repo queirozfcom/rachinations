@@ -35,13 +35,7 @@ class Node
 
   end
 
-  def attach_condition(condition)
-    conditions.push(condition)
-  end
 
-  def conditions
-    @conditions ||= Array.new
-  end
 
   def edges
     if @edges.is_a? Array
@@ -90,31 +84,45 @@ class Node
     types.empty?
   end
 
-  def attach_trigger(trig)
-    triggers.push(trig+[true])
+  def attach_condition(&blk)
+    conditions.push(blk)
+  end
+
+  def conditions
+    @conditions = @conditions || Array.new
+    @conditions
+  end
+
+
+  def attach_trigger(target_node)
+    triggers.push(target_node)
   end
 
   def triggers
-    @triggers ||= Array.new
+    @triggers = @triggers || Array.new
+    @triggers
   end
 
-  def clear_triggers
-    triggers.each do |t|
-      t[2]=true
-    end
-  end
+  # def clear_triggers
+  #   triggers.each do |t|
+  #     t[2]=true
+  #   end
+  # end
 
+  # Call trigger! on each node stored in self.triggers
+  #
   def fire_triggers!
-    triggers.each do |n|
-      if (n[0].is_a? Proc) && n[2]
-        if n[0].call
-          n[2]=false
-          n[1].trigger!
-        end
-      elsif n[0] && n[2]
-        n[2]=false
-        n[1].trigger!
-      end
+    triggers.each do |node|
+      node.trigger!
+      # if (n[0].is_a? Proc) && n[2]
+      #   if n[0].call
+      #     n[2]=false
+      #     n[1].trigger!
+      #   end
+      # elsif n[0] && n[2]
+      #   n[2]=false
+      #   n[1].trigger!
+      # end
     end
   end
 
@@ -137,8 +145,8 @@ class Node
   end
 
   def commit!
-    clear_triggers
-    self
+    # clear_triggers
+    #self
   end
 
   def pull?

@@ -1,0 +1,2 @@
+class BadDSL < RuntimeError
+end

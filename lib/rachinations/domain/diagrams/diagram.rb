@@ -41,7 +41,20 @@ class Diagram
 
     params.store(:diagram, self)
 
+    #if there's a condition, return it, otherwise return default condition
+    condition = params.delete(:condition){ lambda{true} }
+
+    #similarly, if nodes are supposed to be triggered by another node
+    triggered_by = params.delete(:triggered_by){nil}
+
     node = node_klass.new(params)
+
+    node.attach_condition &condition
+
+    if !triggered_by.nil?
+      triggerer = self.send(triggered_by.to_sym)
+      triggerer.attach_trigger(node)
+    end
 
     nodes.push(node)
 
