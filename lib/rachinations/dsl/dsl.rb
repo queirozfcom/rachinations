@@ -38,7 +38,7 @@ module DSL
 
     end
 
-    def sink(name: 'anonymous', mode: :pull_any, activation: :passive, triggered_by: nil, condition: lambda{true})
+    def sink(name='anonymous', mode: :pull_any, activation: :passive, triggered_by: nil, condition: lambda{true})
 
       hsh = {}
       hsh[:name] = name
@@ -51,7 +51,7 @@ module DSL
 
     end
 
-    def converter(name: 'anonymous', mode: :pull_any, activation: :passive, triggered_by: nil, condition: lambda{true})
+    def converter(name='anonymous', mode: :pull_any, activation: :passive, triggered_by: nil, condition: lambda{true})
 
       hsh = {}
       hsh[:name] = name
@@ -64,7 +64,7 @@ module DSL
 
     end
 
-    def trader(name: 'anonymous', mode: :pull_any, activation: :passive, triggered_by: nil, condition: lambda{true})
+    def trader(name='anonymous', mode: :pull_any, activation: :passive, triggered_by: nil, condition: lambda{true})
 
       hsh = {}
       hsh[:name] = name
@@ -75,9 +75,9 @@ module DSL
 
       add_node! Trader, hsh
 
-    end
+   end
 
-    def gate(name: 'anonymous', activation: :passive, triggered_by: nil, condition: lambda{true})
+    def gate(name='anonymous', activation: :passive, triggered_by: nil, condition: lambda{true})
 
       hsh = {}
       hsh[:name] = name
@@ -90,7 +90,7 @@ module DSL
     end
 
     # methods to create edges
-    def edge(name: 'anonymous', label: 1,from:, to:)
+    def edge(name='anonymous', label: 1,from:, to:)
 
       hsh = {}
       hsh[:name] = name
@@ -106,7 +106,7 @@ module DSL
     # so that I can easily access elements which have been given a name
     # (mostly nodes and maybe edges too)
     def method_missing(method_sym, *args, &block)
-      super unless method_sym.to_s != 'anonymous' #these aren't actual node names
+      super if method_sym.to_s == 'anonymous' #these aren't actual node names
 
       begin
         #does a node with that name exist?

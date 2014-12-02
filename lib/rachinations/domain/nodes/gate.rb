@@ -1,6 +1,8 @@
 require_relative '../../domain/nodes/node'
 require_relative '../../domain/nodes/resourceless_node'
 
+require 'weighted_distribution'
+
 class Gate < ResourcelessNode
 
 
@@ -19,17 +21,44 @@ class Gate < ResourcelessNode
 
   def put_resource!(res,edge)
 
-    # only works for 1 outgoing edge... will think about this later on
-    inv{outgoing_edges.size == 1}
+    inv("Edges must be either all defaults or all probabilities") { outgoing_edges.all?{|e| e.label == 1 } || outgoing_edges.all?{|e| e.label.class == Float} }
+    inv("If probabilities given, their sum must not exceed 1"){ outgoing_edges.reduce(0){|acc,el| acc + el.label } <= 1 || !outgoing_edges.all?{|e| e.label.class == Float}  }
 
-    #just pass it on for now
-    outgoing_edges.each{|e|
-      e.push!(res) if Random.rand < e.label
-    }
+    maybe_edge = pick_one(outgoing_edges)
+
+    if(maybe_edge.nil?)
+      # do nothing - resource has 'vanished' - happens every other day
+    else
+      maybe_edge.push!(res)
+    end
 
   end
 
   private
+
+  def pick_one(edges)
+
+    if(edges.all?{|e| e.label == 1})
+      #edges is probably an enumerable but only arrays can be sample()'d
+      edges.to_a.sample
+    elsif(edges.all?{|e| e.label.class == Float})
+      #{edge=>weight} is the shape required by WeightedRandomizer
+      weights = edges.reduce(Hash.new){|acc,el| acc[el] = el.label; acc }
+
+      sum = edges.reduce(0){|acc,el|acc + el.label }
+
+      remaining = 1.0 - sum
+
+      #resource 'vanishes'
+      weights[nil] = remaining
+
+      edge_distribution = WeightedDistribution.new(weights)
+      edge_distribution.sample
+    else
+      raise RuntimeError.new('Invalid setup')
+    end
+
+  end
 
   def options
     [:name, :diagram, :activation, :mode, :types]
@@ -42,11 +71,9 @@ class Gate < ResourcelessNode
   def defaults
     {
         activation: :passive,
-        mode: :pull_any,
+        mode: :push_any,
         types: []
     }
   end
-
-
 
 end

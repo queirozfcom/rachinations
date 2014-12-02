@@ -98,7 +98,7 @@ class Source < ResourcefulNode
 
     #we'll need to change this if source starts accepting
     # more than a single type
-    inv { types.size === 1 }
+    inv("Sources can only have a single type") { types.size === 1 }
 
     if type.nil?
       res = Token.new

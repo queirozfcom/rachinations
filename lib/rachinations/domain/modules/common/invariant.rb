@@ -9,8 +9,8 @@ module Invariant
 
 
 
-  def invariant &block
-    raise AssertionError unless yield
+  def invariant(message=nil,&block)
+    raise AssertionError.new(message) unless yield
   end
 
   alias_method :inv, :invariant
