@@ -5,6 +5,22 @@ describe Diagram do
 
   context 'diagram tests using the dsl' do
 
+    it 'runs a simple example diagram'do
+      d = diagram mode: 'verbose' do
+        source 's1'
+        pool 'p1'
+        pool 'p2'
+        edge from: 's1', to: 'p1'
+        edge from: 'p1', to: 'p2'
+      end
+      d.run 5
+
+      print d.p1.resource_count # prints 5
+
+      expect(d.p2.resource_count).to eq 4
+
+    end
+
     it 'runs with one pool with no name' do
       d = diagram do
         pool
@@ -22,6 +38,23 @@ describe Diagram do
 
       d.run! 5
       expect(d.p.resource_count).to eq 9
+    end
+
+    it 'requires valid names for nodes and edges because they might be used as methods'do
+
+      expect{
+
+      d = diagram 'wrong' do
+        pool 'p1'
+        source 's1'
+        pool 'foo bar'
+        source '1ar baz'
+        edge ' foo', from: 'p1', to: 's1'
+        edge 'foo ', from: 'p1', to: 's1'
+      end
+
+      }.to raise_error(BadDSL)
+
     end
 
     it 'runs with conditions' do

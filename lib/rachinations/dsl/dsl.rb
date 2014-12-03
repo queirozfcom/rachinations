@@ -2,6 +2,7 @@ require_relative '../domain/diagrams/diagram'
 require_relative '../domain/diagrams/verbose_diagram'
 require_relative '../domain/diagrams/non_deterministic_diagram'
 require_relative '../domain/modules/diagrams/verbose'
+require_relative '../utils/string_helper'
 
 module DSL
 
@@ -9,12 +10,14 @@ module DSL
   # added to the Diagram class itself, but to the global scope instead.
   class ::Diagram
 
+    alias_method :run, :run!
+
     # methods to create nodes
     # I would probably not need so many method if I used metaprogramming
-    def pool(name='anonymous', initial_value: 0, mode: :pull_any, activation: :passive, triggered_by: nil, condition: lambda{true})
+    def pool(name='anonymous', initial_value: 0, mode: :pull_any, activation: :passive, triggered_by: nil, condition: lambda { true })
 
       hsh = {}
-      hsh[:name] = name
+      hsh[:name] = validate_name!(name)
       hsh[:initial_value] = initial_value
       hsh[:mode] = mode
       hsh[:activation] = activation
@@ -26,10 +29,10 @@ module DSL
 
     end
 
-    def source(name= 'anonymous', mode: :push_any, activation: :automatic, triggered_by: nil, condition: lambda{true})
+    def source(name= 'anonymous', mode: :push_any, activation: :automatic, triggered_by: nil, condition: lambda { true })
 
       hsh = {}
-      hsh[:name] = name
+      hsh[:name] = validate_name!(name)
       hsh[:mode] = mode
       hsh[:activation] = activation
       hsh[:condition] = condition
@@ -38,10 +41,10 @@ module DSL
 
     end
 
-    def sink(name='anonymous', mode: :pull_any, activation: :passive, triggered_by: nil, condition: lambda{true})
+    def sink(name='anonymous', mode: :pull_any, activation: :passive, triggered_by: nil, condition: lambda { true })
 
       hsh = {}
-      hsh[:name] = name
+      hsh[:name] = validate_name!(name)
       hsh[:mode] = mode
       hsh[:activation] = activation
       hsh[:condition] = condition
@@ -51,10 +54,10 @@ module DSL
 
     end
 
-    def converter(name='anonymous', mode: :pull_any, activation: :passive, triggered_by: nil, condition: lambda{true})
+    def converter(name='anonymous', mode: :pull_any, activation: :passive, triggered_by: nil, condition: lambda { true })
 
       hsh = {}
-      hsh[:name] = name
+      hsh[:name] = validate_name!(name)
       hsh[:mode] = mode
       hsh[:activation] = activation
       hsh[:condition] = condition
@@ -64,10 +67,10 @@ module DSL
 
     end
 
-    def trader(name='anonymous', mode: :pull_any, activation: :passive, triggered_by: nil, condition: lambda{true})
+    def trader(name='anonymous', mode: :pull_any, activation: :passive, triggered_by: nil, condition: lambda { true })
 
       hsh = {}
-      hsh[:name] = name
+      hsh[:name] = validate_name!(name)
       hsh[:mode] = mode
       hsh[:activation] = activation
       hsh[:condition] = condition
@@ -75,12 +78,12 @@ module DSL
 
       add_node! Trader, hsh
 
-   end
+    end
 
-    def gate(name='anonymous', activation: :passive, triggered_by: nil, condition: lambda{true})
+    def gate(name='anonymous', activation: :passive, triggered_by: nil, condition: lambda { true })
 
       hsh = {}
-      hsh[:name] = name
+      hsh[:name] = validate_name!(name)
       hsh[:activation] = activation
       hsh[:condition] = condition
       hsh[:triggered_by] = triggered_by
@@ -90,10 +93,10 @@ module DSL
     end
 
     # methods to create edges
-    def edge(name='anonymous', label: 1,from:, to:)
+    def edge(name='anonymous', label: 1, from:, to:)
 
       hsh = {}
-      hsh[:name] = name
+      hsh[:name] = validate_name!(name)
       hsh[:label] = label
       hsh[:from] = from
       hsh[:to] = to
@@ -146,13 +149,13 @@ module DSL
   end
 
 
-  def diagram(name='new diagram', mode: :silent, &blk)
+  def diagram(name='new_diagram', mode: :silent, &blk)
 
     # cant verbose be a simple boolean instead?
     if mode == :silent || mode == 'silent'
-      dia= Diagram.new name
+      dia= Diagram.new(validate_name!(name))
     elsif mode == :verbose || mode == 'verbose'
-      dia = VerboseDiagram.new name
+      dia = VerboseDiagram.new(validate_name!(name))
     else
       raise BadDSL, "Unknown diagram mode: #{mode.to_s}"
     end
@@ -165,7 +168,7 @@ module DSL
 
   def non_deterministic_diagram(name, verbose=:silent, &blk)
 
-    dia=NonDeterministicDiagram.new name
+    dia=NonDeterministicDiagram.new(validate_name!(name))
 
     # cant verbose be a simple boolean instead?
     if verbose === :verbose
@@ -176,6 +179,16 @@ module DSL
 
     dia
 
+  end
+
+  private
+
+  def validate_name!(name)
+    if StringHelper.valid_ruby_variable_name?(name)
+      name
+    else
+      raise BadDSL.new('Invalid name')
+    end
   end
 
   #add these methods to existing class Diagram here
