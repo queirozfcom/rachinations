@@ -135,7 +135,7 @@ class Pool < ResourcefulNode
   end
 
   def to_s
-    "Pool '#{@name}':  #{resources} "
+    "Pool '#{@name}': #{resources} "
   end
 
   # TODO this smells. where is this used? can i do without it?

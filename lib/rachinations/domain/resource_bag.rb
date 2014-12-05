@@ -82,15 +82,14 @@ class ResourceBag
       unlocked = count_where{|r| (r.is_type? klass) && (r.unlocked?) }
       locked = count_where{|r| (r.is_type? klass) && (r.locked?) }
 
-      out += "\n #{name} -> #{unlocked} (#{locked}) \n\n"
+      out += "#{name} -> #{unlocked} (#{locked}) \n"
     end
 
     if classes.empty?
-      "\n    Empty\n\n"
+      "Empty\n\n"
     else
-      out
+      out+"\n"
     end
-
 
   end
 

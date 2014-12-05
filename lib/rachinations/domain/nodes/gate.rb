@@ -34,6 +34,10 @@ class Gate < ResourcelessNode
 
   end
 
+  def to_s
+    "Gate '#{@name}'\n\n"
+  end
+
   private
 
   def pick_one(edges)

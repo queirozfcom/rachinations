@@ -12,8 +12,7 @@ module DSL
 
     alias_method :run, :run!
 
-    # methods to create nodes
-    # I would probably not need so many method if I used metaprogramming
+
     def pool(name='anonymous', initial_value: 0, mode: :pull_any, activation: :passive, triggered_by: nil, condition: lambda { true })
 
       hsh = {}
@@ -187,7 +186,7 @@ module DSL
     if StringHelper.valid_ruby_variable_name?(name)
       name
     else
-      raise BadDSL.new('Invalid name')
+      raise BadDSL.new("Invalid name: '#{name}'")
     end
   end
 

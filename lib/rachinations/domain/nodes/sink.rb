@@ -14,4 +14,7 @@ class Sink < Pool
     # do nothing
   end
 
+  def to_s
+    "Sink '#{@name}'\n\n"
+  end
 end
