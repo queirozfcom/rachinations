@@ -52,6 +52,8 @@ class Diagram
     node.attach_condition &condition
 
     if !triggered_by.nil?
+      # ask the current class (diagram) to evaluate what node it is
+      #
       triggerer = self.send(triggered_by.to_sym)
       triggerer.attach_trigger(node)
     end

@@ -135,5 +135,21 @@ describe Diagram do
 
     end
 
+    it 'new simpler syntax'do
+
+      d = diagram 'd1' do
+        pool 'p1', 10, :automatic, :push_any
+        pool 'p2'
+        edge from: 'p1', to: 'p2'
+      end
+
+      d.run 5
+
+      expect(d.p1.resource_count).to eq(5)
+      expect(d.p2.resource_count).to eq(5)
+
+
+    end
+
   end
 end

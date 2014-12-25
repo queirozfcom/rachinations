@@ -131,7 +131,7 @@ describe Diagram do
 
     it 'takes staging and commit steps into account when run with 3 pools for 1 turn only' do
 
-      d = Diagram.new 'some_name'
+      d = Diagram.new
 
       d.add_node! Pool, name: 'pool1', initial_value: 2, mode: :push_any, activation: :automatic
 
@@ -153,7 +153,7 @@ describe Diagram do
 
     it 'takes staging and commit steps into account when run with 3 pools for 4 turns' do
 
-      d = Diagram.new 'some_name'
+      d = Diagram.new
 
       d.add_node! Pool, name: 'pool1', initial_value: 10, mode: :push_any, activation: :automatic
 
@@ -177,7 +177,7 @@ describe Diagram do
 
     it 'runs with a source and a pool and have the expected amount of resources at the end' do
 
-      d=Diagram.new 'simple'
+      d=Diagram.new
 
 
       d.add_node! Source, {
@@ -201,7 +201,9 @@ describe Diagram do
     end
 
     it 'can be run until a given condition is true' do
-      d=Diagram.new 'simple'
+
+      d=Diagram.new
+
       d.add_node! Pool, {
           :name => 'deposit',
           :initial_value => 0
@@ -222,7 +224,8 @@ describe Diagram do
 
     it 'aborts after specified turns as a safeguard against infinite loops given as stopping condition' do
 
-      d=Diagram.new 'simple'
+      d=Diagram.new
+
       d.max_iterations=9
 
       d.add_node! Pool, {
@@ -253,7 +256,7 @@ describe Diagram do
 
       d.add_node! Pool, name: 'Hungry fella', activation: :automatic
 
-      d.add_edge! Edge, name: 'edge1', from: 'Poor fella', to: 'Hungry fella'
+      d.add_edge! Edge, from: 'Poor fella', to: 'Hungry fella'
 
       expect { d.run! 10 }.not_to raise_error
 

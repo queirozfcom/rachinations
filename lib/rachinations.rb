@@ -34,6 +34,8 @@ require 'rachinations/domain/edge_collection'
 require 'rachinations/domain/node_collection'
 require 'rachinations/domain/resource_bag'
 
-
+# users can use the dsl to create diagrams
 include DSL
+
+# users use call .percent on integers
 using NumberModifiers

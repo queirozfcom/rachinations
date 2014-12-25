@@ -2,9 +2,13 @@ require_relative '../domain/diagrams/diagram'
 require_relative '../domain/diagrams/verbose_diagram'
 require_relative '../domain/diagrams/non_deterministic_diagram'
 require_relative '../domain/modules/diagrams/verbose'
+require_relative '../domain/modules/common/refiners/proc_convenience_methods'
+require_relative './bad_dsl'
 require_relative '../utils/string_helper'
+require_relative 'helpers/config'
 
 module DSL
+  using ProcConvenienceMethods
 
   # this isn't a refiner because there are some methods (like diagram) which shouldn't be
   # added to the Diagram class itself, but to the global scope instead.
@@ -12,98 +16,70 @@ module DSL
 
     alias_method :run, :run!
 
+    def pool(*args)
 
-    def pool(name='anonymous', initial_value: 0, mode: :pull_any, activation: :passive, triggered_by: nil, condition: lambda { true })
+      hash = DSL::Config.parse_arguments(args)
 
-      hsh = {}
-      hsh[:name] = validate_name!(name)
-      hsh[:initial_value] = initial_value
-      hsh[:mode] = mode
-      hsh[:activation] = activation
-      hsh[:condition] = condition
-      hsh[:triggered_by] = triggered_by
-
-      add_node! Pool, hsh
-
+      add_node! Pool, hash
 
     end
 
-    def source(name= 'anonymous', mode: :push_any, activation: :automatic, triggered_by: nil, condition: lambda { true })
+    def source(*args)
 
-      hsh = {}
-      hsh[:name] = validate_name!(name)
-      hsh[:mode] = mode
-      hsh[:activation] = activation
-      hsh[:condition] = condition
-      hsh[:triggered_by] = triggered_by
-      add_node! Source, hsh
+      hash = DSL::Config.parse_arguments(args)
+
+      add_node! Source, hash
 
     end
 
-    def sink(name='anonymous', mode: :pull_any, activation: :passive, triggered_by: nil, condition: lambda { true })
+    def sink(*args)
 
-      hsh = {}
-      hsh[:name] = validate_name!(name)
-      hsh[:mode] = mode
-      hsh[:activation] = activation
-      hsh[:condition] = condition
-      hsh[:triggered_by] = triggered_by
+      hash = DSL::Config.parse_arguments(args)
 
-      add_node! Sink, hsh
+      add_node! Sink, hash
 
     end
 
-    def converter(name='anonymous', mode: :pull_any, activation: :passive, triggered_by: nil, condition: lambda { true })
+    def converter(*args)
 
-      hsh = {}
-      hsh[:name] = validate_name!(name)
-      hsh[:mode] = mode
-      hsh[:activation] = activation
-      hsh[:condition] = condition
-      hsh[:triggered_by] = triggered_by
+      hash = DSL::Config.parse_arguments(args)
 
-      add_node! Converter, hsh
+      add_node! Converter, hash
 
     end
 
-    def trader(name='anonymous', mode: :pull_any, activation: :passive, triggered_by: nil, condition: lambda { true })
+    def trader(*args)
 
-      hsh = {}
-      hsh[:name] = validate_name!(name)
-      hsh[:mode] = mode
-      hsh[:activation] = activation
-      hsh[:condition] = condition
-      hsh[:triggered_by] = triggered_by
+      hash = DSL::Config.parse_arguments(args)
 
-      add_node! Trader, hsh
+      add_node! Trader, hash
 
     end
 
-    def gate(name='anonymous', activation: :passive, triggered_by: nil, condition: lambda { true })
+    def gate(*args)
+      # gate is different because it doesn't take some arguments
+      hash = DSL::Config.parse_gate_arguments(args)
 
-      hsh = {}
-      hsh[:name] = validate_name!(name)
-      hsh[:activation] = activation
-      hsh[:condition] = condition
-      hsh[:triggered_by] = triggered_by
-
-      add_node! Gate, hsh
+      add_node! Gate, hash
 
     end
 
     # methods to create edges
-    def edge(name='anonymous', label: 1, from:, to:)
+    def edge(*args)
 
-      hsh = {}
-      hsh[:name] = validate_name!(name)
-      hsh[:label] = label
-      hsh[:from] = from
-      hsh[:to] = to
+      hash = DSL::Config.parse_edge_arguments(args)
 
-      add_edge! Edge, hsh
+      add_edge! Edge, hash
 
     end
 
+
+    # def node(name, klass, hsh={})
+    #
+    #   hsh[:name] = name
+    #
+    #   add_node! klass, hsh
+    # end
 
     # so that I can easily access elements which have been given a name
     # (mostly nodes and maybe edges too)
@@ -126,24 +102,7 @@ module DSL
       else
         node
       end
-
     end
-
-    def node(name, klass, hsh={})
-
-      hsh[:name] = name
-
-      add_node! klass, hsh
-    end
-
-    # def edge(name, klass, from, to, hsh={})
-    #
-    #   hsh[:name] = name
-    #   hsh[:from] = from
-    #   hsh[:to] = to
-    #
-    #   add_edge! klass, hsh
-    # end
 
   end
 
@@ -159,11 +118,14 @@ module DSL
       raise BadDSL, "Unknown diagram mode: #{mode.to_s}"
     end
 
+    # methods in the block get run as if they were called on
+    # the diagram itself
     dia.instance_eval &blk
 
     dia
 
   end
+
 
   def non_deterministic_diagram(name, verbose=:silent, &blk)
 
@@ -180,18 +142,13 @@ module DSL
 
   end
 
-  private
 
   def validate_name!(name)
     if StringHelper.valid_ruby_variable_name?(name)
       name
     else
-      raise BadDSL.new("Invalid name: '#{name}'")
+      raise BadDSL, "Invalid name: '#{name}'"
     end
   end
-
-  #add these methods to existing class Diagram here
-  #because it doesn't need to know about it
-
 
 end
