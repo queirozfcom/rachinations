@@ -42,10 +42,10 @@ class Diagram
     params.store(:diagram, self)
 
     #if there's a condition, return it, otherwise return default condition
-    condition = params.delete(:condition){ lambda{true} }
+    condition = params.delete(:condition) { lambda { true } }
 
     #similarly, if nodes are supposed to be triggered by another node
-    triggered_by = params.delete(:triggered_by){nil}
+    triggered_by = params.delete(:triggered_by) { nil }
 
     node = node_klass.new(params)
 
@@ -53,7 +53,6 @@ class Diagram
 
     if !triggered_by.nil?
       # ask the current class (diagram) to evaluate what node it is
-      #
       triggerer = self.send(triggered_by.to_sym)
       triggerer.attach_trigger(node)
     end
@@ -69,8 +68,8 @@ class Diagram
     params.store(:diagram, self)
 
     #we need to send the actual nodes, not their names
-    from = get_node(params.fetch(:from))
-    to = get_node(params.fetch(:to))
+    from = get_node(params.delete(:from))
+    to = get_node(params.delete(:to))
 
     params.store(:from, from)
     params.store(:to, to)

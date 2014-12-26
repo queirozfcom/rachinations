@@ -5,7 +5,7 @@ require_relative '../domain/modules/diagrams/verbose'
 require_relative '../domain/modules/common/refiners/proc_convenience_methods'
 require_relative './bad_dsl'
 require_relative '../utils/string_helper'
-require_relative 'helpers/config'
+require_relative 'helpers/parser'
 
 module DSL
   using ProcConvenienceMethods
@@ -18,7 +18,7 @@ module DSL
 
     def pool(*args)
 
-      hash = DSL::Config.parse_arguments(args)
+      hash = DSL::Parser.parse_arguments(args)
 
       add_node! Pool, hash
 
@@ -26,7 +26,7 @@ module DSL
 
     def source(*args)
 
-      hash = DSL::Config.parse_arguments(args)
+      hash = DSL::Parser.parse_arguments(args)
 
       add_node! Source, hash
 
@@ -34,7 +34,7 @@ module DSL
 
     def sink(*args)
 
-      hash = DSL::Config.parse_arguments(args)
+      hash = DSL::Parser.parse_arguments(args)
 
       add_node! Sink, hash
 
@@ -42,7 +42,7 @@ module DSL
 
     def converter(*args)
 
-      hash = DSL::Config.parse_arguments(args)
+      hash = DSL::Parser.parse_arguments(args)
 
       add_node! Converter, hash
 
@@ -50,7 +50,7 @@ module DSL
 
     def trader(*args)
 
-      hash = DSL::Config.parse_arguments(args)
+      hash = DSL::Parser.parse_arguments(args)
 
       add_node! Trader, hash
 
@@ -58,7 +58,7 @@ module DSL
 
     def gate(*args)
       # gate is different because it doesn't take some arguments
-      hash = DSL::Config.parse_gate_arguments(args)
+      hash = DSL::Parser.parse_gate_arguments(args)
 
       add_node! Gate, hash
 
@@ -67,19 +67,12 @@ module DSL
     # methods to create edges
     def edge(*args)
 
-      hash = DSL::Config.parse_edge_arguments(args)
+      hash = DSL::Parser.parse_edge_arguments(args)
 
       add_edge! Edge, hash
 
     end
 
-
-    # def node(name, klass, hsh={})
-    #
-    #   hsh[:name] = name
-    #
-    #   add_node! klass, hsh
-    # end
 
     # so that I can easily access elements which have been given a name
     # (mostly nodes and maybe edges too)

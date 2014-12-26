@@ -37,5 +37,5 @@ require 'rachinations/domain/resource_bag'
 # users can use the dsl to create diagrams
 include DSL
 
-# users use call .percent on integers
+# users can call .percent on integers
 using NumberModifiers

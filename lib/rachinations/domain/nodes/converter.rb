@@ -94,7 +94,7 @@ class Converter < ResourcefulNode
     #TODO use argument (edge) on the call to super and make sure tests still pass
     # that way it's clearer that it is being passed on to super
     super
-    resources_contributed.store(edge, Fifo.new)
+    resources_contributed.store(edge, Extras::Fifo.new)
     self
   end
 

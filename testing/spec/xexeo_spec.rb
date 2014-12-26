@@ -7,12 +7,10 @@ describe Diagram do
   it "runs modelo1" do
 
     n=diagram 'test_diagram' do
-      node 'source', Source
-      node 'pool1', Pool
+      source 'source'
+      pool 'pool1'
       edge from: 'source', to: 'pool1'
     end
-
-    d = Diagram.new('one source one pool')
 
     n.run!(5)
 
@@ -113,10 +111,10 @@ describe Diagram do
 
   it "runs sequencial" do
     n=diagram 'test_diagram' do
-      node 'p1', Pool, mode: :push, activation: :automatic, initial_value: 8
-      node 'p2', Pool, mode: :push, activation: :automatic
-      node 'p3', Pool, mode: :push, activation: :automatic
-      node 'p4', Pool, mode: :push, activation: :automatic
+      pool 'p1', mode: :push_any, activation: :automatic, initial_value: 8
+      pool 'p2', mode: :push_any, activation: :automatic
+      pool 'p3', mode: :push_any, activation: :automatic
+      pool 'p4', mode: :push_any, activation: :automatic
       edge from: 'p1', to: 'p2'
       edge from: 'p2', to: 'p3'
       edge from: 'p3', to: 'p4'
@@ -129,10 +127,10 @@ describe Diagram do
 
   it "runs sobonito" do
     n=diagram 'test_diagram' do
-      node 'p1', Pool, mode: :push, activation: :automatic, initial_value: 8
-      node 'p2', Pool, mode: :push, activation: :automatic
-      node 'p3', Pool, mode: :push, activation: :automatic
-      node 'p4', Pool, mode: :push, activation: :automatic
+      pool 'p1', mode: :push_any, activation: :automatic, initial_value: 8
+      pool 'p2', mode: :push_any, activation: :automatic
+      pool 'p3', mode: :push_any, activation: :automatic
+      pool 'p4', mode: :push_any, activation: :automatic
       edge from: 'p1',to: 'p2'
       edge from: 'p2',to: 'p1'
       edge from: 'p1',to: 'p3'
@@ -150,10 +148,10 @@ describe Diagram do
 
   it "runs sobonitowhile" do
     n=diagram 'test_diagram' do
-      node 'p1', Pool, mode: :push, activation: :automatic, initial_value: 8
-      node 'p2', Pool, mode: :push, activation: :automatic
-      node 'p3', Pool, mode: :push, activation: :automatic
-      node 'p4', Pool, mode: :push, activation: :automatic
+      pool 'p1',  mode: :push_any, activation: :automatic, initial_value: 8
+      pool 'p2',  mode: :push_any, activation: :automatic
+      pool 'p3',  mode: :push_any, activation: :automatic
+      pool 'p4',  mode: :push_any, activation: :automatic
       edge from: 'p1',to: 'p2'
       edge from: 'p2',to: 'p1'
       edge from: 'p1',to: 'p3'
@@ -174,14 +172,14 @@ describe Diagram do
 
   it "runs whatIwish1" do
 
-    skip "needed features are missing"
+    skip "Needed features are missing"
 
     # n=diagram 'test_diagram' do
     #   node 'source', Source
     #   node 'pool1', Pool
     #   edge 'edge1', Edge, 'source', 'pool1'
     #   node 'pool2', Pool,
-    #   converter 'c1' , Converter
+    #   converter 'c1'
     #   node 'e3' , Edge , 'pool2' , 'c1'
     #   trigger 't1' , Trigger , 'pool1' , 'pool2' , { |ExtendedNode p| p.resouces>0 }
     # end

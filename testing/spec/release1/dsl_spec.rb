@@ -5,38 +5,40 @@ describe Diagram do
 
   context 'diagram tests using the dsl' do
 
-    it 'runs a simple example diagram' do
-      d = diagram do
-        source 's1'
-        pool 'p1', mode: :push_any, activation: :automatic
-        pool 'p2'
-        edge from: 's1', to: 'p1'
-        edge from: 'p1', to: 'p2'
-      end
-      d.run 5
-
-      expect(d.p1.resource_count).to eq 1
-      expect(d.p2.resource_count).to eq 4
-
-    end
-
-    it 'runs with one pool with no name' do
-      d = diagram do
-        pool
-      end
-
-      d.run! 5
-
-    end
+    # it 'runs a simple example diagram' do
+    #   d = diagram do
+    #     source 's1'
+    #     pool 'p1', :push_any, :automatic
+    #     pool 'p2'
+    #     edge from: 's1', to: 'p1'
+    #     edge from: 'p1', to: 'p2'
+    #   end
+    #   d.run 5
+    #
+    #   expect(d.p1.resource_count).to eq 1
+    #   expect(d.p2.resource_count).to eq 4
+    #
+    # end
+    #
+    # it 'runs with one pool with no name' do
+    #   d = diagram do
+    #     pool
+    #   end
+    #
+    #   d.run! 5
+    #
+    # end
+    #
 
     it 'runs with one pool with some params' do
 
       d = diagram do
-        pool 'p', initial_value: 9, mode: :pull_all
+        pool 'p', 9, :pull_all
       end
 
       d.run! 5
       expect(d.p.resource_count).to eq 9
+
     end
 
     it 'requires valid names for nodes and edges because they might be used as methods' do
@@ -74,6 +76,7 @@ describe Diagram do
     end
 
     it 'runs with triggers' do
+
       d = diagram 'triggers' do
         source 's1'
         pool 'p1'
@@ -89,7 +92,7 @@ describe Diagram do
 
     end
 
-    it 'runs with a three-way, default gate' do
+    it 'runs with a three-way, default gate using different notations' do
 
       d = diagram do
         source 's1'
@@ -98,7 +101,7 @@ describe Diagram do
         pool 'p1'
         pool 'p2'
         pool 'p3'
-        edge 'e1', from: 'g1', to: 'p1', label: 1/3
+        edge 'e1', 1/3, from: 'g1', to: 'p1'
         edge 'e1', from: 'g1', to: 'p2', label: 1/3
         edge 'e1', from: 'g1', to: 'p3', label: 1/3
       end
