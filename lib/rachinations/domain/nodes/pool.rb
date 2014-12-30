@@ -47,8 +47,17 @@ class Pool < ResourcefulNode
 
         pull_any!
 
-      end
+      elsif push? && all?
 
+        push_all!
+
+      elsif pull? && all?
+
+        pull_all!
+
+      else
+
+      end
     end
   end
 
@@ -185,17 +194,13 @@ class Pool < ResourcefulNode
   def push_any!
 
     outgoing_edges.shuffle.each do |edge|
-      begin
-        blk = edge.push_expression
-      rescue => ex
-        # Could not get a block for one Edge, but this is push_any so I'll go ahead.
-        next #other edges might still be able to serve me.
-      end
+
+      blk = edge.push_expression
 
       edge.label.times do
         begin
           res = remove_resource!(&blk)
-        rescue => ex
+        rescue NoElementsMatchingConditionError
           # Failed to remove this resource. Let's try another Edge, perhaps?
           break
         end
@@ -209,17 +214,13 @@ class Pool < ResourcefulNode
 
   def pull_any!
     incoming_edges.shuffle.each do |edge|
-      begin
-        blk = edge.pull_expression
-      rescue RuntimeError => ex
-        # Could not get a block for one Edge, but this is pull_any so I'll go ahead.
-        next #other edges might still be able to serve me.
-      end
+
+      blk = edge.pull_expression
 
       edge.label.times do
         begin
           res = edge.pull!(&blk)
-        rescue RuntimeError => ex
+        rescue RuntimeError
           # Let's try another Edge, perhaps?
           break
         end
@@ -229,6 +230,24 @@ class Pool < ResourcefulNode
       end
 
     end
+  end
+
+  def pull_all!
+
+    if incoming_edges.select { |edge| edge.enabled? }.all? { |edge| edge.test_ping? }
+      incoming_edges.select { |edge| edge.enabled? }.each do |edge|
+        blk = edge.pull_expression
+
+        edge.label.times do
+          res = edge.pull!(&blk)
+
+          add_resource!(res.lock!)
+
+        end
+
+      end
+    end
+
   end
 
   def options

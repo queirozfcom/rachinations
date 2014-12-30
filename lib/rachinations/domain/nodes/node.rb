@@ -36,7 +36,6 @@ class Node
   end
 
 
-
   def edges
     if @edges.is_a? Array
       @edges
@@ -127,17 +126,17 @@ class Node
   end
 
   def enabled?
-    res=true
-    conditions.each do |cond|
-      if cond.is_a? Proc
-        res=res && cond.call
-      elsif cond === false
+    status=true
+    conditions.each do |condition|
+      if condition.is_a? Proc
+        status = (status && condition.call)
+      elsif condition === false
         return false
-      elsif cond === true
+      elsif condition === true
         # do nothing
       end
     end
-    res
+    status
   end
 
   def disabled?

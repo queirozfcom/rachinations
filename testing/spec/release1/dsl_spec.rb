@@ -5,34 +5,35 @@ describe Diagram do
 
   context 'diagram tests using the dsl' do
 
-    # it 'runs a simple example diagram' do
-    #   d = diagram do
-    #     source 's1'
-    #     pool 'p1', :push_any, :automatic
-    #     pool 'p2'
-    #     edge from: 's1', to: 'p1'
-    #     edge from: 'p1', to: 'p2'
-    #   end
-    #   d.run 5
-    #
-    #   expect(d.p1.resource_count).to eq 1
-    #   expect(d.p2.resource_count).to eq 4
-    #
-    # end
-    #
-    # it 'runs with one pool with no name' do
-    #   d = diagram do
-    #     pool
-    #   end
-    #
-    #   d.run! 5
-    #
-    # end
-    #
+    it 'runs a simple example diagram' do
+      d = diagram do
+        source 's1'
+        pool 'p1', :push_any, :automatic
+        pool 'p2'
+        edge from: 's1', to: 'p1'
+        edge from: 'p1', to: 'p2'
+      end
+      d.run 5
+
+      expect(d.p1.resource_count).to eq 1
+      expect(d.p2.resource_count).to eq 4
+
+    end
+
+    it 'runs with one pool with no name' do
+      d = diagram do
+        pool
+      end
+
+      d.run! 5
+
+    end
+
 
     it 'runs with one pool with some params' do
 
       d = diagram do
+        pool 'p', 9, :pull_all
         pool 'p', 9, :pull_all
       end
 
@@ -138,7 +139,7 @@ describe Diagram do
 
     end
 
-    it 'new simpler syntax'do
+    it 'accepts new simpler syntax'do
 
       d = diagram 'd1' do
         pool 'p1', 10, :automatic, :push_any
@@ -151,8 +152,6 @@ describe Diagram do
       expect(d.p1.resource_count).to eq(5)
       expect(d.p2.resource_count).to eq(5)
 
-
     end
-
   end
 end

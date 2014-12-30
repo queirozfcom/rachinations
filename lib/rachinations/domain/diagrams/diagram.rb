@@ -103,7 +103,7 @@ class Diagram
 
     i=1
 
-    #if given condition block turned false, it's time to stop
+    # if given condition block turned false, it's time to stop
     while yield i do
 
       break unless sanity_check? i
@@ -153,7 +153,7 @@ class Diagram
 
   def run_first_round!
 
-    enabled_nodes.select { |n| n.automatic? || n.start? }.shuffle.each { |n| n.trigger! }
+    enabled_nodes.select { |node| node.automatic? || node.start? }.shuffle.each { |node| node.trigger! }
 
     commit_nodes!
 
@@ -161,7 +161,7 @@ class Diagram
 
   def run_round!
 
-    enabled_nodes.select { |n| n.automatic? }.shuffle.each { |node| node.trigger! }
+    enabled_nodes.select { |node| node.automatic? }.shuffle.each { |node| node.trigger! }
 
     commit_nodes!
 
@@ -169,11 +169,13 @@ class Diagram
 
   def commit_nodes!
     #only after all nodes have run do we update the actual resources and changes, to be used in the next round.
-    nodes.shuffle.each { |n| n.commit! }
+    nodes.shuffle.each { |node| node.commit! }
+
   end
 
   def enabled_nodes
-    nodes.select { |n| n.enabled? }
+    nodes.select { |node| node.enabled? }
+
   end
 
   #template method

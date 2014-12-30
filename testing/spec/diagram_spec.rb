@@ -469,6 +469,41 @@ describe Diagram do
 
       end
     end
+
+
+    describe 'Comprehensive examples using pull_all and activators 'do
+
+      it 'example 1' do
+
+        d = Diagram.new
+
+        d.add_node! Pool, mode: :pull_all, name: 'p1', activation: :automatic
+        d.add_node! Pool, name: 'p2', initial_value: 7
+        d.add_node! Pool, name: 'p3', initial_value: 2
+        d.add_node! Pool, name: 'p4', initial_value: 2
+        d.add_node! Pool, name: 'p5', activation: :automatic, initial_value: 6, mode: :push_any
+
+        d.add_edge! Edge, from: 'p2',to:'p1'
+        d.add_edge! Edge, from: 'p3',to:'p1'
+        d.add_edge! Edge, from: 'p4',to:'p1'
+
+        d.add_edge! Edge, from: 'p5',to:'p3'
+        d.add_edge! Edge, from: 'p5',to:'p4'
+
+        d.p5.attach_condition{ d.p3.resource_count < 1 && d.p4.resource_count < 1 }
+
+        d.run! 8
+
+        expect(d.p1.resource_count).to eq 15
+        expect(d.p2.resource_count).to eq 2
+        expect(d.p3.resource_count).to eq 0
+        expect(d.p4.resource_count).to eq 0
+        expect(d.p5.resource_count).to eq 0
+
+      end
+
+    end
+
   end
 
 end
