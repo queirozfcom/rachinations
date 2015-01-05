@@ -2,6 +2,8 @@ require_relative 'spec_helper'
 
 describe Diagram do
   using NumberModifiers
+  using ProcConvenienceMethods
+
 
   context 'integration' do
 
@@ -471,9 +473,9 @@ describe Diagram do
     end
 
 
-    describe 'Comprehensive examples using pull_all and activators 'do
+    describe 'Comprehensive examples'do
 
-      it 'example 1' do
+      it 'example using pull_all and activators' do
 
         d = Diagram.new
 
@@ -501,6 +503,10 @@ describe Diagram do
         expect(d.p5.resource_count).to eq 0
 
       end
+
+
+
+
 
     end
 

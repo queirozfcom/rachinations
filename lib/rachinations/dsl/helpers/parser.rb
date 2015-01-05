@@ -145,8 +145,24 @@ module DSL
 
     end
 
-    def self.valid_name?(name)
-      StringHelper.valid_ruby_variable_name?(name)
+    # Used to validate that a string is a valid name for diagram components
+    #
+    # @param [String] text the name we want to validate
+    # @raise [BadDSL] if given text is not a valid name
+    # @return [String] the text itself, but only if it's valid. Otherwise
+    #   an exception will be raised.
+    def self.validate_name!(text)
+      if StringHelper.valid_ruby_variable_name?(text)
+        text
+      else
+        raise BadDSL, "Invalid name: '#{text}'"
+      end
+    end
+
+    # @param [String] text the name we want to validate
+    # @return [Boolean] whether or not given text is a valid name for diagram elements
+    def self.valid_name?(text)
+      StringHelper.valid_ruby_variable_name?(text)
     end
 
   end

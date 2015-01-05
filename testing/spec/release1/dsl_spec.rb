@@ -153,5 +153,32 @@ describe Diagram do
       expect(d.p2.resource_count).to eq(5)
 
     end
+
+
+    it 'example using push_all, activators and triggers' do
+
+      d = diagram do
+        pool 'p1'
+        pool 'p2'
+        pool 'p3'
+        source 's2', :automatic
+        pool 'p5'
+        source 's1' , condition: expr { p5.resource_count > 5 }
+        pool 'p4', :push_all, initial_value: 11, triggered_by: 's1'
+      end
+
+      d.run 10
+
+      # expect(d.p5.resource_count).to eq 10
+      #
+      # expect(d.p1.resource_count).to eq 3
+      # expect(d.p2.resource_count).to eq 3
+      # expect(d.p3.resource_count).to eq 3
+      #
+      # expect(d.p4.resource_count).to eq 2
+
+
+    end
+
   end
 end

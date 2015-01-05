@@ -18,7 +18,7 @@ module DSL
 
     def pool(*args)
 
-      hash = DSL::Parser.parse_arguments(args)
+      hash = Parser.parse_arguments(args)
 
       add_node! Pool, hash
 
@@ -26,7 +26,7 @@ module DSL
 
     def source(*args)
 
-      hash = DSL::Parser.parse_arguments(args)
+      hash = Parser.parse_arguments(args)
 
       add_node! Source, hash
 
@@ -34,7 +34,7 @@ module DSL
 
     def sink(*args)
 
-      hash = DSL::Parser.parse_arguments(args)
+      hash = Parser.parse_arguments(args)
 
       add_node! Sink, hash
 
@@ -42,7 +42,7 @@ module DSL
 
     def converter(*args)
 
-      hash = DSL::Parser.parse_arguments(args)
+      hash = Parser.parse_arguments(args)
 
       add_node! Converter, hash
 
@@ -50,7 +50,7 @@ module DSL
 
     def trader(*args)
 
-      hash = DSL::Parser.parse_arguments(args)
+      hash = Parser.parse_arguments(args)
 
       add_node! Trader, hash
 
@@ -58,7 +58,7 @@ module DSL
 
     def gate(*args)
       # gate is different because it doesn't take some arguments
-      hash = DSL::Parser.parse_gate_arguments(args)
+      hash = Parser.parse_gate_arguments(args)
 
       add_node! Gate, hash
 
@@ -67,7 +67,7 @@ module DSL
     # methods to create edges
     def edge(*args)
 
-      hash = DSL::Parser.parse_edge_arguments(args)
+      hash = Parser.parse_edge_arguments(args)
 
       add_edge! Edge, hash
 
@@ -99,14 +99,16 @@ module DSL
 
   end
 
+  # These methods aren't within the refiner because they aren't methods
+  # on class Diagram but rather 'global' methods.
 
   def diagram(name='new_diagram', mode: :silent, &blk)
 
     # cant verbose be a simple boolean instead?
     if mode == :silent || mode == 'silent'
-      dia= Diagram.new(validate_name!(name))
+      dia= Diagram.new(Parser.validate_name!(name))
     elsif mode == :verbose || mode == 'verbose'
-      dia = VerboseDiagram.new(validate_name!(name))
+      dia = VerboseDiagram.new(Parser.validate_name!(name))
     else
       raise BadDSL, "Unknown diagram mode: #{mode.to_s}"
     end
@@ -122,7 +124,7 @@ module DSL
 
   def non_deterministic_diagram(name, verbose=:silent, &blk)
 
-    dia=NonDeterministicDiagram.new(validate_name!(name))
+    dia=NonDeterministicDiagram.new(Parser.validate_name!(name))
 
     # cant verbose be a simple boolean instead?
     if verbose === :verbose
@@ -135,12 +137,15 @@ module DSL
 
   end
 
-
-  def validate_name!(name)
-    if StringHelper.valid_ruby_variable_name?(name)
-      name
+  # This is just a convenience method to create a proc in a way that's more
+  #  intuitive for ends users.
+  # @example Create a proc, equivalent to proc{|x| x+1 }
+  #   expr{|x| x+1 }
+  def expr(&blk)
+    if !block_given?
+      raise BadDSL, "expected a block, but none was given"
     else
-      raise BadDSL, "Invalid name: '#{name}'"
+      Proc.new(&blk)
     end
   end
 
