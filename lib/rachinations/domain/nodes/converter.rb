@@ -41,7 +41,7 @@ class Converter < ResourcefulNode
 
     if all?
 
-      if incoming_edges.all? { |edge| edge.test_pull?(true) } && outgoing_edges.all? { |edge| edge.test_push?(true) }
+      if incoming_edges.all? { |edge| edge.test_pull?(require_all: true) } && outgoing_edges.all? { |edge| edge.test_push?(require_all:true) }
         pull_all!
         push_all!
       else
@@ -53,7 +53,7 @@ class Converter < ResourcefulNode
       pull_any!
 
       if in_conditions_met?
-        if outgoing_edges.all? { |edge| edge.test_push?(true) }
+        if outgoing_edges.all? { |edge| edge.test_push?(require_all: true) }
           push_all!
           clear_stored_resources!
         end # converters are always push_all
@@ -153,7 +153,7 @@ class Converter < ResourcefulNode
 
       edge.label.times do
         begin
-          res = edge.pull!(&blk)
+          res = edge.pull!(blk)
         rescue RuntimeError => ex
           # Let's try another Edge, perhaps?
           break
@@ -183,7 +183,7 @@ class Converter < ResourcefulNode
 
       edge.label.times do
         begin
-          res = edge.pull!(&blk)
+          res = edge.pull!(blk)
           res=nil # we do not store the results
         rescue RuntimeError => ex
           raise RuntimeError.new "One edge failed to pull; the whole operation failed."

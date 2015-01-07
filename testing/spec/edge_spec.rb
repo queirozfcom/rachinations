@@ -87,7 +87,7 @@ describe Edge do
 
         edge = Edge.new :name => 'e', :from => from, :to => @to
         expect(edge).to receive(:strategy).and_return(@strategy)
-        expect(edge.test_ping?(true)).to eq false
+        expect(edge.test_ping?(require_all:true)).to eq false
 
       end
 
@@ -96,7 +96,7 @@ describe Edge do
 
         edge = Edge.new :name => 'e', :from => from, :to => @to, :label => 8
         expect(edge).to receive(:strategy).and_return(@strategy)
-        expect(edge.test_ping?(true)).to eq false
+        expect(edge.test_ping?(require_all:true)).to eq false
       end
 
       it 'is true when the exact number of required resources are available to be moved' do
@@ -104,7 +104,7 @@ describe Edge do
 
         edge = Edge.new :name => 'e', :from => from, :to => @to, :label => 8
         expect(edge).to receive(:strategy).and_return(@strategy)
-        expect(edge.test_ping?(true)).to eq true
+        expect(edge.test_ping?(require_all:true)).to eq true
       end
 
       it 'is true when the more resources than required are available to be moved' do
@@ -112,7 +112,7 @@ describe Edge do
 
         edge = Edge.new :name => 'e', :from => from, :to => @to, :label => 2
         expect(edge).to receive(:strategy).and_return(@strategy)
-        expect(edge.test_ping?(true)).to eq true
+        expect(edge.test_ping?(require_all:true)).to eq true
       end
 
     end
@@ -124,7 +124,7 @@ describe Edge do
 
         edge = Edge.new :name => 'e', :from => from, :to => @to
         expect(edge).to receive(:strategy).and_return(@strategy)
-        expect(edge.test_ping?(false)).to eq false
+        expect(edge.test_ping?(require_all:false)).to eq false
       end
 
       it 'is true if at least one resource is available' do
@@ -132,7 +132,7 @@ describe Edge do
 
         edge = Edge.new :name => 'e', :from => from, :to => @to, :label => 8
         expect(edge).to receive(:strategy).and_return(@strategy)
-        expect(edge.test_ping?(false)).to eq true
+        expect(edge.test_ping?(require_all:false)).to eq true
       end
 
     end

@@ -4,10 +4,13 @@ require_relative '../../domain/resources/token'
 require_relative '../resource_bag'
 require_relative '../../domain/exceptions/no_elements_matching_condition_error'
 require_relative '../../domain/modules/common/refiners/proc_convenience_methods'
+require_relative '../../../../lib/rachinations/helpers/edge_helper'
 
 using ProcConvenienceMethods
 
 class Pool < ResourcefulNode
+
+  Helper = Helpers::EdgeHelper
 
   def initialize(hsh={})
 
@@ -126,16 +129,16 @@ class Pool < ResourcefulNode
     end
   end
 
-  def take_resource!(&expression)
+  def take_resource!(expression=nil)
 
-    unless block_given?
+    if expression.nil?
       # if no conditions given, then anything goes.
       expression = Proc.new { |res| true }
     end
 
     raise RuntimeError.new unless resources.count_where(&expression) > 0
 
-    res=remove_resource! &expression
+    res=remove_resource! expression
 
     fire_triggers!
 
@@ -173,16 +176,28 @@ class Pool < ResourcefulNode
 
   attr_reader :resources
 
-  def remove_resource!(&expression)
+  # Tries to remove a Resource that matches given expression from this node.
+  # @param [Proc] expression the expression to match against Resources
+  # @raise [RuntimeError] In case it was not possible to remove a Resource
+  def remove_resource!(expression)
 
     # client doesn't need to know about locked vs unlocked resources
     unlocked_expression = Proc.new { |r| r.unlocked? }
 
-    res=resources.get_where { |r| unlocked_expression.call(r) && expression.call(r) }
+    begin
+      # the original expression plus the expression that specifies that only unlocked
+      # resources may be retrieved
+      res=resources.get_where { |r| unlocked_expression.call(r) && expression.call(r) }
+    rescue ArgumentError
+        raise RuntimeError, 'wrong arguments'
+    rescue NoElementsMatchingConditionError
+        raise RuntimeError, 'no elements matching'
+    else
+      @resources_removed[res.class] += 1
+      res
+    end
 
-    @resources_removed[res.class] += 1
 
-    res
   end
 
   def add_resource!(res)
@@ -199,13 +214,13 @@ class Pool < ResourcefulNode
 
       edge.label.times do
         begin
-          res = remove_resource!(&blk)
-        rescue NoElementsMatchingConditionError
+          res = remove_resource!(blk)
+        rescue RuntimeError
           # Failed to remove this resource. Let's try another Edge, perhaps?
           break
+        else
+          edge.push!(res)
         end
-
-        edge.push!(res)
 
       end
 
@@ -219,13 +234,13 @@ class Pool < ResourcefulNode
 
       edge.label.times do
         begin
-          res = edge.pull!(&blk)
+          res = edge.pull!(blk)
         rescue RuntimeError
           # Let's try another Edge, perhaps?
           break
+        else
+          add_resource!(res.lock!)
         end
-
-        add_resource!(res.lock!)
 
       end
 
@@ -234,19 +249,49 @@ class Pool < ResourcefulNode
 
   def pull_all!
 
-    if incoming_edges.select { |edge| edge.enabled? }.all? { |edge| edge.test_ping? }
-      incoming_edges.select { |edge| edge.enabled? }.each do |edge|
+    enabled_incoming_edges = incoming_edges.select { |edge| edge.enabled? }
+
+    if enabled_incoming_edges.all? { |edge| edge.test_ping? }
+
+      enabled_incoming_edges.each do |edge|
         blk = edge.pull_expression
 
         edge.label.times do
-          res = edge.pull!(&blk)
+          res = edge.pull!(blk)
 
           add_resource!(res.lock!)
 
         end
 
       end
+      fire_triggers!
     end
+
+  end
+
+  def push_all!
+
+    enabled_outgoing_edges = outgoing_edges.select { |edge| edge.enabled? }
+
+
+    if Helper.all_can_push?(edges, require_all: true)
+
+      enabled_outgoing_edges.each do |edge|
+
+        expression = edge.push_expression
+
+        edge.label.times do
+
+          res = remove_resource!(expression)
+
+          edge.push!(res)
+
+        end
+
+      end
+      fire_triggers!
+    end
+
 
   end
 

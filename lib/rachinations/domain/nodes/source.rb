@@ -144,6 +144,7 @@ class Source < ResourcefulNode
       end
 
     end
+    fire_triggers!
   end
 
   def options

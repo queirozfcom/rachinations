@@ -96,7 +96,6 @@ describe Converter do
 
         expect(@c).to receive(:in_conditions_met?).and_return(true)
 
-
         expect(@edge_out).to receive(:test_push?).and_return(true)
         expect(@edge_out).to receive(:push_expression).and_return(proc{true})
         expect(@edge_out).to receive(:push!)
@@ -119,13 +118,13 @@ describe Converter do
 
       it 'pushes and pulls if all edges (incoming and outgoing) can push and pull, respectively' do
 
-        expect(@edge_in).to receive(:test_pull?).with(true).and_return(true)
+        expect(@edge_in).to receive(:test_pull?).with(require_all:true).and_return(true)
         expect(@edge_in).to receive(:pull!)
 
-        expect(@edge_in2).to receive(:test_pull?).with(true).and_return(true)
+        expect(@edge_in2).to receive(:test_pull?).with(require_all:true).and_return(true)
         expect(@edge_in2).to receive(:pull!)
 
-        expect(@edge_out).to receive(:test_push?).with(true).and_return(true)
+        expect(@edge_out).to receive(:test_push?).with(require_all:true).and_return(true)
         expect(@edge_out).to receive(:push!)
 
 

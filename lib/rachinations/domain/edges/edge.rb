@@ -38,7 +38,7 @@ class Edge
   #
   # @return [Boolean] true in case a ping! on this Edge
   #  would return true. False otherwise.
-  def test_ping?(require_all=false)
+  def test_ping?(require_all:false)
     return false if from.disabled? || to.disabled?
 
     condition = strategy.condition
@@ -118,13 +118,12 @@ class Edge
   #  won't accept the resource sent.
   # @param res [Token] the resource to send.
   def push!(res)
-    raise RuntimeError.new "This Edge does not support type: #{res.type}" unless supports?(res.type)
+    raise RuntimeError, "This Edge does not support type: #{res.type}" unless supports?(res.type)
 
     begin
       to.put_resource!(res, self)
-    rescue => e
-      # just to make it clear that it bubbles
-      raise RuntimeError.new(e.message+" => "+'Push failed')
+    rescue UnsupportedTypeError
+      raise RuntimeError, "unsupported type"
     end
   end
 
@@ -137,10 +136,10 @@ class Edge
   #  that satisfy this condition block.
   # @return [Token,nil] a Resource that satisfies the given block or nil,
   #  if the pull was not performed for some reason (e.g. it's probabilistic)
-  def pull!(&blk)
+  def pull!(blk)
 
     begin
-      res=from.take_resource!(&blk)
+      res=from.take_resource!(blk)
     rescue => e
       # just to make it clear that it bubbles
       raise RuntimeError.new("Pull failed")
