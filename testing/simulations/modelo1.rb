@@ -4,7 +4,7 @@ require_relative '../../domain/nodes/pool'
 require_relative '../../domain/nodes/source'
 require_relative '../../domain/edges/edge'
 
-include DSL
+include DiagramShorthandMethods
 
 n=diagram 'test_diagram' , :verbose do
   node 'source', Source

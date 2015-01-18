@@ -1,13 +1,13 @@
 require_relative '../../domain/modules/common/refiners/proc_convenience_methods'
 require_relative '../../extras/constant_hash'
+
 module DSL
 
-  # This module helps with parsing arguments used in the DSL
+  # This module helps with parsing arguments used in the DiagramShorthandMethods
   module Parser
     using ProcConvenienceMethods
 
     ConstantHash = ::Extras::ConstantHash
-
 
     # these patterns (*_EXPR) define what each argument should look like
 

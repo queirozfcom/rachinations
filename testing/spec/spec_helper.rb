@@ -15,7 +15,6 @@ require 'rspec'
 require 'rachinations'
 
 
-
 #resource classes to be used in tests
 Blue=Class.new(Token)
 Black=Class.new(Token)

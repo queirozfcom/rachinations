@@ -4,6 +4,8 @@ require_relative 'spec_helper'
 
 describe Diagram do
 
+  using DSL::DiagramShorthandMethods
+
   it "runs modelo1" do
 
     n=diagram 'test_diagram' do
@@ -126,6 +128,7 @@ describe Diagram do
   end
 
   it "runs sobonito" do
+
     n=diagram 'test_diagram' do
       pool 'p1', mode: :push_any, activation: :automatic, initial_value: 8
       pool 'p2', mode: :push_any, activation: :automatic
@@ -140,8 +143,6 @@ describe Diagram do
       edge from: 'p4',to: 'p3'
       edge from: 'p3',to: 'p4'
     end
-
-    d = Diagram.new('bonitinho')
 
     n.run!(20)
   end

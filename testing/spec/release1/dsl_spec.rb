@@ -1,6 +1,7 @@
 require_relative '../spec_helper'
 
 describe Diagram do
+
   using NumberModifiers
 
   context 'diagram tests using the dsl' do
@@ -139,7 +140,7 @@ describe Diagram do
 
     end
 
-    it 'accepts new simpler syntax'do
+    it 'accepts new simpler syntax' do
 
       d = diagram 'd1' do
         pool 'p1', 10, :automatic, :push_any
@@ -163,12 +164,12 @@ describe Diagram do
         pool 'p3'
         source 's2', :automatic
         pool 'p5'
-        source 's1',:automatic, condition: expr { p5.resource_count > 5 }
+        source 's1', :automatic, condition: expr { p5.resource_count > 5 }
         pool 'p4', :push_all, initial_value: 11, triggered_by: 's1'
         edge from: 'p4', to: 'p1'
-        edge from: 'p4', to:'p2'
-        edge from: 'p4', to:'p3'
-        edge from: 's2', to:'p5'
+        edge from: 'p4', to: 'p2'
+        edge from: 'p4', to: 'p3'
+        edge from: 's2', to: 'p5'
       end
 
       d.run 10
@@ -183,6 +184,21 @@ describe Diagram do
 
 
     end
+
+    # it "forward-referencing of non existing nodes" do
+    #
+    #   expect do
+    #
+    #     d = diagram do
+    #       pool 'p2', initial_value: 7 # this will be triggered 10 times
+    #       edge from: 'p2', to: 'p3'
+    #       pool 'p3'
+    #     end
+    #
+    #   end.not_to raise_error
+    #
+    # end
+
 
   end
 end

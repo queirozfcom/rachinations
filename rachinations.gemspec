@@ -9,7 +9,7 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Felipe Almeida"]
   spec.email         = ["falmeida1988@gmail.com"]
   spec.summary       = %q{Ruby port for Dr. J. Dormans' Machinations Game Mechanics Diagrams.}
-  spec.description   = %q{This project provides a Ruby-based DSL to enable game designers to
+  spec.description   = %q{This project provides a Ruby-based DiagramShorthandMethods to enable game designers to
 design and also test tentative game designs and/or prototypes}
   spec.homepage      = "https://github.com/queirozfcom/rachinations"
   spec.license       = "MIT"

@@ -1,6 +1,6 @@
 require_relative '../domain/diagram'
-require_relative '../dsl/dsl.rb'
-include DSL
+require_relative '../dsl/diagram_shorthand_methods.rb'
+include DiagramShorthandMethods
 
 n=diagram 'test_diagram' do
   node 'source', Source

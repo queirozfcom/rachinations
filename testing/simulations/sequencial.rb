@@ -2,7 +2,7 @@ require_relative '../../domain/diagrams/diagram'
 require_relative '../../dsl/dsl'
 require_relative '../../domain/nodes/pool'
 require_relative '../../domain/edges/edge'
-include DSL
+include DiagramShorthandMethods
 
 n=diagram 'test_diagram', :verbose do
   node 'p1', Pool, mode: :push, activation: :automatic, initial_value: 8

@@ -9,7 +9,8 @@ require 'rachinations/extras/fifo'
 
 require 'rachinations/domain/diagrams/diagram'
 require 'rachinations/domain/diagrams/verbose_diagram'
-require 'rachinations/dsl/dsl'
+require 'rachinations/dsl/diagram_shorthand_methods'
+require 'rachinations/dsl/bootstrap'
 require 'rachinations/domain/strategies/strategy'
 require 'rachinations/domain/strategies/valid_types'
 require 'rachinations/domain/edges/edge'
@@ -34,8 +35,10 @@ require 'rachinations/domain/edge_collection'
 require 'rachinations/domain/node_collection'
 require 'rachinations/domain/resource_bag'
 
-# users can use the dsl to create diagrams
-include DSL
 
 # users can call .percent on integers
-using NumberModifiers
+#using NumberModifiers
+
+# users can use the dsl to create diagrams
+include DSL::Bootstrap
+using DSL::DiagramShorthandMethods
