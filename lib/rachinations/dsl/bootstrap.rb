@@ -26,7 +26,6 @@ module DSL
 
     end
 
-
     def non_deterministic_diagram(name, verbose=:silent, &blk)
 
       dia=NonDeterministicDiagram.new(Parser.validate_name!(name))
@@ -53,7 +52,5 @@ module DSL
         Proc.new(&blk)
       end
     end
-
   end
-
 end

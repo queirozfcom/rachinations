@@ -2,8 +2,6 @@ require_relative '../spec_helper'
 
 describe Diagram do
 
-  using NumberModifiers
-
   context 'diagram tests using the dsl' do
 
     it 'runs a simple example diagram' do

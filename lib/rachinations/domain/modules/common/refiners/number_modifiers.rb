@@ -4,7 +4,7 @@ module NumberModifiers
   # allow user to modify Numbers in order to express
   # percentages ( 12.percent ) and also fractions, for
   # example.
-  refine Fixnum do
+  class ::Fixnum
 
     def /(other)
       fdiv(other)

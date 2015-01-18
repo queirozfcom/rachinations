@@ -36,9 +36,11 @@ require 'rachinations/domain/node_collection'
 require 'rachinations/domain/resource_bag'
 
 
-# users can call .percent on integers
-#using NumberModifiers
-
 # users can use the dsl to create diagrams
 include DSL::Bootstrap
-using DSL::DiagramShorthandMethods
+
+# users can call .percent on numbers
+include NumberModifiers
+
+# users can call rand() without needing to qualify it
+include Utils
