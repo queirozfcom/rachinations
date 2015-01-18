@@ -183,6 +183,23 @@ describe Diagram do
 
     end
 
+    it "accepts procs for edge labels" do
+
+      d = diagram mode: :verbose do
+        source 's'
+        pool 'p'
+        edge from: 's', to: 'p', label: expr{ rand(10) }
+      end
+
+      d.run 2
+
+      # this is clearly not an exhaustive test but itll do for now
+
+      expect(d.p.resource_count).to be <= 20
+      expect(d.p.resource_count).to be >= 0
+
+    end
+
     # it "forward-referencing of non existing nodes" do
     #
     #   expect do

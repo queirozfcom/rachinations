@@ -42,5 +42,4 @@ include DSL::Bootstrap
 # users can call .percent on numbers
 include NumberModifiers
 
-# users can call rand() without needing to qualify it
-include Utils
+
