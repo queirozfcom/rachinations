@@ -31,7 +31,7 @@ module DSL
     def self.parse_arguments(arguments)
       arguments.inject(ConstantHash.new) do |accumulator, arg|
 
-        # named parameters are expressed are hashes
+        # named parameters are expressed as hashes
         # and all arguments can (also) be passed as named parameters
         if arg.is_a? Hash
           if arg.has_key? :condition
