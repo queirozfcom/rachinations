@@ -8,8 +8,16 @@ class Edge
   using NumberModifiers
 
 
-  attr_reader :from, :to, :name, :label, :types
+  attr_reader :from, :to, :name, :types
 
+
+  def label
+    if @label.is_a?(Proc)
+      @label.call
+    else
+      @label
+    end
+  end
 
   def initialize(hsh)
 
