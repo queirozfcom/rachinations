@@ -38,8 +38,7 @@ module HashInit
 
     end
 
-    #make sure all required ones are there
-
+    # make sure all required ones are there
     options.each do |el|
       if el.is_a? Hash
 

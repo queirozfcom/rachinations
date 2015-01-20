@@ -185,10 +185,10 @@ describe Diagram do
 
     it "accepts procs for edge labels" do
 
-      d = diagram mode: :verbose do
+      d = diagram do
         source 's'
         pool 'p'
-        edge from: 's', to: 'p', label: expr{ rand(10) }
+        edge from: 's', to: 'p', label: expr { rand(10) }
       end
 
       d.run 2
@@ -199,6 +199,25 @@ describe Diagram do
       expect(d.p.resource_count).to be >= 0
 
     end
+
+    it 'accepts :triggers' do
+
+      # see how it gets confusing when you to turn your logic
+      # around in your head and define stuff in the wrong order
+
+      d = diagram do
+        pool 'p2'
+        pool 'p1', :push_any, initial_value: 7
+        source 's', triggers: 'p1'
+        edge from: 'p1', to: 'p2'
+      end
+
+      d.run 10
+
+      expect(d.p2.resource_count).to eq 7
+
+    end
+
 
     # it "forward-referencing of non existing nodes" do
     #

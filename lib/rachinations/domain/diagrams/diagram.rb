@@ -41,11 +41,15 @@ class Diagram
 
     params.store(:diagram, self)
 
-    #if there's a condition, return it, otherwise return default condition
+    # if there's a condition, return it, otherwise return default condition
     condition = params.delete(:condition) { lambda { true } }
 
-    #similarly, if nodes are supposed to be triggered by another node
+    # similarly, if nodes are supposed to be triggered by another node
     triggered_by = params.delete(:triggered_by) { nil }
+
+    # akin to :triggered_by, but it's defined in the triggerER
+    # rather than in the trigerrEE
+    triggers = params.delete(:triggers) { nil }
 
     node = node_klass.new(params)
 
@@ -55,6 +59,12 @@ class Diagram
       # ask the current class (diagram) to evaluate what node it is
       triggerer = self.send(triggered_by.to_sym)
       triggerer.attach_trigger(node)
+    end
+
+    if !triggers.nil?
+      # ask the current class (diagram) to evaluate what node it is
+      triggeree = self.send(triggers.to_sym)
+      node.attach_trigger(triggeree)
     end
 
     nodes.push(node)

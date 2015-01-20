@@ -11,13 +11,13 @@ describe NonDeterministicDiagram do
         name: 'g1',
         activation: :automatic,
         initial_value: 5,
-        mode: :push
+        mode: :push_any
     }
 
     generator.add_node! Pool, {
         name: 'g2',
         activation: :automatic,
-        mode: :push
+        mode: :push_any
     }
 
     generator.add_node! Pool, {

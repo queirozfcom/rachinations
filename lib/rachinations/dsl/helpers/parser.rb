@@ -9,20 +9,19 @@ module DSL
 
     ConstantHash = ::Extras::ConstantHash
 
-    # these patterns (*_EXPR) define what each argument should look like
+    # these patterns define what each argument should look like
 
-    IDENTIFIER_EXPR = proc { |arg| arg.is_a?(String) && valid_name?(arg) }
+    IDENTIFIER = proc { |arg| arg.is_a?(String) && valid_name?(arg) }
 
-    INITIAL_VALUE_EXPR = proc { |arg| arg.is_a? Fixnum }
+    INITIAL_VALUE = proc { |arg| arg.is_a? Fixnum }
 
-    MODE_EXPR = proc { |arg| [:pull_any, :pull_all, :push_any, :push_all].include? arg }
+    MODE = proc { |arg| [:pull_any, :pull_all, :push_any, :push_all].include? arg }
 
-    ACTIVATION_EXPR = proc { |arg| [:automatic, :passive, :start].include? arg }
+    ACTIVATION= proc { |arg| [:automatic, :passive, :start].include? arg }
 
-    PROC_EXPR = proc { |arg| arg.is_a? Proc }
+    PROC = proc { |arg| arg.is_a? Proc }
 
-    # returns true for integers or floats
-    LABEL_EXPR = proc { |arg| arg.is_a? Numeric }
+    LABEL = proc { |arg| arg.is_a?(Numeric) || arg.is_a?(Proc) }
 
     # Parse an arbitrary list of arguments and returns a well-formed
     #  Hash which can then be used as argument to method add_node!
@@ -34,32 +33,25 @@ module DSL
         # named parameters are expressed as hashes
         # and all arguments can (also) be passed as named parameters
         if arg.is_a? Hash
-          if arg.has_key? :condition
-            if PROC_EXPR.match? arg[:condition]
-              accumulator[:condition] = arg[:condition]
-            else
-              raise BadDSL.new
-            end
-          end
-
-          if arg.has_key? :triggered_by
-            if IDENTIFIER_EXPR.match? arg[:triggered_by]
-              accumulator[:triggered_by] = arg[:triggered_by]
-            else
-              raise BadDSL.new
-            end
-          end
 
           if arg.has_key? :activation
-            if ACTIVATION_EXPR.match? arg[:activation]
+            if ACTIVATION.match? arg[:activation]
               accumulator[:activation] = arg[:activation]
             else
               raise BadDSL.new
             end
           end
 
+          if arg.has_key? :condition
+            if PROC.match? arg[:condition]
+              accumulator[:condition] = arg[:condition]
+            else
+              raise BadDSL.new
+            end
+          end
+
           if arg.has_key? :initial_value
-            if INITIAL_VALUE_EXPR.match? arg[:initial_value]
+            if INITIAL_VALUE.match? arg[:initial_value]
               accumulator[:initial_value] = arg[:initial_value]
             else
               raise BadDSL.new
@@ -67,21 +59,37 @@ module DSL
           end
 
           if arg.has_key? :mode
-            if MODE_EXPR.match? arg[:mode]
+            if MODE.match? arg[:mode]
               accumulator[:mode] = arg[:mode]
             else
               raise BadDSL.new
             end
           end
 
+          if arg.has_key? :triggered_by
+            if IDENTIFIER.match? arg[:triggered_by]
+              accumulator[:triggered_by] = arg[:triggered_by]
+            else
+              raise BadDSL.new
+            end
+          end
+
+          if arg.has_key? :triggers
+            if IDENTIFIER.match? arg[:triggers]
+              accumulator[:triggers] = arg[:triggers]
+            else
+              raise BadDSL.new
+            end
+          end
+
         else
-          if IDENTIFIER_EXPR.match?(arg) # a node's name, if present, is always the first argument
+          if IDENTIFIER.match?(arg) # a node's name, if present, is always the first argument
             accumulator[:name] = arg
-          elsif INITIAL_VALUE_EXPR.match?(arg)
+          elsif INITIAL_VALUE.match?(arg)
             accumulator[:initial_value] = arg
-          elsif MODE_EXPR.match?(arg)
+          elsif MODE.match?(arg)
             accumulator[:mode] = arg
-          elsif ACTIVATION_EXPR.match?(arg)
+          elsif ACTIVATION.match?(arg)
             accumulator[:activation] = arg
           else
             raise BadDSL, "Argument #{arg} doesn't fit any known signature"
@@ -99,16 +107,16 @@ module DSL
       arguments.inject(ConstantHash.new) do |accumulator, arg|
         if arg.is_a? Hash
           if arg.has_key? :condition
-            accumulator[:condition] = arg[:condition] if PROC_EXPR.match?(arg[:condition])
+            accumulator[:condition] = arg[:condition] if PROC.match?(arg[:condition])
           elsif arg.has_key? :triggered_by
-            accumulator[:triggered_by] = arg[:triggered_by] if IDENTIFIER_EXPR.match?(arg[:triggered_by])
+            accumulator[:triggered_by] = arg[:triggered_by] if IDENTIFIER.match?(arg[:triggered_by])
           else
-            ra
+            raise BadDSL, "Named argument doesn't fit any known signature"
           end
         else
-          if IDENTIFIER_EXPR.match?(arg)
+          if IDENTIFIER.match?(arg)
             accumulator[:name] = arg
-          elsif ACTIVATION_EXPR.match?(arg)
+          elsif ACTIVATION.match?(arg)
             accumulator[:activation] = arg
           else
             raise BadDSL, "Argument #{arg} doesn't fit any known signature"
@@ -122,23 +130,24 @@ module DSL
     def self.parse_edge_arguments(arguments)
 
       arguments.inject(ConstantHash.new) do |accumulator, arg|
-        if IDENTIFIER_EXPR.match?(arg)
-          accumulator[:name] = arg
-        elsif LABEL_EXPR.match?(arg)
-          accumulator[:label]=arg
-        elsif arg.is_a? Hash
-
+        if arg.is_a? Hash
           if arg.has_key? :from
-            accumulator[:from] = arg[:from]
+            accumulator[:from] = arg[:from] if IDENTIFIER.match? arg[:from]
           end
           if arg.has_key? :to
-            accumulator[:to] = arg[:to]
+            accumulator[:to] = arg[:to] if IDENTIFIER.match? arg[:to]
           end
           if arg.has_key? :label
-            accumulator[:label] = arg[:label]
+            accumulator[:label] = arg[:label] if LABEL.match? arg[:label]
           end
         else
-          raise BadDSL, "Argument #{arg} doesn't fit any known signature."
+          if IDENTIFIER.match?(arg)
+            accumulator[:name] = arg
+          elsif LABEL.match?(arg)
+            accumulator[:label]=arg
+          else
+            raise BadDSL, "Argument #{arg} doesn't fit any known signature."
+          end
         end
         accumulator
       end

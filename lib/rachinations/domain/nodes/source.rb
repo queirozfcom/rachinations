@@ -2,7 +2,6 @@ require_relative '../../domain/nodes/pool'
 
 class Source < ResourcefulNode
 
-
   def initialize(hsh={})
 
     check_options!(hsh)
@@ -65,11 +64,16 @@ class Source < ResourcefulNode
 
         push_any!
 
-      elsif pull?
+      elsif push? && all?
 
-        raise NotImplementedError('A pulling Source?')
+        push_all!
+
+      else
+        raise BadConfig, 'Invalid mode for Source'
 
       end
+
+      fire_triggers!
 
     end
   end

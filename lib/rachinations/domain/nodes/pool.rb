@@ -3,6 +3,7 @@ require_relative '../../domain/nodes/node'
 require_relative '../../domain/resources/token'
 require_relative '../resource_bag'
 require_relative '../../domain/exceptions/no_elements_matching_condition_error'
+require_relative '../../domain/exceptions/bad_config'
 require_relative '../../domain/modules/common/refiners/proc_convenience_methods'
 require_relative '../../../../lib/rachinations/helpers/edge_helper'
 
@@ -59,8 +60,9 @@ class Pool < ResourcefulNode
         pull_all!
 
       else
-
+        raise BadConfig, "Invalid config for this node's mode"
       end
+      fire_triggers!
     end
   end
 
