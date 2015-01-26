@@ -219,20 +219,52 @@ describe Diagram do
     end
 
 
-    # it "forward-referencing of non existing nodes" do
-    #
-    #   expect do
-    #
-    #     d = diagram do
-    #       pool 'p2', initial_value: 7 # this will be triggered 10 times
-    #       edge from: 'p2', to: 'p3'
-    #       pool 'p3'
-    #     end
-    #
-    #   end.not_to raise_error
-    #
-    # end
+    it "accepts declaring forward-referencing of non existing nodes" do
 
+      expect do
+        # triggered_by forward referencing a node
+        diagram do
+          pool 'p2', 7, triggered_by: 'p3'
+          pool 'p3'
+        end
+      end.not_to raise_error
+
+      expect do
+        # edge forward referencing its connected nodes
+        d = diagram do
+          pool 'p2', initial_value: 7 # this will be triggered 10 times
+          edge from: 'p2', to: 'p3'
+          pool 'p3'
+        end
+
+      end.not_to raise_error
+
+    end
+
+    it 'runs diagrams using forward-referencing' do
+
+      d = diagram do
+        pool 'p2',:automatic, :push_any, initial_value: 7 # this will be triggered 10 times
+        edge from: 'p2', to: 'p3'
+        pool 'p3'
+      end
+
+      d.run 10
+
+      expect(d.p3.resource_count).to eq 7
+
+      d2 = diagram do
+        pool :automatic, triggers: 'p2'
+        pool 'p2', :push_any, initial_value: 10
+        pool 'p3'
+        edge from: 'p2', to: 'p3'
+      end
+
+      d2.run 10
+      expect(d2.p3.resource_count).to eq 10
+      expect(d2.p2.resource_count).to eq 0
+
+    end
 
   end
 end

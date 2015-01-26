@@ -76,7 +76,6 @@ module DSL
 
       end
 
-
       # so that I can easily access elements which have been given a name
       # (mostly nodes and maybe edges too)
       def method_missing(method_sym, *args, &block)

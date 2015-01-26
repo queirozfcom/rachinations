@@ -5,11 +5,12 @@ require_relative '../../../../lib/rachinations/domain/modules/common/refiners/nu
 
 class Edge
   include HashInit
-  using NumberModifiers
 
+  using NumberModifiers
 
   attr_reader :from, :to, :name, :types
 
+  attr_writer :from, :to
 
   def label
     if @label.is_a?(Proc)
@@ -27,13 +28,13 @@ class Edge
 
     @name = params.fetch(:name, 'anonymous')
 
-    @from = params.fetch(:from)
-
-    @to = params.fetch(:to)
-
     @label = params.fetch(:label)
 
     @types = params.fetch(:types)
+
+    @from = params.fetch(:from) if params.has_key?(:from)
+
+    @to = params.fetch(:to) if params.has_key?(:to)
 
   end
 
@@ -46,7 +47,7 @@ class Edge
   #
   # @return [Boolean] true in case a ping! on this Edge
   #  would return true. False otherwise.
-  def test_ping?(require_all:false)
+  def test_ping?(require_all: false)
     return false if from.disabled? || to.disabled?
 
     condition = strategy.condition
@@ -123,10 +124,13 @@ class Edge
   # end of this Edge.
   #
   # @raise [RuntimeError] in case the receiving node or this Edge
-  #  won't accept the resource sent.
+  #   won't accept the resource sent.
+  # @raise [RuntimeError] if this edge hasn't defined :from and :to
+  #   instance variables
   # @param res [Token] the resource to send.
   def push!(res)
-    raise RuntimeError, "This Edge does not support type: #{res.type}" unless supports?(res.type)
+    raise RuntimeError, "Edge does not support type: #{res.type}" unless supports?(res.type)
+    raise RuntimeError, "Please define instance variables :from and :to" unless instance_variable_defined?(:@from) && instance_variable_defined?(:@to)
 
     begin
       to.put_resource!(res, self)
@@ -136,15 +140,19 @@ class Edge
   end
 
   # Tries to take a resource matching given block
-  # from the node at the other end.
+  #   from the node at the other end.
   #
   # @param [Proc] blk  block that will define what resource the other node
-  #  should send.
+  #   should send.
   # @raise [RuntimeError] in case the other node could provide no resources
-  #  that satisfy this condition block.
+  #   that satisfy this condition block.
+  # @raise [RuntimeError] if this edge hasn't defined :from and :to
+  #   instance variables
   # @return [Token,nil] a Resource that satisfies the given block or nil,
-  #  if the pull was not performed for some reason (e.g. it's probabilistic)
+  #   if the pull was not performed for some reason (e.g. it's probabilistic)
   def pull!(blk)
+
+    raise RuntimeError, "Please define instance variables :from and :to" unless instance_variable_defined?(:@from) && instance_variable_defined?(:@to)
 
     begin
       res=from.take_resource!(blk)
@@ -175,7 +183,7 @@ class Edge
   end
 
   def options
-    [:name,:label,:types,:from,:to,:diagram]
+    [:name, :label, :types, :diagram, :from, :to]
   end
 
 end

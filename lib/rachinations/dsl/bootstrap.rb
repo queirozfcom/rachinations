@@ -18,24 +18,95 @@ module DSL
         raise BadDSL, "Unknown diagram mode: #{mode.to_s}"
       end
 
-      # methods in the block get run as if they were called on
-      # the diagram (augmented by the DiagramShorthandMethods module) itself
-      dia.instance_eval(&blk)
+      # This is a modified version of Diagram#add_edge!. It defers some method
+      #   calls that involve other nodes until after the end of the block that
+      #   builds the diagram. this is done because, when these options are set,
+      #   the nodes may not have been created yet.
+      # @param [Class] the edge class. probably Edge
+      # @param [Hash] params params to be passed to the constructor of given class
+      def dia.add_edge!(edge_klass, params)
 
-      dia
+        params.store(:diagram, self)
 
-    end
+        from_node_name = params.fetch(:from)
+        to_node_name = params.fetch(:to)
 
-    def non_deterministic_diagram(name, verbose=:silent, &blk)
+        edge = edge_klass.new(params)
 
-      dia=NonDeterministicDiagram.new(Parser.validate_name!(name))
+        # this method may contain nodes that may not yet exist
+        edge_attach_from = lambda do |edge, node_name, diagram|
+          # ask the diagram to evaluate what node it is
+          node = diagram.get_node(node_name)
+          node.attach_edge!(edge)
+          edge.from = node
+        end
 
-      # cant verbose be a simple boolean instead?
-      if verbose === :verbose
-        dia.extend(Verbose)
+        # this method may contain nodes that may not yet exist
+        edge_attach_to = lambda do |edge, node_name, diagram|
+          # ask the diagram to evaluate what node it is
+          node = diagram.get_node(node_name)
+          node.attach_edge!(edge)
+          edge.to = node
+        end
+
+        # so they need to be scheduled and run later
+        schedule_task(edge_attach_from, edge, from_node_name, self)
+        schedule_task(edge_attach_to, edge, to_node_name, self)
+
+        edges.push(edge)
+
+        self
+
       end
 
-      dia.instance_eval &blk
+      def dia.add_node!(node_klass, params)
+
+        params.store(:diagram, self)
+
+        # if there's a condition, return it, otherwise return default condition
+        condition = params.delete(:condition) { lambda { true } }
+
+        # similarly, if nodes are supposed to be triggered by another node
+        triggered_by = params.delete(:triggered_by) { nil }
+
+        # akin to :triggered_by, but it's defined in the triggerER
+        # rather than in the trigerrEE
+        triggers = params.delete(:triggers) { nil }
+
+        node = node_klass.new(params)
+
+        node.attach_condition &condition
+
+        if !triggered_by.nil?
+
+          attach_trigger_task = lambda do |triggeree, triggerer_name, diagram|
+            # ask the diagram to evaluate what node it is
+            triggerer = diagram.get_node(triggerer_name)
+            triggerer.attach_trigger(triggeree)
+          end
+          schedule_task(attach_trigger_task, node, triggered_by, self)
+
+        end
+
+        if !triggers.nil?
+
+          attach_trigger_task = lambda do |triggerer, triggeree_name, diagram|
+            # ask the diagram to evaluate what node it is
+            triggeree = diagram.send(triggeree_name.to_sym)
+            triggerer.attach_trigger(triggeree)
+          end
+          schedule_task(attach_trigger_task, node, triggers, self)
+
+        end
+
+        nodes.push(node)
+
+        self
+
+      end
+
+      dia.instance_eval(&blk)
+      dia.run_scheduled_tasks
 
       dia
 

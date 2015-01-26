@@ -4,6 +4,8 @@ require 'rachinations/version'
 
 require 'rachinations/domain/modules/common/refiners/proc_convenience_methods'
 require 'rachinations/domain/modules/common/refiners/number_modifiers'
+require 'rachinations/domain/modules/common/schedulable_tasks'
+
 
 require 'rachinations/extras/fifo'
 

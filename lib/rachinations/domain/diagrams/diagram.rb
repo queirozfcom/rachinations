@@ -1,10 +1,12 @@
 require_relative '../../domain/modules/common/invariant'
+require_relative '../../domain/modules/common/schedulable_tasks'
 require_relative '../edge_collection'
 require_relative '../node_collection'
 
 class Diagram
 
   include Invariant
+  include SchedulableTasks
 
   attr_accessor :name, :max_iterations, :nodes, :edges
 
@@ -56,14 +58,15 @@ class Diagram
     node.attach_condition &condition
 
     if !triggered_by.nil?
+
       # ask the current class (diagram) to evaluate what node it is
-      triggerer = self.send(triggered_by.to_sym)
+      triggerer = get_node(triggered_by)
       triggerer.attach_trigger(node)
     end
 
     if !triggers.nil?
-      # ask the current class (diagram) to evaluate what node it is
-      triggeree = self.send(triggers.to_sym)
+      # ask the diagram to evaluate what node it is
+      triggeree = get_node(triggers)
       node.attach_trigger(triggeree)
     end
 
@@ -77,17 +80,16 @@ class Diagram
 
     params.store(:diagram, self)
 
-    #we need to send the actual nodes, not their names
-    from = get_node(params.delete(:from))
-    to = get_node(params.delete(:to))
-
-    params.store(:from, from)
-    params.store(:to, to)
+    # replace node names in params with the actual nodes
+    node_from = get_node(params.delete(:from))
+    params.store(:from, node_from)
+    node_to = get_node(params.delete(:to))
+    params.store(:to, node_to)
 
     edge = edge_klass.new(params)
 
-    from.attach_edge!(edge)
-    to.attach_edge!(edge)
+    node_from.attach_edge!(edge)
+    node_to.attach_edge!(edge)
 
     edges.push(edge)
 
