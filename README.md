@@ -39,7 +39,7 @@ Rachinations is written in Ruby so you need to have Ruby installed on your syste
 
   If you have never used Ruby before, I recommend you tick the following two boxes, as per the following image:
 
-  ![installing_ruby_on_windows](http://i.imgur.com/zkOlQ0b.png)
+  ![installing_ruby_on_windows](http://i.imgur.com/Y0u1ZzN.png)
 
   - Veryfing that the installation worked
 
