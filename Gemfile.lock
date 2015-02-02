@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    rachinations (0.0.6)
+    rachinations (0.0.7)
       activesupport (= 3.0.0)
       i18n (= 0.6.11)
       weighted_distribution (= 1.0.0)
