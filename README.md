@@ -52,7 +52,7 @@ Rachinations is written in Ruby so you need to have Ruby installed on your syste
   ruby 2.1.5p273 (2014-11-13 revision 48405) [x64-mingw32]
   ```
 
-  Once that's done, we'll configure `gem` (Ruby's package manager) to address a well known problem that has to do with certificates on windows. more info [here](http://stackoverflow.com/questions/9962051/could-not-find-a-valid-gem-in-any-repository-rubygame-and-others) and [here](http://help.rubygems.org/discussions/problems/19761-could-not-find-a-valid-gem) for example.
+  Once that's done, we'll configure `gem` (Ruby's package manager) to address a well known problem that has to do with certificates on Windows. More info [here](http://stackoverflow.com/questions/9962051/could-not-find-a-valid-gem-in-any-repository-rubygame-and-others) and [here](http://help.rubygems.org/discussions/problems/19761-could-not-find-a-valid-gem).
 
   On the command prompt, do this:
 
@@ -69,7 +69,7 @@ Rachinations is written in Ruby so you need to have Ruby installed on your syste
   http://rubygems.org added to sources
   ```
 
-  After you've done the last step (which adds a new source for ruby gems, then you can install the gem proper:
+  After you've done the last step (which adds a new source for gems to be fetched from), then you can install the gem proper:
 
   ```
   > gem install rachinations
@@ -78,7 +78,7 @@ Rachinations is written in Ruby so you need to have Ruby installed on your syste
 
 ## Usage
 
-All you need to do is write your diagram in a file whose name ends in `.rb` and run it using ruby.
+All you need to do is write your diagram in a file whose name ends in `.rb` and run it using the `ruby` command.
 
 ### Examples
 
@@ -90,7 +90,7 @@ All you need to do is write your diagram in a file whose name ends in `.rb` and 
  # this is a simple diagram with a single pool with
  # 5 resources
  d=diagram 'simplest_diagram' do
-     pool 'p1', initial_value: 5
+     pool initial_value: 5
  end
 
  # and execute it for 10 rounds
