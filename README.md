@@ -90,7 +90,7 @@ All you need to do is write your diagram in a file whose name ends in `.rb` and 
  # this is a simple diagram with a single pool with
  # 5 resources
  d=diagram 'simplest_diagram' do
-   pool 'p1', initial_value: 5
+     pool 'p1', initial_value: 5
  end
 
  # and execute it for 10 rounds
@@ -123,15 +123,15 @@ All you need to do is write your diagram in a file whose name ends in `.rb` and 
  require 'rachinations'
 
  diagram 'example_2' do
-   source 's1'
-   pool 'p1'
-   converter 'c1', :automatic
-   pool 'p2'
-   pool 'p3'
-   edge from: 's1', to: 'p1'
-   edge from: 'p1', to: 'c1'
-   edge from: 'c1', to: 'p2'
-   edge from: 'c1', to: 'p3'
+     source 's1'
+     pool 'p1'
+     converter 'c1', :automatic
+     pool 'p2'
+     pool 'p3'
+     edge from: 's1', to: 'p1'
+     edge from: 'p1', to: 'c1'
+     edge from: 'c1', to: 'p2'
+     edge from: 'c1', to: 'p3'
  end
  ```
 
@@ -141,17 +141,17 @@ All you need to do is write your diagram in a file whose name ends in `.rb` and 
  require 'rachinations'
 
  diagram 'example_3' do
-   source 's1'
-   gate 'g1', :probabilistic
-   pool 'p1'
-   pool 'p2'
-   pool 'p3'
-   sink 's2', :automatic, condition: expr{ p2.resource_count > 30 }
-   edge from: 's1', to: 'g1'
-   edge from: 'g1', to: 'p1'
-   edge 2, from: 'g1', to: 'p2'
-   edge from: 'g1', to: 'p3'
-   edge from: 'p3', to 's2'
+     source 's1'
+     gate 'g1', :probabilistic
+     pool 'p1'
+     pool 'p2'
+     pool 'p3'
+     sink 's2', :automatic, condition: expr{ p2.resource_count > 30 }
+     edge from: 's1', to: 'g1'
+     edge from: 'g1', to: 'p1'
+     edge 2, from: 'g1', to: 'p2'
+     edge from: 'g1', to: 'p3'
+     edge from: 'p3', to 's2'
  end
  ```
 
@@ -161,12 +161,12 @@ All you need to do is write your diagram in a file whose name ends in `.rb` and 
  require 'rachinations'
 
  diagram 'example_4' do
-   source 's1'
-   pool 'p1', triggers: 's2'
-   source 's2', :passive
-   pool 'p2'
-   edge from: 's1', to: 'p1'
-   edge from: 's2', to: 'p2'
+     source 's1'
+     pool 'p1', triggers: 's2'
+     source 's2', :passive
+     pool 'p2'
+     edge from: 's1', to: 'p1'
+     edge from: 's2', to: 'p2'
  end
  ```
 
@@ -178,12 +178,12 @@ All you need to do is write your diagram in a file whose name ends in `.rb` and 
  require 'rachinations'
 
  diagram 'example_4_alternative' do
-   source 's1'
-   pool 'p1'
-   source 's2', :passive, triggered_by: 'p1'
-   pool 'p2'
-   edge from: 's1', to: 'p1'
-   edge from: 's2', to: 'p2'
+     source 's1'
+     pool 'p1'
+     source 's2', :passive, triggered_by: 'p1'
+     pool 'p2'
+     edge from: 's1', to: 'p1'
+     edge from: 's2', to: 'p2'
  end
  ```
 
