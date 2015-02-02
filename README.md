@@ -108,12 +108,12 @@ All you need to do is write your diagram in a file whose name ends in `.rb` and 
  ```ruby
  require 'rachinations'
 
- diagram 'exemple_1' do
-   source 's1', :automatic
-   pool 'p1'
-   pool 'p2', :automatic
-   edge from: 's1', to: 'p1'
-   edge from: 'p1', to: 'p2'
+ diagram 'example_1' do
+     source 's1', :automatic
+     pool 'p1'
+     pool 'p2', :automatic
+     edge from: 's1', to: 'p1'
+     edge from: 'p1', to: 'p2'
  end
  ```
 
@@ -122,7 +122,7 @@ All you need to do is write your diagram in a file whose name ends in `.rb` and 
  ```ruby
  require 'rachinations'
 
- diagram 'exemplo_2' do
+ diagram 'example_2' do
    source 's1'
    pool 'p1'
    converter 'c1', :automatic
