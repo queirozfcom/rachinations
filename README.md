@@ -31,7 +31,7 @@ Rachinations is written in Ruby so you need to have Ruby installed on your syste
 
 **Windows**
 
-  - Installation
+  - **Installation**
 
   On Windows, the best way to get up and running with Ruby is probably using the [RubyInstaller for Windows](http://rubyinstaller.org/)
 
@@ -41,7 +41,7 @@ Rachinations is written in Ruby so you need to have Ruby installed on your syste
 
   ![installing_ruby_on_windows](http://i.imgur.com/Y0u1ZzN.png)
 
-  - Veryfing that the installation worked
+  - **Veryfing that the installation worked**
 
   Once Ruby is installed, open a **command prompt** and type `ruby -v` just to see if everything worked.
 
@@ -51,6 +51,8 @@ Rachinations is written in Ruby so you need to have Ruby installed on your syste
   > ruby -v
   ruby 2.1.5p273 (2014-11-13 revision 48405) [x64-mingw32]
   ```
+
+  - **Configuring rubygems and installing the library**
 
   Once that's done, we'll configure `gem` (Ruby's package manager) to address a well known problem that has to do with certificates on Windows. More info [here](http://stackoverflow.com/questions/9962051/could-not-find-a-valid-gem-in-any-repository-rubygame-and-others) and [here](http://help.rubygems.org/discussions/problems/19761-could-not-find-a-valid-gem).
 
