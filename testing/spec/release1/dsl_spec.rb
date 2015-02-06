@@ -244,7 +244,7 @@ describe Diagram do
     it 'runs diagrams using forward-referencing' do
 
       d = diagram do
-        pool 'p2',:automatic, :push_any, initial_value: 7 # this will be triggered 10 times
+        pool 'p2', :automatic, :push_any, initial_value: 7 # this will be triggered 10 times
         edge from: 'p2', to: 'p3'
         pool 'p3'
       end
@@ -265,6 +265,46 @@ describe Diagram do
       expect(d2.p2.resource_count).to eq 0
 
     end
+
+    it 'runs until safeguard clauses have been met if run method is called with no params' do
+
+      expect {
+
+        d = diagram do
+          source 's1'
+          edge from: 's1', to: 'p1'
+          pool 'p1'
+        end
+
+        d.run
+
+      }.not_to raise_exception
+    end
+
+    # it 'stops when a single stopping condition turns true' do
+    #
+    #   d = diagram 'win/lose' do
+    #
+    #     source 'green_shots', :automatic
+    #     edge from: 'green_shots', to: 'g1'
+    #     gate 'g1'
+    #     edge from: 'g1', to: 'green_points', label: 40.percent
+    #     pool 'green_points'
+    #
+    #     source 'red_shots', :automatic
+    #     edge from: 'red_shots', to: 'g2'
+    #     gate 'g2'
+    #     edge from: 'g2', to: 'red_points', label: 50.percent
+    #     pool 'red_points'
+    #
+    #     stop 'green wins' { green_points >= 10 }
+    #     stop 'red wins' { red_points >= 10 }
+    #
+    #   end
+    #
+    #   d.run
+    #
+    # end
 
   end
 end

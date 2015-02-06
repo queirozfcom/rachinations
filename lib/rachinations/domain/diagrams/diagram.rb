@@ -96,7 +96,7 @@ class Diagram
     self
   end
 
-  def run!(rounds=5)
+  def run!(rounds = max_iterations)
 
     run_while! do |i|
       i<=rounds
