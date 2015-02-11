@@ -153,7 +153,7 @@ All you need to do is write your diagram in a file whose name ends in `.rb` and 
      edge from: 'g1', to: 'p1'
      edge 2, from: 'g1', to: 'p2'
      edge from: 'g1', to: 'p3'
-     edge from: 'p3', to 's2'
+     edge from: 'p3', to: 's2'
  end
  ```
 
