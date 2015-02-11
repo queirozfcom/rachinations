@@ -45,7 +45,7 @@ Rachinations is written in Ruby so you need to have Ruby installed on your syste
 
   Once Ruby is installed, open a **command prompt** and type `ruby -v` just to see if everything worked.
 
-  You should see something like this (details might vary slightly)
+  You should see something like this (details may vary slightly)
 
   ```
   > ruby -v
