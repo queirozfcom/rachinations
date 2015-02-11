@@ -1,6 +1,8 @@
 require_relative '../../domain/modules/common/invariant'
 require_relative '../../domain/modules/common/hash_init'
 
+# @abstract Subclass and override {#take_resource!} and
+#   {#put_resource!} to implement nodes
 class Node
 
   include Invariant
@@ -34,7 +36,6 @@ class Node
     actual_types.uniq
 
   end
-
 
   def edges
     if @edges.is_a? Array
@@ -102,27 +103,10 @@ class Node
     @triggers
   end
 
-  # def clear_triggers
-  #   triggers.each do |t|
-  #     t[2]=true
-  #   end
-  # end
-
   # Call trigger! on each node stored in self.triggers
   #
   def fire_triggers!
-    triggers.each do |node|
-      node.trigger!
-      # if (n[0].is_a? Proc) && n[2]
-      #   if n[0].call
-      #     n[2]=false
-      #     n[1].trigger!
-      #   end
-      # elsif n[0] && n[2]
-      #   n[2]=false
-      #   n[1].trigger!
-      # end
-    end
+    triggers.each { |node| node.trigger! }
   end
 
   def enabled?

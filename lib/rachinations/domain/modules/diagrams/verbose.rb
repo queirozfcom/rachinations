@@ -2,7 +2,7 @@ module Verbose
 
 
   def before_run
-    print "\033[1;32m===== INITIAL STATE =====\e[00m\n\n"
+    print "\n\033[1;32m===== INITIAL STATE =====\e[00m\n\n"
 
     puts self
   end

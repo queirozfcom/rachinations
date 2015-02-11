@@ -15,6 +15,9 @@ module DSL
 
     # if you can turn this into a refiner and still keep all tests passing,
     # send a PR for me :smile:
+
+    # Reopen class Diagram and add methods that will only be visible
+    # inside a diagram do .. end block
     class ::Diagram
 
       alias_method :run, :run!
@@ -67,12 +70,15 @@ module DSL
 
       end
 
-      # methods to create edges
       def edge(*args)
 
         hash = Parser.parse_edge_arguments(args)
 
         add_edge! Edge, hash
+
+      end
+
+      def stop(*args)
 
       end
 

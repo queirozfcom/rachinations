@@ -99,7 +99,7 @@ class Diagram
   def run!(rounds = max_iterations)
 
     run_while! do |i|
-      i<=rounds
+      i <= rounds && no_stop_conditions_met
     end
 
   end
@@ -115,7 +115,6 @@ class Diagram
 
     i=1
 
-    # if given condition block turned false, it's time to stop
     while yield i do
 
       break unless sanity_check? i
@@ -164,31 +163,32 @@ class Diagram
   end
 
   def run_first_round!
-
-    enabled_nodes.select { |node| node.automatic? || node.start? }.shuffle.each { |node| node.trigger! }
+    enabled_nodes
+    .select { |node| node.automatic? || node.start? }
+    .shuffle
+    .each { |node| node.trigger! }
 
     commit_nodes!
-
   end
 
   def run_round!
-
-    enabled_nodes.select { |node| node.automatic? }.shuffle.each { |node| node.trigger! }
+    enabled_nodes
+    .select { |node| node.automatic? }
+    .shuffle
+    .each { |node| node.trigger! }
 
     commit_nodes!
-
   end
 
   def commit_nodes!
     #only after all nodes have run do we update the actual resources and changes, to be used in the next round.
     nodes.shuffle.each { |node| node.commit! }
-
   end
 
   def enabled_nodes
     nodes.select { |node| node.enabled? }
-
   end
+
 
   #template method
   def before_round(node_no)
@@ -203,7 +203,8 @@ class Diagram
   end
 
   #template method
-  def after_run;
+  def after_run
+
   end
 
   #template method

@@ -281,30 +281,33 @@ describe Diagram do
       }.not_to raise_exception
     end
 
-    # it 'stops when a single stopping condition turns true' do
-    #
-    #   d = diagram 'win/lose' do
-    #
-    #     source 'green_shots', :automatic
-    #     edge from: 'green_shots', to: 'g1'
-    #     gate 'g1'
-    #     edge from: 'g1', to: 'green_points', label: 40.percent
-    #     pool 'green_points'
-    #
-    #     source 'red_shots', :automatic
-    #     edge from: 'red_shots', to: 'g2'
-    #     gate 'g2'
-    #     edge from: 'g2', to: 'red_points', label: 50.percent
-    #     pool 'red_points'
-    #
-    #     stop 'green wins' { green_points >= 10 }
-    #     stop 'red wins' { red_points >= 10 }
-    #
-    #   end
-    #
-    #   d.run
-    #
-    # end
+    it 'stops when a single stopping condition turns true' do
+
+      d = diagram 'win_lose' do
+
+        source 'green_shots', :automatic
+        edge from: 'green_shots', to: 'g1'
+        gate 'g1'
+        edge from: 'g1', to: 'green_points', label: 40.percent
+        pool 'green_points'
+
+        source 'red_shots', :automatic
+        edge from: 'red_shots', to: 'g2'
+        gate 'g2'
+        edge from: 'g2', to: 'red_points', label: 50.percent
+        pool 'red_points'
+
+        stop 'green wins', expr { green_points >= 10 }
+        stop 'red wins', expr { red_points >= 10 }
+
+      end
+
+      d.run
+      expect(d.green_points.resource_count == 10 || d.red_points == 10).to be true
+
+    end
+
 
   end
+
 end

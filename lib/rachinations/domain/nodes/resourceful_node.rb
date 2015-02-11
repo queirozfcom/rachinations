@@ -5,6 +5,9 @@ require_relative '../../domain/modules/common/refiners/proc_convenience_methods'
 
 using ProcConvenienceMethods
 
+# @abstract Subclass and override {#trigger!}, {#resource_count},
+#   {#pull_any!}, {#pull_all!}, {#push_any!}, {#push_all!}, {#take_resource!}
+#   and {#put_resource!} to implement nodes that can store resources
 class ResourcefulNode < Node
 
   include Invariant
@@ -25,13 +28,11 @@ class ResourcefulNode < Node
 
   end
 
-# pools are about resources
-
   def supports?(klass)
     if klass.eql?(Token)
       untyped?
     else
-      #untyped nodes support everything.
+      # untyped nodes support everything.
       if untyped?
         true
       else
