@@ -189,7 +189,7 @@ All you need to do is write your diagram in a file whose name ends in `.rb` and 
  end
  ```
 
-### Full specification
+### Full DSL specification
  **TODO**
 
 
