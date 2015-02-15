@@ -1,4 +1,4 @@
-[rachinations](Rachinations)
+[Rachinations](Rachinations)
 ====================
 [![Build Status](https://travis-ci.org/queirozfcom/rachinations.svg?branch=master)](https://travis-ci.org/queirozfcom/rachinations?branch=master)
 [![Code Climate](https://codeclimate.com/github/queirozfcom/rachinations.png)](https://codeclimate.com/github/queirozfcom/rachinations)
