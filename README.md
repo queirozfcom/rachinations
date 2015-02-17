@@ -1,4 +1,4 @@
-rachinations
+Rachinations
 ====================
 [![Build Status](https://travis-ci.org/queirozfcom/rachinations.svg?branch=master)](https://travis-ci.org/queirozfcom/rachinations?branch=master)
 [![Code Climate](https://codeclimate.com/github/queirozfcom/rachinations.png)](https://codeclimate.com/github/queirozfcom/rachinations)
@@ -189,7 +189,8 @@ All you need to do is write your diagram in a file whose name ends in `.rb` and 
  end
  ```
 
-
+### Full DSL specification
+ **TODO**
 
 
 
