@@ -52,7 +52,7 @@ describe NonDeterministicDiagram do
 
   include DSL
 
-  it ' makes a train run' do
+  it 'makes a train run' do
 
 
     d = NonDeterministicDiagram.new 'dia'

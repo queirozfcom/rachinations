@@ -14,27 +14,27 @@ describe Diagram do
 
     it 'should be created with a source and a pool and run n times with no errors' do
 
-      d=Diagram.new 'simple'
+      d=Diagram.new 'simples'
 
       d.add_node! Source, {
-          :name => 'source'
+          :name => 'fonte'
       }
 
       d.add_node! Pool, {
-          :name => 'deposit',
+          :name => 'depósito',
           :initial_value => 0
       }
 
       d.add_edge! Edge, {
-          :name => 'connector',
-          :from => 'source',
-          :to => 'deposit'
+          :name => 'conector',
+          :from => 'fonte',
+          :to => 'depósito'
       }
 
       d.run!(10)
 
       expect(d.resource_count).to eq 10
-      expect(d.get_node('deposit').resource_count).to eq 10
+      expect(d.get_node('depósito').resource_count).to eq 10
 
     end
 
@@ -472,8 +472,70 @@ describe Diagram do
       end
     end
 
+    describe 'stop conditions' do
 
-    describe 'Comprehensive examples'do
+      it 'should stop when a stop condition is met before all turns run' do
+
+        d = Diagram.new
+
+        d.add_node! Source, name: 's'
+        d.add_node! Gate, name: 'g'
+        d.add_node! Pool, name: 'po'
+        d.add_edge! Edge, from: 's', to: 'g'
+        d.add_edge! Edge, from: 'g', to: 'po'
+
+        d.add_stop_condition! message: 'first', condition: expr { d.po.resource_count >= 5 }
+
+        # useless but still
+        d.add_stop_condition! message: 'second', condition: expr { d.po.resource_count >= 10 }
+
+        d.run!(20)
+
+        expect(d.po.resource_count).to eq 5
+      end
+
+      it 'should continue until the last round if no stop conditions are met' do
+        d = Diagram.new
+
+        d.add_node! Source, name: 's'
+        d.add_node! Gate, name: 'g'
+        d.add_node! Pool, name: 'po'
+        d.add_edge! Edge, from: 's', to: 'g'
+        d.add_edge! Edge, from: 'g', to: 'po'
+
+        d.add_stop_condition! message: 'first', condition: expr { d.po.resource_count > 99 }
+
+        # also useless but still
+        d.add_stop_condition! message: 'second', condition: expr { d.po.resource_count < -1 }
+
+        d.run!(20)
+
+        expect(d.po.resource_count).to eq 20
+
+      end
+
+      it 'complains' do
+        # when users try to add two stop conditions but give them no names
+
+        expect {
+          d = Diagram.new
+
+          d.add_node! Source, name: 's'
+          d.add_node! Gate, name: 'g'
+          d.add_node! Pool, name: 'po'
+          d.add_edge! Edge, from: 's', to: 'g'
+          d.add_edge! Edge, from: 'g', to: 'po'
+
+          d.add_stop_condition! condition: expr { d.po.resource_count > 99 }
+          d.add_stop_condition! condition: expr { d.po.resource_count < -1 }
+
+        }.to raise_error
+
+      end
+
+    end
+
+    describe 'Comprehensive examples' do
 
       it 'example using pull_all and activators' do
 
@@ -485,14 +547,14 @@ describe Diagram do
         d.add_node! Pool, name: 'p4', initial_value: 2
         d.add_node! Pool, name: 'p5', activation: :automatic, initial_value: 6, mode: :push_any
 
-        d.add_edge! Edge, from: 'p2',to:'p1'
-        d.add_edge! Edge, from: 'p3',to:'p1'
-        d.add_edge! Edge, from: 'p4',to:'p1'
+        d.add_edge! Edge, from: 'p2', to: 'p1'
+        d.add_edge! Edge, from: 'p3', to: 'p1'
+        d.add_edge! Edge, from: 'p4', to: 'p1'
 
-        d.add_edge! Edge, from: 'p5',to:'p3'
-        d.add_edge! Edge, from: 'p5',to:'p4'
+        d.add_edge! Edge, from: 'p5', to: 'p3'
+        d.add_edge! Edge, from: 'p5', to: 'p4'
 
-        d.p5.attach_condition{ d.p3.resource_count < 1 && d.p4.resource_count < 1 }
+        d.p5.attach_condition { d.p3.resource_count < 1 && d.p4.resource_count < 1 }
 
         d.run! 8
 
@@ -503,9 +565,6 @@ describe Diagram do
         expect(d.p5.resource_count).to eq 0
 
       end
-
-
-
 
 
     end

@@ -113,7 +113,7 @@ class Node
     status=true
     conditions.each do |condition|
       if condition.is_a? Proc
-        status = (status && condition.call)
+        status = (status && condition.call())
       elsif condition === false
         return false
       elsif condition === true

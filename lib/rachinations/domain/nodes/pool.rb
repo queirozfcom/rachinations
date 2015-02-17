@@ -3,7 +3,6 @@ require_relative '../../domain/nodes/node'
 require_relative '../../domain/resources/token'
 require_relative '../resource_bag'
 require_relative '../../domain/exceptions/no_elements_matching_condition_error'
-require_relative '../../domain/exceptions/bad_config'
 require_relative '../../domain/modules/common/refiners/proc_convenience_methods'
 require_relative '../../../../lib/rachinations/helpers/edge_helper'
 
@@ -11,7 +10,7 @@ using ProcConvenienceMethods
 
 class Pool < ResourcefulNode
 
-  Helper = Helpers::EdgeHelper
+  EdgeHelper = Helpers::EdgeHelper
 
   def initialize(hsh={})
 
@@ -276,7 +275,7 @@ class Pool < ResourcefulNode
     enabled_outgoing_edges = outgoing_edges.select { |edge| edge.enabled? }
 
 
-    if Helper.all_can_push?(edges, require_all: true)
+    if EdgeHelper.all_can_push?(edges, require_all: true)
 
       enabled_outgoing_edges.each do |edge|
 

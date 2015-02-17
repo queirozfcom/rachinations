@@ -1,3 +1,4 @@
+require_relative 'bad_options'
 #use this for classes you want to be able to instantiate
 #using a hashful of parameters
 module HashInit

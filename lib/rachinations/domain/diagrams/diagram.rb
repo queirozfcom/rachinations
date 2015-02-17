@@ -15,8 +15,8 @@ class Diagram
     @edges = EdgeCollection.new
     @name = name
     @max_iterations = 999
+    @stop_conditions = []
   end
-
 
   def get_node(name)
 
@@ -96,10 +96,23 @@ class Diagram
     self
   end
 
+  def add_stop_condition!(message: nil, condition:)
+    raise ArgumentError, 'Expression required for stop condition' unless condition.is_a? Proc
+    raise ArgumentError, 'Message can be omitted only if there is no other condition' if message.nil? && (!@stop_conditions.empty?)
+
+    hsh = {
+        message: message,
+        condition: condition
+    }
+
+    @stop_conditions << hsh
+
+  end
+
   def run!(rounds = max_iterations)
 
     run_while! do |i|
-      i <= rounds && no_stop_conditions_met
+      i <= rounds && no_stop_conditions_met?
     end
 
   end
@@ -117,7 +130,7 @@ class Diagram
 
     while yield i do
 
-      break unless sanity_check? i
+      break if maximum_round? i
 
       before_round i
 
@@ -138,7 +151,6 @@ class Diagram
 
   end
 
-
   def resource_count(klass=nil)
     total=0
     @nodes.each do |n|
@@ -153,13 +165,13 @@ class Diagram
     nodes.reduce('') { |carry, n| carry+n.to_s }
   end
 
-  def sanity_check?(round_no)
-    if round_no > @max_iterations
-      sanity_check_message
-      false
-    else
-      true
-    end
+  def no_stop_conditions_met?
+    @stop_conditions
+    .all? { |el| ! el[:condition].call }
+  end
+
+  def maximum_round?(round_no)
+    round_no > @max_iterations
   end
 
   def run_first_round!
@@ -189,7 +201,6 @@ class Diagram
     nodes.select { |node| node.enabled? }
   end
 
-
   #template method
   def before_round(node_no)
   end
@@ -199,16 +210,15 @@ class Diagram
   end
 
   #template method
-  def before_run;
+  def before_run
   end
 
   #template method
   def after_run
-
   end
 
   #template method
-  def sanity_check_message;
+  def sanity_check_message
   end
 
 end

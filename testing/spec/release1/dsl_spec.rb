@@ -153,7 +153,6 @@ describe Diagram do
 
     end
 
-
     it 'example using push_all, activators and triggers' do
 
       d = diagram do
@@ -282,6 +281,8 @@ describe Diagram do
     end
 
     it 'stops when a single stopping condition turns true' do
+
+      skip 'stop conditions'
 
       d = diagram 'win_lose' do
 

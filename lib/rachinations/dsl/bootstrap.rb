@@ -1,5 +1,4 @@
 require_relative '../../../lib/rachinations/domain/diagrams/diagram'
-require_relative 'diagram_shorthand_methods'
 require_relative 'bad_dsl'
 require_relative 'helpers/parser'
 
@@ -7,15 +6,17 @@ require_relative 'helpers/parser'
 module DSL
   module Bootstrap
 
-    def diagram(name='new_diagram', mode: :silent, &blk)
+    def diagram(name='new_diagram', mode: :default, &blk)
 
-      # cant verbose be a simple boolean instead?
-      if mode == :silent || mode == 'silent'
+      supported_modes = [:default, :silent, :verbose]
+
+      raise BadDSL, "Unknown diagram mode: #{mode.to_s}" unless supported_modes.include? mode
+
+      # right now silent and default are the same thing
+      if mode == :default || mode == :silent
         dia= Diagram.new(Parser.validate_name!(name))
       elsif mode == :verbose || mode == 'verbose'
         dia = VerboseDiagram.new(Parser.validate_name!(name))
-      else
-        raise BadDSL, "Unknown diagram mode: #{mode.to_s}"
       end
 
       # This is a modified version of Diagram#add_edge!. It defers some method
@@ -77,7 +78,7 @@ module DSL
 
         node.attach_condition &condition
 
-        if !triggered_by.nil?
+        unless triggered_by.nil?
 
           attach_trigger_task = lambda do |triggeree, triggerer_name, diagram|
             # ask the diagram to evaluate what node it is
@@ -88,7 +89,7 @@ module DSL
 
         end
 
-        if !triggers.nil?
+        unless triggers.nil?
 
           attach_trigger_task = lambda do |triggerer, triggeree_name, diagram|
             # ask the diagram to evaluate what node it is
@@ -105,6 +106,7 @@ module DSL
 
       end
 
+      # after defining all those methods we run
       dia.instance_eval(&blk)
       dia.run_scheduled_tasks
 

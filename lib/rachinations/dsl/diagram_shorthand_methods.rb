@@ -1,7 +1,4 @@
 require_relative '../domain/diagrams/diagram'
-require_relative '../domain/diagrams/verbose_diagram'
-require_relative '../domain/diagrams/non_deterministic_diagram'
-require_relative '../domain/modules/diagrams/verbose'
 require_relative '../domain/modules/common/refiners/proc_convenience_methods'
 require_relative './bad_dsl'
 require_relative '../utils/string_helper'
@@ -79,7 +76,7 @@ module DSL
       end
 
       def stop(*args)
-
+        # TODO add stop condition to underlying diagram
       end
 
       # so that I can easily access elements which have been given a name
