@@ -98,7 +98,7 @@ class Diagram
 
   def add_stop_condition!(message: nil, condition:)
     raise ArgumentError, 'Expression required for stop condition' unless condition.is_a? Proc
-    raise ArgumentError, 'Message can be omitted only if there is no other condition' if message.nil? && (!@stop_conditions.empty?)
+    raise ArgumentError, 'Message can be omitted only if there is no other condition' if message.nil? && !(@stop_conditions.empty?)
 
     hsh = {
         message: message,

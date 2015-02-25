@@ -76,7 +76,10 @@ module DSL
       end
 
       def stop(*args)
-        # TODO add stop condition to underlying diagram
+        hash = Parser.parse_stop_condition_arguments(args)
+
+        add_stop_condition!(hash)
+
       end
 
       # so that I can easily access elements which have been given a name

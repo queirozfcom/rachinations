@@ -23,6 +23,8 @@ module DSL
 
     LABEL = proc { |arg| arg.is_a?(Numeric) || arg.is_a?(Proc) }
 
+    SHORT_STRING = proc { |arg| arg.is_a?(String) && arg.length.between?(1, 25) }
+
     # Parse an arbitrary list of arguments and returns a well-formed
     #  Hash which can then be used as argument to method add_node!
     # @param [Array] arguments an array of arguments.
@@ -91,6 +93,8 @@ module DSL
             accumulator[:mode] = arg
           elsif ACTIVATION.match?(arg)
             accumulator[:activation] = arg
+          elsif PROC.match?(arg)
+            accumulator[:condition] = arg
           else
             raise BadDSL, "Argument #{arg} doesn't fit any known signature"
           end
@@ -129,29 +133,51 @@ module DSL
 
     def self.parse_edge_arguments(arguments)
 
-      arguments.inject(ConstantHash.new) do |accumulator, arg|
-        if arg.is_a? Hash
-          if arg.has_key? :from
-            accumulator[:from] = arg[:from] if IDENTIFIER.match? arg[:from]
+      arguments.inject(ConstantHash.new) do |acc, elem|
+        if elem.is_a? Hash
+          if elem.has_key? :from
+            acc[:from] = elem[:from] if IDENTIFIER.match? elem[:from]
           end
-          if arg.has_key? :to
-            accumulator[:to] = arg[:to] if IDENTIFIER.match? arg[:to]
+          if elem.has_key? :to
+            acc[:to] = elem[:to] if IDENTIFIER.match? elem[:to]
           end
-          if arg.has_key? :label
-            accumulator[:label] = arg[:label] if LABEL.match? arg[:label]
+          if elem.has_key? :label
+            acc[:label] = elem[:label] if LABEL.match? elem[:label]
           end
         else
-          if IDENTIFIER.match?(arg)
-            accumulator[:name] = arg
-          elsif LABEL.match?(arg)
-            accumulator[:label]=arg
+          if IDENTIFIER.match?(elem)
+            acc[:name] = elem
+          elsif LABEL.match?(elem)
+            acc[:label]=elem
           else
-            raise BadDSL, "Argument #{arg} doesn't fit any known signature."
+            raise BadDSL, "argument #{elem} doesn't fit any known signature."
           end
         end
-        accumulator
+        acc
       end
 
+    end
+
+    def self.parse_stop_condition_arguments(arguments)
+      arguments.inject(ConstantHash.new) do |acc, elem|
+
+        if elem.is_a? Hash
+
+          if elem.has_key? :message
+            acc[:message] = elem[:message] if IDENTIFIER.match? elem[:message]
+          end
+
+          if elem.has_key? :condition
+            acc[:condition] = elem[:condition] if PROC.match? elem[:condition]
+          end
+
+        else
+          acc[:condition] = elem if PROC.match? elem
+          acc[:message] = elem if SHORT_STRING.match? elem
+        end
+
+        acc
+      end
     end
 
     # Used to validate that a string is a valid name for diagram components

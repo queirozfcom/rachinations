@@ -282,8 +282,6 @@ describe Diagram do
 
     it 'stops when a single stopping condition turns true' do
 
-      skip 'stop conditions'
-
       d = diagram 'win_lose' do
 
         source 'green_shots', :automatic
@@ -298,13 +296,13 @@ describe Diagram do
         edge from: 'g2', to: 'red_points', label: 50.percent
         pool 'red_points'
 
-        stop 'green wins', expr { green_points >= 10 }
-        stop 'red wins', expr { red_points >= 10 }
+        stop 'green wins', expr { green_points.resource_count >= 10 }
+        stop 'red wins', expr { red_points.resource_count >= 10 }
 
       end
 
       d.run
-      expect(d.green_points.resource_count == 10 || d.red_points == 10).to be true
+      expect(d.green_points.resource_count == 10 || d.red_points.resource_count == 10).to be true
 
     end
 
