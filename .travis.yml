@@ -1,8 +1,0 @@
-language: ruby
-rvm:
-  - "ruby 2.1.1"
-install: bundle install
-branches:
-  only:
-    - master
-    - new_main_loop
