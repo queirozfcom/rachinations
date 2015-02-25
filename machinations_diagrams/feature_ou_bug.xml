@@ -1,5 +1,0 @@
-<graph version="v4.05" name="" author="" interval="1" timeMode="asynchronous" distributionMode="fixed speed" speed="100" actions="1" dice="D6" skill="" strategy="" multiplayer="" width="600" height="560" numberOfRuns="100" visibleRuns="25" colorCoding="0">
-  <connection type="Resource Connection" start="2" end="1" label="1" position="0.5" color="Black" thickness="2"/>
-  <node symbol="Pool" x="353" y="147" color="Black" caption="" thickness="2" captionPos="0.25" activationMode="automatic" pullMode="pull any" actions="1" resourceColor="Black" startingResources="0" capacity="-1"/>
-  <node symbol="Pool" x="121" y="371" color="Black" caption="" thickness="2" captionPos="0.25" activationMode="automatic" pullMode="push any" actions="1" resourceColor="Red" startingResources="2" capacity="-1"/>
-</graph>

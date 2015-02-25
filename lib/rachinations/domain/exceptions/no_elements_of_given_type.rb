@@ -1,3 +1,0 @@
-class NoElementsOfGivenTypeError < RuntimeError
-
-end

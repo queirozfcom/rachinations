@@ -1,2 +1,0 @@
-class NoElementsMatchingConditionError < RuntimeError
-end

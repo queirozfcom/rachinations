@@ -1,2 +1,0 @@
-class UnsupportedTypeError < RuntimeError
-end
