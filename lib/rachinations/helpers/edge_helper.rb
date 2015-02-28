@@ -19,17 +19,20 @@ module Helpers
 
       raise NotImplementedError, 'only require_all is implemented so far' unless require_all
 
-      final = edges.inject(initial) do |accumulator, edge|
-        accumulator[:number_of_resources] += edge.label
+      final = edges.inject(initial) do |acc, elem|
+
+        edge = elem
+
+        acc[:number_of_resources] += edge.label
 
         resources_available = edge.from.resource_count(expr: edge.push_expression)
 
-        if resources_available >= accumulator[:number_of_resources]
-          accumulator[:partial_success] &&= true
+        if resources_available >= acc[:number_of_resources]
+          acc[:partial_success] &&= true
         else
-          accumulator[:partial_success] &&= false
+          acc[:partial_success] &&= false
         end
-        accumulator
+        acc
       end
 
       final[:partial_success]
