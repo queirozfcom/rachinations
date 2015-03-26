@@ -217,7 +217,6 @@ describe Diagram do
 
     end
 
-
     it "accepts declaring forward-referencing of non existing nodes" do
 
       expect do
@@ -306,6 +305,17 @@ describe Diagram do
 
     end
 
+    it 'probabilistic edges' do
+
+      # using short options
+
+    end
+
+    it 'deterministic edges' do
+
+      # using short options
+
+    end
 
   end
 

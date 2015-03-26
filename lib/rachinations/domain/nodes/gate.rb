@@ -2,9 +2,13 @@ require_relative '../../domain/nodes/node'
 require_relative '../../domain/nodes/resourceless_node'
 
 require 'weighted_distribution'
+require 'fraction'
 
 class Gate < ResourcelessNode
 
+  EdgeHelper = Helpers::EdgeHelper
+
+  attr_reader :mode, :activation
 
   def initialize(hsh={})
     check_options!(hsh)
@@ -13,25 +17,30 @@ class Gate < ResourcelessNode
     @diagram = params[:diagram]
     @name = params[:name]
     @activation = params[:activation]
+    # for gates, :mode has different semantics
     @mode = params[:mode]
     @types = get_types(given_types: params[:types])
 
     super(hsh)
   end
 
-  def put_resource!(res,edge)
+  def put_resource!(res, from_edge)
 
-    inv("Edges must be either all defaults or all probabilities") { outgoing_edges.all?{|e| e.label == 1 } || outgoing_edges.all?{|e| e.label.class == Float} }
-    inv("If probabilities given, their sum must not exceed 1"){ outgoing_edges.reduce(0){|acc,el| acc + el.label } <= 1 || !outgoing_edges.all?{|e| e.label.class == Float}  }
+    raise BadConfig.new('All outgoing Edges must be of the same kind') unless EdgeHelper.all_labels_of_same_kind?(outgoing_edges)
+    raise BadConfig.new('If probabilities are given, they must add up to 1') unless EdgeHelper.labels_valid?(outgoing_edges)
 
-    maybe_edge = pick_one(outgoing_edges)
+    maybe_edge = EdgeHelper.pick_one(edges: outgoing_edges, mode: mode, index: next_edge_index)
 
-    if(maybe_edge.nil?)
-      # do nothing - resource has 'vanished' - happens every other day
+    if (maybe_edge.nil?)
+      # no outgoing edges. resource disappears
     else
       maybe_edge.push!(res)
     end
 
+  end
+
+  def take_resource!(res, edge)
+    # no action
   end
 
   def to_s
@@ -40,28 +49,15 @@ class Gate < ResourcelessNode
 
   private
 
-  def pick_one(edges)
+  # used to indicate what edge index
+  # when in :deterministic mode
+  def next_edge_index
+    # starting at zero
+    @next_edge_index ||= 0
 
-    if(edges.all?{|e| e.label == 1})
-      #edges is probably an enumerable but only arrays can be sample()'d
-      edges.to_a.sample
-    elsif(edges.all?{|e| e.label.class == Float})
-      #{edge=>weight} is the shape required by WeightedRandomizer
-      weights = edges.reduce(Hash.new){|acc,el| acc[el] = el.label; acc }
+    @next_edge_index += 1
 
-      sum = edges.reduce(0){|acc,el|acc + el.label }
-
-      remaining = 1.0 - sum
-
-      #resource 'vanishes'
-      weights[nil] = remaining
-
-      edge_distribution = WeightedDistribution.new(weights)
-      edge_distribution.sample
-    else
-      raise RuntimeError.new('Invalid setup')
-    end
-
+    (@next_edge_index - 1)
   end
 
   def options
@@ -75,7 +71,7 @@ class Gate < ResourcelessNode
   def defaults
     {
         activation: :passive,
-        mode: :push_any,
+        mode: :deterministic,
         types: []
     }
   end

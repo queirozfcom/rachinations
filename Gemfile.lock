@@ -3,6 +3,7 @@ PATH
   specs:
     rachinations (0.0.7)
       activesupport (= 3.0.0)
+      fraction (= 0.3.2)
       i18n (= 0.6.11)
       weighted_distribution (= 1.0.0)
 
@@ -22,6 +23,7 @@ GEM
     docile (1.1.5)
     ffi (1.9.3-x64-mingw32)
     ffi (1.9.3-x86-mingw32)
+    fraction (0.3.2)
     i18n (0.6.11)
     mime-types (2.3)
     minitest (5.4.0)

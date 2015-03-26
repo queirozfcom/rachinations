@@ -1,5 +1,6 @@
-module NumberModifiers
+# require 'fraction'
 
+module NumberModifiers
 
   # allow user to modify Numbers in order to express
   # percentages ( 12.percent ) and also fractions, for

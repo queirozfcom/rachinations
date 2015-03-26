@@ -2,6 +2,9 @@ lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'rachinations/version'
 
+require 'rachinations/utils/math_utils'
+require 'rachinations/utils/string_utils'
+
 require 'rachinations/domain/modules/common/refiners/proc_convenience_methods'
 require 'rachinations/domain/modules/common/refiners/number_modifiers'
 require 'rachinations/domain/modules/common/schedulable_tasks'
@@ -21,6 +24,7 @@ require 'rachinations/domain/exceptions/no_elements_of_given_type'
 require 'rachinations/domain/exceptions/unsupported_type_error'
 require 'rachinations/domain/exceptions/no_elements_matching_condition_error'
 require 'rachinations/domain/exceptions/no_elements_found'
+require 'rachinations/domain/exceptions/bad_config'
 require 'rachinations/dsl/bad_dsl'
 
 require 'rachinations/domain/nodes/node'
@@ -35,7 +39,6 @@ require 'rachinations/domain/resources/token'
 require 'rachinations/domain/edge_collection'
 require 'rachinations/domain/node_collection'
 require 'rachinations/domain/resource_bag'
-
 
 # users can use the dsl to create diagrams
 include DSL::Bootstrap

@@ -1,7 +1,6 @@
 require_relative '../domain/diagrams/diagram'
 require_relative '../domain/modules/common/refiners/proc_convenience_methods'
 require_relative './bad_dsl'
-require_relative '../utils/string_helper'
 require_relative 'helpers/parser'
 
 module DSL

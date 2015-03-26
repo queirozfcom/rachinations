@@ -8,6 +8,7 @@ module DSL
     using ProcConvenienceMethods
 
     ConstantHash = ::Extras::ConstantHash
+    StringUtils = ::Utils::StringUtils
 
     # these patterns define what each argument should look like
 
@@ -188,7 +189,7 @@ module DSL
     # @return [String] the text itself, but only if it's valid. Otherwise
     #   an exception will be raised.
     def self.validate_name!(text)
-      if StringHelper.valid_ruby_variable_name?(text)
+      if StringUtils.valid_ruby_variable_name?(text)
         text
       else
         raise BadDSL, "Invalid name: '#{text}'"
@@ -198,7 +199,7 @@ module DSL
     # @param [String] text the name we want to validate
     # @return [Boolean] whether or not given text is a valid name for diagram elements
     def self.valid_name?(text)
-      StringHelper.valid_ruby_variable_name?(text)
+      StringUtils.valid_ruby_variable_name?(text)
     end
 
   end

@@ -8,6 +8,16 @@ describe 'monografia spec' do
 
   describe 'examples with dsl' do
 
+    it 'example_3' do
+
+      diagram 'exemplo_3' do
+
+        source 's1'
+        gate 'g1', :probabilistic
+      end
+
+    end
+
   end
 
   describe 'full specification' do
