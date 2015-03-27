@@ -459,11 +459,13 @@ describe Diagram do
 
         d = Diagram.new
 
+        d.add_node! Sink, name: 'sink'
         d.add_node! Source, name: 's'
         d.add_node! Gate, name: 'g'
         d.add_node! Pool, name: 'p'
         d.add_edge! Edge, from: 's', to: 'g'
         d.add_edge! Edge, from: 'g', to: 'p', label: 50.percent
+        d.add_edge! Edge, from: 'g', to: 'sink', label: 50.percent
 
         d.run!(20)
 

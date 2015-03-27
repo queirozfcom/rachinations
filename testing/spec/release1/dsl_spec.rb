@@ -283,16 +283,22 @@ describe Diagram do
 
       d = diagram 'win_lose' do
 
+        sink 'sink'
+
         source 'green_shots', :automatic
         edge from: 'green_shots', to: 'g1'
         gate 'g1'
         edge from: 'g1', to: 'green_points', label: 40.percent
+        # it feels a bit weird having to add a sink just to make labels add up to 1
+        edge from: 'g1', to: 'sink', label: 60.percent
         pool 'green_points'
 
         source 'red_shots', :automatic
         edge from: 'red_shots', to: 'g2'
         gate 'g2'
         edge from: 'g2', to: 'red_points', label: 50.percent
+        # it feels a bit weird having to add a sink just to make labels add up to 1
+        edge from: 'g2', to: 'sink', label: 50.percent
         pool 'red_points'
 
         stop 'green wins', expr { green_points.resource_count >= 10 }
@@ -305,15 +311,54 @@ describe Diagram do
 
     end
 
-    it 'probabilistic edges' do
+    it 'probabilistic gates' do
 
-      # using short options
+      d = diagram 'exemplo_3_monografia' do
+        source 's1'
+        gate 'g1', :probabilistic
+        pool 'p1'
+        pool 'p2'
+        pool 'p3'
+        sink 's2', :automatic, condition: expr{ p2.resource_count > 30 }
+        edge from: 's1', to: 'g1'
+        edge from: 'g1', to: 'p1'
+        edge 2,from:'g1', to:'p2'
+        edge from:'g1', to:'p3'
+        edge from:'p3', to:'s2'
+
+      end
+
+      d.run
+
+      # after a lot of turns, the sink will dominate other nodes
+      # using a range because in the last turn p3 may have received one resource and
+      # maybe the sink hasn't pulled it yet
+      expect(d.p3.resource_count).to be_within(1).of(0)
 
     end
 
-    it 'deterministic edges' do
+    it 'deterministic gates' do
 
-      # using short options
+      # this example was taken from gate_spec.rb and adapted to use the DSL instead.
+
+      d = diagram do
+        source 's'
+        gate 'g', :deterministic
+        pool 'p1'
+        pool 'p2'
+        pool 'p3'
+        edge from: 's', to: 'g'
+        edge 2, from: 'g', to: 'p1'
+        edge from: 'g', to: 'p2'
+        edge from: 'g', to: 'p3'
+      end
+
+      d.run 12
+
+      expect(d.p1.resource_count).to eq(6)
+      expect(d.p2.resource_count).to eq(3)
+      expect(d.p3.resource_count).to eq(3)
+
 
     end
 

@@ -9,7 +9,7 @@ class Sink < Pool
     # do nothing
   end
 
-  def put_resource!(obj)
+  def put_resource!(obj, edge=nil)
     inv{obj.unlocked?}
     # do nothing
   end

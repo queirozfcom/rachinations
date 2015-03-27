@@ -18,6 +18,8 @@ module DSL
 
     MODE = proc { |arg| [:pull_any, :pull_all, :push_any, :push_all].include? arg }
 
+    GATE_MODE = proc { |arg| [:probabilistic, :deterministic].include? arg }
+
     ACTIVATION= proc { |arg| [:automatic, :passive, :start].include? arg }
 
     PROC = proc { |arg| arg.is_a? Proc }
@@ -116,6 +118,8 @@ module DSL
             accumulator[:condition] = arg[:condition] if PROC.match?(arg[:condition])
           elsif arg.has_key? :triggered_by
             accumulator[:triggered_by] = arg[:triggered_by] if IDENTIFIER.match?(arg[:triggered_by])
+          elsif arg.has_key?[:mode]
+            accumulator[:mode] = arg[:mode] if GATE_MODE.match?(arg[:mode])
           else
             raise BadDSL, "Named argument doesn't fit any known signature"
           end
@@ -124,8 +128,10 @@ module DSL
             accumulator[:name] = arg
           elsif ACTIVATION.match?(arg)
             accumulator[:activation] = arg
+          elsif GATE_MODE.match?(arg)
+            accumulator[:mode] = arg
           else
-            raise BadDSL, "Argument #{arg} doesn't fit any known signature"
+            raise BadDSL, "Argument '#{arg}' doesn't fit any known signature"
           end
         end
         accumulator
