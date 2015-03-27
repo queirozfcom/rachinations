@@ -184,7 +184,7 @@ describe 'Diagrams with gates' do
 
     it 'probabilistic gates send resources in a non-deterministic way' do
 
-      no_of_turns = 100
+      no_of_turns = 800
 
       d = Diagram.new
 
@@ -204,9 +204,9 @@ describe 'Diagrams with gates' do
       d.run! no_of_turns
 
       # have to deal with probabilities here
-      expect(d.get_node('p1').resource_count).to be_within(10).of(50)
-      expect(d.get_node('p2').resource_count).to be_within(10).of(25)
-      expect(d.get_node('p3').resource_count).to be_within(10).of(25)
+      expect(d.get_node('p1').resource_count).to be_within(50).of(400)
+      expect(d.get_node('p2').resource_count).to be_within(50).of(200)
+      expect(d.get_node('p3').resource_count).to be_within(50).of(200)
 
       # this should work in  most cases
       expect(d.get_node('p2').resource_count).not_to eq(d.get_node('p3').resource_count)
