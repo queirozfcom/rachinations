@@ -189,8 +189,182 @@ All you need to do is write your diagram in a file whose name ends in `.rb` and 
  end
  ```
 
-### Full DSL specification
- **TODO**
+## Full DSL specification
+
+### Diagram creation
+
+**Supported options**
+
+- `name`
+ - Optional
+ - Type: IDENTIFIER
+ - Default value: `Nil`
+ - *Note*: If present, this option must be the first one given.
+
+- `mode`
+ - Optional
+ - Supported values: `:default`, `:silent` and `:verbose`
+ - Default value: `:default`
+
+**Examples**
+ - TODO
+  
+
+### Pools, Sources and Sinks
+
+**Supported options**
+
+- `name`
+ - Optional
+ - Type: IDENTIFIER
+ - Default value: `Nil`
+ - *Note*: If present, this option must be the first one given.
+
+- `initial_value`
+ - Optional
+ - Type: NATURAL
+ - Default value: `0`
+ - *Note*: Only applicable to Pools.
+
+- `mode`
+ - Optional
+ - Supported values: `:push_any`, `:pull_any`, `:push_all` and `:pull_all`
+ - Default value: `:push_any` for Sources, `:pull_any` for Pools and Sinks.
+
+- `activation`
+ - Optional
+ - Supported values: `:passive`, `:automatic` and `:start`
+ - Default value: `:automatic` for Sources, `:passive` for Pools and Sinks.
+
+- `condition`
+ - Optional
+ - Type: EXPRESSION
+ - Default value: `expr{ true }` (always evaluates to `true`)
+
+- `triggers`
+ - Optional
+ - Type: IDENTIFIER
+ - Default: `Nil`
+ - *Note*: If present, it must be the name of a Diagram element that already exists or that will be added until the end of Diagram definition.
+
+- `triggered_by`
+ - Optional
+ - Type: IDENTIFIER
+ - Default: `Nil`
+ - *Note*: If present, it must be the name of a Diagram element that already exists or that will be added until the end of Diagram definition.
+
+**Examples**
+ - TODO
+
+### Gates
+
+**Supported options**
+
+- `name`
+ - Optional
+ - Type: IDENTIFIER
+ - Default value: `Nil`
+ - *Note*: If present, this option must be the first one given.
+
+- `mode`
+ - Optional
+ - Supported values: `:probabilistic` and `:deterministic`
+ - Default value: `:deterministic`
+
+- `activation`
+ - Optional
+ - Supported values: `:passive`, `:automatic` and `:start`
+ - Default value: `:passive`
+
+- `condition`
+ - Optional
+ - Type: EXPRESSION
+ - Default value: `expr{ true }` (always evaluates to `true`)
+
+- `triggers`
+ - Optional
+ - Type: IDENTIFIER
+ - Default: `Nil`
+ - *Note*: If present, it must be the name of a Diagram element that already exists or that will be added until the end of Diagram definition.
+
+- `triggered_by`
+ - Optional
+ - Type: IDENTIFIER
+ - Default: `Nil`
+ - *Note*: If present, it must be the name of a Diagram element that already exists or that will be added until the end of Diagram definition.
+
+**Examples**
+ - TODO
+
+### Converters
+
+**Supported options**
+
+- `name`
+ - Optional
+ - Type: IDENTIFIER
+ - Default value: `Nil`
+ - *Note*: If present, this option must be the first one given.
+
+- `mode`
+ - Optional
+ - Supported values: `:push_any`, `:pull_any`, `:push_all` and `:pull_all`
+ - Default value: `:push_all`
+
+- `activation`
+ - Optional
+ - Supported values: `:passive`, `:automatic` and `:start`
+ - Default value: `:passive` 
+
+
+**Examples**
+ - TODO
+
+### Edges
+
+**Supported options**
+
+- `name`
+ - Optional
+ - Type: IDENTIFIER
+ - Default value: `Nil`
+ - *Note*: If present, this option must be the first one given.
+
+- `from`
+ - Required
+ - Type: IDENTIFIER
+ - *Note*: It must be the name of a Diagram element that already exists or that will be added until the end of Diagram definition.
+
+- `to`
+ - Required
+ - Type: IDENTIFIER
+ - *Note*: It must be the name of a Diagram element that already exists or that will be added until the end of Diagram definition.
+ 
+- `label`
+ - Optional
+ - Type: POSITIVE REAL
+ - Default value: `1`
+ 
+**Examples**
+ - TODO
+
+### Stop conditions
+
+**Supported options**
+
+- `name`
+ - Optional if this is the only stop condition in the whole Diagram. Required otherwise.
+ - Type: IDENTIFIER
+ - Default value: `Nil`
+ - *Note*: If present, this option must be the first one given.
+
+- `condition`
+ - Required
+ - Type: EXPRESSION
+
+**Examples**
+ - TODO
+
 
 
 
