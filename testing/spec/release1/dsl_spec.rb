@@ -319,12 +319,12 @@ describe Diagram do
         pool 'p1'
         pool 'p2'
         pool 'p3'
-        sink 's2', :automatic, condition: expr{ p2.resource_count > 30 }
+        sink 's2', :automatic, condition: expr { p2.resource_count > 30 }
         edge from: 's1', to: 'g1'
         edge from: 'g1', to: 'p1'
-        edge 2,from:'g1', to:'p2'
-        edge from:'g1', to:'p3'
-        edge from:'p3', to:'s2'
+        edge 2, from: 'g1', to: 'p2'
+        edge from: 'g1', to: 'p3'
+        edge from: 'p3', to: 's2'
 
       end
 
@@ -359,6 +359,42 @@ describe Diagram do
       expect(d.p2.resource_count).to eq(3)
       expect(d.p3.resource_count).to eq(3)
 
+
+    end
+
+    it 'diagram output modes' do
+      # making sure it doesn't just terminate and print nothing!
+
+      expect {
+
+        d=diagram 'a_diagram', mode: :default do
+          source 's'
+          edge from: 's', to: 'p'
+          pool 'p'
+        end
+        d.run 100
+      }.to output(/total\stime\selapsed/i).to_stdout
+
+
+      expect {
+
+        d=diagram 'a_diagram', mode: :silent do
+          source 's'
+          edge from: 's', to: 'p'
+          pool 'p'
+        end
+        d.run 100
+      }.to output("").to_stdout
+
+      expect {
+
+        d=diagram 'a_diagram', mode: :verbose do
+          source 's'
+          edge from: 's', to: 'p'
+          pool 'p'
+        end
+        d.run 20
+      }.to output(/round/i).to_stdout # in search of a better regex...
 
     end
 

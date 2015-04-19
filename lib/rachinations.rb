@@ -13,6 +13,8 @@ require 'rachinations/extras/fifo'
 
 require 'rachinations/domain/diagrams/diagram'
 require 'rachinations/domain/diagrams/verbose_diagram'
+require 'rachinations/domain/diagrams/default_diagram'
+require 'rachinations/domain/diagrams/silent_diagram'
 require 'rachinations/domain/diagrams/non_deterministic_diagram'
 require 'rachinations/dsl/diagram_shorthand_methods'
 require 'rachinations/dsl/bootstrap'

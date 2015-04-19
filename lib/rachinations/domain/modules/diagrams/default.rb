@@ -1,4 +1,4 @@
-module Verbose
+module Default
 
   @time = nil
   @last_round = 0
@@ -27,21 +27,19 @@ module Verbose
     print "Diagram '#{name}' ran for #{total_rounds} rounds.\n"
 
     if total_time < 1.0
-      print "Total time elapsed: #{(total_time*1000).to_i} milliseconds."
+      print "Total time elapsed: #{(total_time*1000).to_i} milliseconds.\n"
     else
-      print "Total time elapsed: #{total_time.to_i} seconds."
+      print "Total time elapsed: #{total_time.to_i} seconds.\n"
     end
 
 
   end
 
   def before_round(round_no)
-    print "======= ROUND #{round_no} =======\n\n"
   end
 
   def after_round (round_no)
     @last_round = round_no
-    puts self
   end
 
   def sanity_check_message

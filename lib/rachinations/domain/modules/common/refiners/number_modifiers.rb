@@ -1,5 +1,3 @@
-# require 'fraction'
-
 module NumberModifiers
 
   # allow user to modify Numbers in order to express

@@ -13,8 +13,10 @@ module DSL
       raise BadDSL, "Unknown diagram mode: #{mode.to_s}" unless supported_modes.include? mode
 
       # right now silent and default are the same thing
-      if mode == :default || mode == :silent
-        dia= Diagram.new(Parser.validate_name!(name))
+      if mode == :default
+        dia= DefaultDiagram.new(Parser.validate_name!(name))
+      elsif mode == :silent
+        dia = SilentDiagram.new(Parser.validate_name!(name))
       elsif mode == :verbose || mode == 'verbose'
         dia = VerboseDiagram.new(Parser.validate_name!(name))
       end
