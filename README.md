@@ -158,6 +158,7 @@ All you need to do is write your diagram in a file whose name ends in `.rb` and 
  ```
 
 - **Example 4**
+Example of `:triggers` construct.
 
  ```ruby
  require 'rachinations'
@@ -172,7 +173,7 @@ All you need to do is write your diagram in a file whose name ends in `.rb` and 
  end
  ```
 
-- **Example 4, alternative version**
+- **Example 4, alternate version**
 
  This amounts to the same diagram as the one defined in Example 4, but uses a different mechanism for defining triggers between nodes.
 
@@ -188,6 +189,26 @@ All you need to do is write your diagram in a file whose name ends in `.rb` and 
      edge from: 's2', to: 'p2'
  end
  ```
+
+- **Example 5**
+Using gates and fractional edges.
+
+```ruby
+require 'rachinations'
+
+diagram 'example_5' do
+    source 's1'
+    edge from: 's1', to 'g1'
+    gate 'g1', :probabilistic
+    edge from: 'g1', to:'p1', label: 1/4
+    edge from: 'g1', to:'p2', label: 1/4
+    edge from: 'g1', to:'p3', label: 2/4
+    pool 'p1'
+    pool 'p2'
+    pool 'p3'
+end
+```
+
 
 ## Full DSL specification
 
