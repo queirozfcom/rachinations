@@ -193,21 +193,23 @@ Example of `:triggers` construct.
 - **Example 5**
 Using gates and fractional edges.
 
-```ruby
-require 'rachinations'
+ ```ruby
+ require 'rachinations'
 
-diagram 'example_5' do
+ # in this case, outgoing edges must add up to 1
+ diagram 'example_5' do
     source 's1'
     edge from: 's1', to 'g1'
     gate 'g1', :probabilistic
+    # in this case, outgoing edges must add up to 1
     edge from: 'g1', to:'p1', label: 1/4
     edge from: 'g1', to:'p2', label: 1/4
     edge from: 'g1', to:'p3', label: 2/4
     pool 'p1'
     pool 'p2'
     pool 'p3'
-end
-```
+ end
+ ```
 
 
 ## Full DSL specification
