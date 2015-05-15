@@ -229,10 +229,6 @@ Using gates and fractional edges.
  - Supported values: `:default`, `:silent` and `:verbose`
  - Default value: `:default`
 
-**Examples**
- - TODO
-  
-
 ### Pools, Sources and Sinks
 
 **Supported options**
@@ -276,9 +272,6 @@ Using gates and fractional edges.
  - Default: `Nil`
  - *Note*: If present, it must be the name of a Diagram element that already exists or that will be added until the end of Diagram definition.
 
-**Examples**
- - TODO
-
 ### Gates
 
 **Supported options**
@@ -316,9 +309,6 @@ Using gates and fractional edges.
  - Default: `Nil`
  - *Note*: If present, it must be the name of a Diagram element that already exists or that will be added until the end of Diagram definition.
 
-**Examples**
- - TODO
-
 ### Converters
 
 **Supported options**
@@ -338,10 +328,6 @@ Using gates and fractional edges.
  - Optional
  - Supported values: `:passive`, `:automatic` and `:start`
  - Default value: `:passive` 
-
-
-**Examples**
- - TODO
 
 ### Edges
 
@@ -367,9 +353,6 @@ Using gates and fractional edges.
  - Optional
  - Type: POSITIVE REAL
  - Default value: `1`
- 
-**Examples**
- - TODO
 
 ### Stop conditions
 
@@ -385,8 +368,6 @@ Using gates and fractional edges.
  - Required
  - Type: EXPRESSION
 
-**Examples**
- - TODO
 
 
 
